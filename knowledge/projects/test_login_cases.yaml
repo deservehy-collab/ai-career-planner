@@ -1,0 +1,15 @@
+# Project 知识库 —— 软件测试：登录模块测试用例与缺陷报告（入门）
+name: 登录模块测试用例与缺陷报告
+domain: software-testing
+difficulty: beginner
+covers_skills: [软件测试基础, 测试用例设计, 功能测试, 缺陷管理]
+prerequisites: []
+tech_stack: [测试用例模板, 缺陷管理工具, 浏览器开发者工具]
+stage_hint: 学习路线起点，围绕一个登录模块把用例与缺陷写规范
+deliverable: 一份登录模块测试用例集与至少 5 条可复现的缺陷报告
+acceptance_criteria:
+  - 用例覆盖正常、异常与边界输入，步骤与预期结果明确
+  - 缺陷报告含环境、复现步骤、实际与预期结果
+  - 能区分缺陷严重程度与优先级，并说明理由
+  - 用例可被他人照着执行，不依赖口头补充
+estimated_weeks: 2

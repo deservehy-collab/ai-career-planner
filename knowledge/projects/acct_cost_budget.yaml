@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：成本核算与预算分析（中级项目）
+name: 成本核算与预算分析
+domain: accounting
+difficulty: intermediate
+covers_skills: [成本核算, 预算管理, 财务报表分析]
+prerequisites: [会计准则, Excel, 成本核算]
+tech_stack: [Excel, 财务软件, 成本核算表与预算执行表]
+stage_hint: 从记账走向管理会计，练习成本归集、预算编制与差异分析
+deliverable: 一套成本与预算分析资料：成本计算表、单位成本分析、年度费用预算及执行差异说明
+acceptance_criteria:
+  - 能按产品归集直接材料、直接人工与制造费用，分配标准有依据
+  - 能计算单位成本并解释主要变动原因
+  - 能编制部门费用预算并跟踪执行，差异分析写到具体原因
+  - 结论能回答"哪个产品、哪项费用需要调整"，而不只是罗列数字
+estimated_weeks: 3

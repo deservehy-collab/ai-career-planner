@@ -1,4 +1,4 @@
-"""认证加固的回归测试：限速、token 与账号存活的绑定、注册触发迁移。
+"""认证加固的回归测试：限速、token 与账号存活的绑定、注册不自动迁移旧数据。
 
 三组行为
 --------
@@ -30,18 +30,48 @@ from backend.app import app  # noqa: E402
 from backend.auth import get_current_user  # noqa: E402
 
 
+class _FakeClock:
+    """顶掉 ``auth.time``：限速器只在两处读 ``time.monotonic()``。
+
+    只换 auth 模块自己的绑定，不动全局 stdlib；其余属性透传给真 ``time``。
+    """
+
+    def __init__(self, start: float = 1000.0) -> None:
+        import time as _real_time
+
+        self._real = _real_time
+        self.now = start
+
+    def monotonic(self) -> float:
+        return self.now
+
+    def advance(self, seconds: float) -> None:
+        self.now += seconds
+
+    def __getattr__(self, name):
+        return getattr(self._real, name)
+
+
 class SlidingWindowLimiterTest(unittest.TestCase):
     """限速器本体的单元行为（窗口过期 / clear / reset）。"""
 
     def test_limited_until_window_passes(self):
-        limiter = auth._SlidingWindowLimiter(limit=3, window_seconds=0.05)
-        for _ in range(3):
-            limiter.record("k")
-        self.assertTrue(limiter.limited("k"))
-        self.assertFalse(limiter.limited("other"), "不同键互不影响")
-        import time as _time
-        _time.sleep(0.06)
-        self.assertFalse(limiter.limited("k"), "窗口滑过后应放行")
+        """窗口用假时钟推进：真 ``sleep`` 在全量跑（机器满载）时会偶发翻车。
+
+        两头都会翻：睡不够 → 该放行的还拦着；三条 record 与断言之间被调度拖过
+        整个窗口 → 该拦的已经放行。改成拨钟之后两头都钉死。
+        """
+        clock = _FakeClock()
+        with mock.patch.object(auth, "time", clock):
+            limiter = auth._SlidingWindowLimiter(limit=3, window_seconds=60)
+            for _ in range(3):
+                limiter.record("k")
+            self.assertTrue(limiter.limited("k"))
+            self.assertFalse(limiter.limited("other"), "不同键互不影响")
+            clock.advance(59)
+            self.assertTrue(limiter.limited("k"), "窗口还没滑完，仍要拦")
+            clock.advance(2)
+            self.assertFalse(limiter.limited("k"), "窗口滑过后应放行")
 
     def test_limited_does_not_record(self):
         limiter = auth._SlidingWindowLimiter(limit=1, window_seconds=60)
@@ -77,6 +107,7 @@ class _AuthIsolatedCase(unittest.TestCase):
         ]
         for p in self._patches:
             p.start()
+        db.init_db()
 
         self._saved_override = app.dependency_overrides.pop(get_current_user, None)
         self.client = TestClient(app)
@@ -172,13 +203,13 @@ class TokenBoundToExistingUserTest(_AuthIsolatedCase):
         self.assertIn("不存在", me.json()["detail"])
         # 业务接口同口径：router 级鉴权依赖也要查库
         self.assertEqual(
-            self.client.get("/api/knowledge/jds", headers=headers).status_code, 401)
+            self.client.get("/api/growth/history", headers=headers).status_code, 401)
 
 
-class RegisterTriggersMigrationTest(_AuthIsolatedCase):
-    """首个账号注册成功时，旧数据根目录的业务文件应被认领迁移。"""
+class RegisterDoesNotAutoMigrateTest(_AuthIsolatedCase):
+    """注册不再认领旧 JSON：旧数据只能走显式迁移脚本。"""
 
-    def test_first_register_claims_legacy_files(self):
+    def test_register_leaves_legacy_files_untouched(self):
         root = Path(config.AUTH_DB_PATH).parent
         (root / "loop.json").write_text('{"schema_version": 1, "rounds": []}', encoding="utf-8")
         (root / "growth.json").write_text('{"schema_version": 1, "history": []}', encoding="utf-8")
@@ -187,23 +218,15 @@ class RegisterTriggersMigrationTest(_AuthIsolatedCase):
             "/api/auth/register", json={"username": "first_mover", "password": "pw123456"})
         self.assertEqual(response.status_code, 201)
 
-        # 找到刚注册的用户 id（注册顺序即迁移归属）
         with db.session_for(Path(config.AUTH_DB_PATH)) as session:
             user = session.query(db.User).filter_by(username="first_mover").one()
             user_id = user.id
 
         target = config.user_data_dir(user_id)
-        self.assertTrue((target / "loop.json").exists(), "首个注册应认领旧 loop.json")
-        self.assertTrue((target / "growth.json").exists(), "首个注册应认领旧 growth.json")
-        self.assertFalse((root / "loop.json").exists(), "旧文件应已改名留档")
-
-    def test_migration_without_users_is_deferred(self):
-        (Path(config.AUTH_DB_PATH).parent / "loop.json").write_text("{}", encoding="utf-8")
-        response = self.client.post(
-            "/api/auth/register", json={"username": "someone", "password": "pw123456"})
-        self.assertEqual(response.status_code, 201)
-        # 注册后存在用户了 → 这次注册本身就触发了迁移
-        self.assertFalse((Path(config.AUTH_DB_PATH).parent / "loop.json").exists())
+        self.assertFalse((target / "loop.json").exists())
+        self.assertFalse((target / "growth.json").exists())
+        self.assertTrue((root / "loop.json").exists(), "注册不得移动或删除旧文件")
+        self.assertTrue((root / "growth.json").exists())
 
 
 if __name__ == "__main__":

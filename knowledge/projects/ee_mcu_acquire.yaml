@@ -1,0 +1,15 @@
+# Project 知识库 —— 电子电气：单片机采集与串口上报（入门）
+name: 单片机采集与串口上报
+domain: electronics
+difficulty: beginner
+covers_skills: [C语言, 单片机与外设, 通信协议, 硬件调试与仪器使用]
+prerequisites: []
+tech_stack: [STM32, Keil / STM32CubeMX, 温湿度传感器, USB 转串口, 逻辑分析仪]
+stage_hint: 学习路线起点，把传感器数据稳定采集并通过串口按帧发出
+deliverable: 一套可复现的采集与上报程序，附联调记录
+acceptance_criteria:
+  - 外设初始化和读取流程与数据手册一致，注释说明关键寄存器或接口
+  - 上报帧包含帧头、数据、校验，接收端能正确解析
+  - 断线、校验失败等异常有明确处理，不出现死等
+  - 联调记录包含波形或日志证据，说明问题现象与定位过程
+estimated_weeks: 3

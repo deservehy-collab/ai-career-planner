@@ -1,0 +1,15 @@
+# Project 知识库 —— 设计：品牌视觉规范手册（中级）
+name: 品牌视觉规范手册
+domain: design
+difficulty: intermediate
+covers_skills: [品牌视觉规范, 色彩与视觉风格, Illustrator, 设计文件管理]
+prerequisites: [色彩与视觉风格, 版式与构图]
+tech_stack: [Illustrator, 品牌手册模板, 字体与色值表, PDF 输出]
+stage_hint: 从单张物料进阶到可复用的品牌规则
+deliverable: 一份包含标志用法、色彩、字体与禁用示例的品牌手册
+acceptance_criteria:
+  - 标志有安全空间、最小尺寸与黑白版本说明
+  - 色彩给出色值与使用比例，附反例
+  - 字体规定标题与正文层级及替代方案
+  - 手册可指导新人独立做出合规物料
+estimated_weeks: 3

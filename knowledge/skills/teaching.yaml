@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 中学教师技能（v1）
+# 说明：
+#   - 技能名必须与 knowledge/jobs/secondary-school-teacher.yaml 完全一致。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 学科专业知识
+  category: teaching
+  level_guides:
+    入门: 掌握任教学科的基础概念与知识框架，能讲清教材中的核心内容。
+    初级: 熟悉本学科课程标准与教材体系，能回答学生常见问题。
+    中级: 能系统梳理学科知识结构，处理跨章节综合问题与常见误区。
+    高级: 能把握学科前沿与命题趋势，对疑难问题给出有依据的解释。
+  prerequisites: []
+  typical_usage: 备课、答疑、命题与学科辅导的知识基础。
+  common_pitfalls:
+    - 只背教材结论，不理解知识之间的联系。
+    - 用大学知识直接讲中学内容，超出学生认知。
+    - 遇到学生追问就回避，逐渐失去课堂信任。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 6
+
+- skill: 教学设计
+  category: teaching
+  level_guides:
+    入门: 知道一节课需要目标、重难点、活动与作业。
+    初级: 能按教材与课标写出结构完整的课时教案。
+    中级: 能围绕学习目标设计导入、探究、练习与评价，并预设学生困难。
+    高级: 能做单元整体设计，让课时之间形成递进并兼顾分层需求。
+  prerequisites: [学科专业知识, 教育心理学]
+  typical_usage: 日常备课、公开课与单元整体教学规划。
+  common_pitfalls:
+    - 目标写成"讲完某节内容"，没有可观察的学习结果。
+    - 活动热闹但没有指向目标，课堂时间被浪费。
+    - 只备内容不备学生，难点没有拆解。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 4
+
+- skill: 课堂管理
+  category: teaching
+  level_guides:
+    入门: 知道课堂需要规则、节奏与基本的秩序维护。
+    初级: 能按既定规则组织课堂，处理常见走神与讲话问题。
+    中级: 能通过提问、分组与节奏控制维持参与度，妥善处理冲突。
+    高级: 能建立稳定的课堂文化，让不同层次学生都持续参与。
+  prerequisites: [教育心理学]
+  typical_usage: 日常授课、小组活动与班级纪律管理。
+  common_pitfalls:
+    - 只靠批评维持纪律，师生关系越来越紧张。
+    - 规则朝令夕改，学生不知道边界在哪。
+    - 为了赶进度忽视课堂反馈，问题积累到课后。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 3
+
+- skill: 命题与作业设计
+  category: teaching
+  level_guides:
+    入门: 知道作业与测验要对应课堂目标。
+    初级: 能按知识点选编基础题与变式题，控制题量与难度。
+    中级: 能设计分层作业与双向细目表，让测验覆盖不同能力层次。
+    高级: 能独立命制高质量试题，分析信度效度并改进教学。
+  prerequisites: [学科专业知识, 教学设计]
+  typical_usage: 日常作业、单元测验与考试命题。
+  common_pitfalls:
+    - 题目与课堂目标脱节，学生练了但没学到。
+    - 难度全凭感觉，班级成绩分布失控。
+    - 只布置不反馈，同样的错误反复出现。
+  learning_resources:
+    - {title: '中华人民共和国教育部', url: 'https://www.moe.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 学情分析
+  category: teaching
+  level_guides:
+    入门: 知道要看成绩、作业与课堂表现了解学生情况。
+    初级: 能统计班级得分与错题分布，找出共性薄弱点。
+    中级: 能结合作业、测验与课堂观察判断不同学生的卡点并调整教学。
+    高级: 能建立持续跟踪的学情档案，为分层教学与个别辅导提供依据。
+  prerequisites: [教育心理学]
+  typical_usage: 考后分析、分层辅导与教学策略调整。
+  common_pitfalls:
+    - 只看平均分，忽略班级内部的两极分化。
+    - 把错误归因于"不认真"，不分析具体的认知障碍。
+    - 分析完没有跟进措施，下次考试问题依旧。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 2
+
+- skill: 教育心理学
+  category: teaching
+  level_guides:
+    入门: 知道中学生处于身心快速发展阶段，理解基本的学习动机概念。
+    初级: 能解释注意力、记忆与遗忘的常见规律并用于教学设计。
+    中级: 能运用动机、归因与同伴关系理论处理课堂与个别学生问题。
+    高级: 能结合发展规律设计班级管理方案，识别并转介心理风险。
+  prerequisites: []
+  typical_usage: 理解学生行为、设计课堂活动与开展个别沟通。
+  common_pitfalls:
+    - 把心理问题简单当成态度问题。
+    - 套用理论标签，忽视具体学生的家庭与经历。
+    - 发现严重情绪信号不转介，错过干预时机。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 3
+
+- skill: 课件制作
+  category: teaching
+  level_guides:
+    入门: 会用 PPT 插入文字、图片与简单动画。
+    初级: 能做出结构清晰、字号可读的课时课件。
+    中级: 能根据教学环节设计信息呈现节奏，合理使用图示、视频与互动。
+    高级: 能建立学科课件模板，兼顾视觉规范与不同设备适配。
+  prerequisites: [教学设计]
+  typical_usage: 课堂讲授、公开课与线上教学资源制作。
+  common_pitfalls:
+    - 一页塞满文字，学生既看不清也抓不住重点。
+    - 动画过多，注意力被形式带走。
+    - 课件代替板书，课堂节奏被翻页牵着走。
+  learning_resources:
+    - {title: 'WPS 学堂', url: 'https://www.wps.cn/learning/'}
+  estimated_weeks: 1
+
+- skill: 家校沟通
+  category: teaching
+  level_guides:
+    入门: 知道沟通要基于事实、尊重家长并明确下一步。
+    初级: 能通过电话或消息反馈学生情况，完成常规通知。
+    中级: 能处理成绩波动、行为问题等敏感沟通，形成家校配合方案。
+    高级: 能建立稳定的家校沟通机制，妥善处理分歧与突发事件。
+  prerequisites: [教育心理学]
+  typical_usage: 日常反馈、家长会与个别学生问题沟通。
+  common_pitfalls:
+    - 只在学生出问题时联系家长，形成"告状式"沟通。
+    - 使用评价性语言给学贴标签，引发对抗。
+    - 沟通没有结论，家长不知道回家该做什么。
+  learning_resources:
+    - {title: '中华人民共和国教育部', url: 'https://www.moe.gov.cn/'}
+  estimated_weeks: 1
+
+- skill: 教育政策与师德规范
+  category: teaching
+  level_guides:
+    入门: 知道教师职业道德规范与未成年人保护的基本要求。
+    初级: 了解教师资格、课程方案与考试评价政策的主要规定。
+    中级: 能在教学与班级管理中落实政策要求，处理常见合规问题。
+    高级: 能解读政策变化并调整教学安排，守住师德与法律底线。
+  prerequisites: []
+  typical_usage: 教师资格认证、日常执教与学校合规管理。
+  common_pitfalls:
+    - 用成绩排名或言语羞辱学生，触碰师德红线。
+    - 不熟悉课程与考试政策变化，教学安排滞后。
+    - 处理学生冲突时侵犯隐私或体罚，造成法律风险。
+  learning_resources:
+    - {title: '教育部教师工作司', url: 'https://www.moe.gov.cn/s78/A10/'}
+  estimated_weeks: 1
+
+- skill: 教学反思与研究
+  category: teaching
+  level_guides:
+    入门: 知道课后要回顾目标是否达成、哪些环节出了问题。
+    初级: 能写出结构化的课后反思，记录学生反馈与改进点。
+    中级: 能通过听评课与同课异构比较教学方案，提出可执行的改进。
+    高级: 能主持小课题研究，把经验沉淀为可推广的教学成果。
+  prerequisites: [教学设计, 学情分析]
+  typical_usage: 课后复盘、教研活动与教师专业发展。
+  common_pitfalls:
+    - 反思写成流水账，没有聚焦具体问题。
+    - 只找外部原因，不审视自己的设计与提问方式。
+    - 反思后不调整，下一次课堂重复同样的问题。
+  learning_resources:
+    - {title: '中国教研网', url: 'https://www.zgjiaoyan.com/'}
+  estimated_weeks: 2

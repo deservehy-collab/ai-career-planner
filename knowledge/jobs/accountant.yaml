@@ -1,0 +1,146 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 会计 —— 岗位画像（人工整理）
+# 版本：v1
+# 最后更新：2026-10-22
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_accounting_std_001  企业会计准则、初级会计职称考试大纲等公开标准的
+#                              通用要求整理（概括，非逐字原文）
+#   source_accounting_jd_001   公开招聘信息中会计/会计助理岗位的通用职责与要求
+#                              整理（多家合并，非单份 JD 逐字引用）
+#
+#   本文件用于技能词表、项目模板与领域过滤，证据字段标注的是"该要求来自哪类
+#   公开材料"，不是可逐字反查的招聘原文。需要逐字依据时，应由用户粘贴 JD，
+#   走 user_pasted 证据链路。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: accountant
+job_name: 会计
+
+aliases:
+  - 会计
+  - 会计师
+  - 财务会计
+  - 会计助理
+  - 总账会计
+  - 财务核算
+  - 会计核算
+  - 成本会计
+  - 税务会计
+
+category: finance-accounting
+domain: accounting
+origin: human-curated
+version: 1
+updated_at: 2026-10-22
+
+# 会计没有可逐字反查的招聘原文；岗位要求以本文件的人工整理技能表为准，
+# 模型只能在表外补充它确实需要的项，不能另造近义词顶替已有技能。
+ground_requirements: true
+
+profile:
+  summary: 会计负责企业日常账务处理、月末结账与报表编制，并配合纳税申报和审计；交付准确、可追溯的账套、报表与纳税资料。
+  core_tasks:
+    - {name: 审核原始凭证并填制记账凭证, detail: 核对发票、合同与报销单，按会计准则录入分录}
+    - {name: 完成月末结账与对账, detail: 核对现金、银行、往来与存货，处理计提、摊销与结转}
+    - {name: 编制财务报表, detail: 出具资产负债表、利润表、现金流量表并解释主要变动}
+    - {name: 办理纳税申报, detail: 计算增值税、企业所得税等税额，按期申报与缴纳}
+    - {name: 归集与分配成本, detail: 按产品或项目归集材料、人工与制造费用，编制成本报表}
+    - {name: 配合内外部审计, detail: 准备凭证、账簿与合同资料，回复问题并落实整改}
+  tools: [用友/金蝶等财务软件, Excel, 电子税务局与开票系统, 报销/财务共享系统, 银行网银]
+  deliverables: [记账凭证与账簿, 月度/年度财务报表, 纳税申报表与完税凭证, 成本与预算分析表, 审计资料清单]
+  entry_requirements: [会计学/财务管理等相关专业, 初级会计职称优先, 熟悉企业会计准则与税法, 熟练使用财务软件与 Excel, 细致严谨并能适应月末结账节奏]
+  career_path:
+    - {name: 出纳/会计助理, detail: 能完成收付款、票据与基础账务处理}
+    - {name: 总账会计, detail: 能独立完成月末结账、报表与纳税申报}
+    - {name: 财务主管, detail: 能审核账务、组织预算与成本分析}
+    - {name: 财务经理, detail: 能负责财务团队、内控与经营分析}
+
+skills:
+
+  - skill: 会计准则
+    importance: 5
+    level: 中级
+    reason: 会计确认、计量与报告都以准则为依据，是整条核算链路的底层规则。
+    evidence:
+      - {source_id: source_accounting_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：掌握企业会计准则的基本框架与常用具体准则'}
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：按会计准则进行日常账务处理与科目核算'}
+
+  - skill: 财务报表分析
+    importance: 5
+    level: 中级
+    reason: 把账务结果转成资产负债表、利润表、现金流量表，并解释变动原因。
+    evidence:
+      - {source_id: source_accounting_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能编制并读懂三大财务报表'}
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：出具月度/年度报表并做基础财务分析'}
+
+  - skill: 纳税申报
+    importance: 4
+    level: 中级
+    reason: 增值税、企业所得税等按期申报，直接关系到企业合规。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成增值税、企业所得税等税种的申报与缴纳'}
+      - {source_id: source_accounting_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：熟悉主要税种的计算与申报流程'}
+
+  - skill: 财务软件
+    importance: 4
+    level: 中级
+    reason: 用友、金蝶等财务软件是日常记账、结账与出报表的主要工作平台。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用用友/金蝶等财务软件'}
+
+  - skill: Excel
+    importance: 4
+    level: 中级
+    reason: 对账、汇总、报表与预算分析大量依赖表格函数与数据整理。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Excel 进行数据处理与报表制作'}
+
+  - skill: 审计基础
+    importance: 3
+    level: 初级
+    reason: 配合内外部审计、准备资料与底稿，是会计岗位的常见协作内容。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解审计流程、能配合提供审计资料者优先'}
+
+  - skill: 成本核算
+    importance: 4
+    level: 中级
+    reason: 制造、贸易类企业需要归集与分配成本，支撑定价与毛利分析。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成成本归集、分配与成本报表编制'}
+
+  - skill: 预算管理
+    importance: 3
+    level: 中级
+    reason: 参与年度预算编制与执行跟踪，是从核算走向管理会计的关键能力。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与预算编制、执行跟踪与差异分析'}
+
+  - skill: 内部控制
+    importance: 3
+    level: 初级
+    reason: 识别与防范资金、票据、审批流程中的风险，保证账实相符。
+    evidence:
+      - {source_id: source_accounting_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：了解会计内部控制与不相容岗位分离的基本要求'}
+
+  - skill: 出纳实务
+    importance: 3
+    level: 初级
+    reason: 现金与银行收付、票据管理、日记账登记是会计入行的基础实操。
+    evidence:
+      - {source_id: source_accounting_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：办理现金与银行收付、登记日记账、保管票据'}

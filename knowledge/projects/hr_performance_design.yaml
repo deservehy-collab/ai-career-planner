@@ -1,0 +1,15 @@
+# Project 知识库 —— 人力资源：绩效考核方案设计与复盘（高级）
+name: 绩效考核方案设计与复盘
+domain: human-resources
+difficulty: advanced
+covers_skills: [绩效考核, 薪酬调研, 激励方案设计, 人力资源数据分析]
+prerequisites: [绩效考核, 薪酬调研]
+tech_stack: [考核指标表, 薪酬带宽表, 激励测算模型, Excel]
+stage_hint: 综合项目，为一个团队设计可落地、可解释的绩效与激励方案
+deliverable: 一套绩效指标、薪酬带宽与激励测算方案，附预算影响与复盘结论
+acceptance_criteria:
+  - 每个指标有数据来源、计算口径与目标值，可被第三方核对
+  - 薪酬带宽按岗位与经验分层，说明与市场水平的差距依据
+  - 激励方案在给定预算下完成测算，超支风险有应对说明
+  - 复盘写明上一版方案的问题与本次调整理由
+estimated_weeks: 5

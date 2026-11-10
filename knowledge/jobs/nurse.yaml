@@ -1,0 +1,138 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 护士 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_med_nurse_001   国家卫健委公开的护理技术规范与分级护理要点整理
+#                          https://www.nhc.gov.cn/ （访问日期 2026-11-10）
+#   source_med_ethic_001   国家法律法规数据库中护士条例、知情同意与隐私保护条文要点
+#                          https://flk.npc.gov.cn/ （访问日期 2026-11-10）
+#   source_med_jd_001      公开招聘信息中护士/护理岗位的通用职责与要求汇总整理
+#                          （多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: nurse
+job_name: 护士
+
+aliases:
+  - 护士
+  - 注册护士
+  - 护理师
+  - 临床护士
+  - 护理人员
+
+category: healthcare
+domain: healthcare
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 护士负责住院患者的日常护理、给药与病情观察，按医嘱执行护理操作并书写护理文书，配合抢救与健康教育，保证患者安全与护理过程可追溯。
+  core_tasks:
+    - {name: 执行基础护理, detail: 完成生命体征测量、卧位、清洁与基础照护}
+    - {name: 执行医嘱给药, detail: 按三查七对完成配液、输液与口服给药}
+    - {name: 观察并记录病情, detail: 按班次记录生命体征、主诉与异常变化并及时上报}
+    - {name: 书写护理文书, detail: 完成护理记录、交班报告与评估量表}
+    - {name: 参与抢救配合, detail: 识别病情变化，参与心肺复苏与抢救分工}
+    - {name: 开展健康教育, detail: 向患者与家属说明用药、饮食与康复注意事项}
+  tools: [护理记录单, 输液与给药器具, 监护仪, 评估量表, 医院信息系统]
+  deliverables: [护理记录, 交班报告, 护理评估表, 健康教育记录, 抢救记录]
+  entry_requirements: [护理学等相关专业, 取得护士执业资格, 掌握基础护理与无菌操作, 能适应倒班, 有临床实习经历优先]
+  career_path:
+    - {name: 护士, detail: 能独立承担责任患者的日常护理}
+    - {name: 护师, detail: 能负责专科护理与带教新人}
+    - {name: 主管护师, detail: 能制定护理方案并参与质量管理}
+    - {name: 护士长/护理部主任, detail: 能管理护理团队与护理质量体系}
+
+skills:
+
+  - skill: 基础护理操作
+    importance: 5
+    level: 中级
+    reason: 日常照护的主体工作，操作是否规范直接影响患者安全与舒适。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：生命体征测量、卧位与基础照护的操作要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责患者日常生活护理与基础操作'}
+
+  - skill: 无菌操作与院感防控
+    importance: 5
+    level: 中级
+    reason: 输液、导尿、换药都属于侵入性操作，无菌不到位会造成院内感染。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：无菌技术、手卫生与医院感染防控要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：严格执行无菌操作与消毒隔离制度'}
+
+  - skill: 病情观察与护理记录
+    importance: 5
+    level: 中级
+    reason: 护士是最早发现病情变化的人，观察与记录决定后续处理是否及时。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：重点患者观察内容与异常上报流程'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：观察病情变化并及时记录与报告'}
+
+  - skill: 静脉输液与给药
+    importance: 5
+    level: 中级
+    reason: 给药是最常见也最容易出错的环节，核对与滴速控制直接关系安全。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：静脉输液流程、三查七对与输液反应处理'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：执行医嘱完成输液与给药'}
+
+  - skill: 急救与心肺复苏
+    importance: 4
+    level: 中级
+    reason: 病房随时可能发生病情突变，抢救配合是每个护士的必备能力。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：心跳呼吸骤停识别与心肺复苏操作要求'}
+      - {source_id: source_med_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：具备急救技能与抢救配合能力'}
+
+  - skill: 护理文书
+    importance: 4
+    level: 中级
+    reason: 护理文书是交接依据，也是医疗纠纷中的关键证据。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: responsibility,
+         note: '规范整理：护理记录、体温单与交班报告的书写要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：规范书写护理文书'}
+
+  - skill: 护患沟通
+    importance: 4
+    level: 中级
+    reason: 患者配合度和满意度很大程度取决于解释与沟通是否到位。
+    evidence:
+      - {source_id: source_med_ethic_001, requirement_type: required, context: responsibility,
+         note: '条文整理：尊重患者知情权与隐私，做好告知与解释'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备良好沟通能力与服务意识'}
+
+  - skill: 护理评估
+    importance: 4
+    level: 初级
+    reason: 护理计划从评估开始，评估不全就会漏掉压疮、跌倒等风险。
+    evidence:
+      - {source_id: source_med_nurse_001, requirement_type: required, context: responsibility,
+         note: '规范整理：入院评估、风险筛查与分级护理要求'}
+
+  - skill: 医疗法规与伦理
+    importance: 3
+    level: 初级
+    reason: 执业范围与隐私保护有明确边界，越界操作会带来执业风险。
+    evidence:
+      - {source_id: source_med_ethic_001, requirement_type: required, context: qualification,
+         note: '条文整理：护士执业注册、查对制度与患者隐私保护'}

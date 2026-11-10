@@ -1,0 +1,147 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 中学教师 —— 岗位画像（人工整理）
+# 版本：v1
+# 最后更新：2026-10-22
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_teaching_std_001  中学教师专业标准、教师资格考试大纲等公开标准的
+#                            通用要求整理（概括，非逐字原文）
+#   source_teaching_jd_001   公开招聘信息中中学教师岗位的通用职责与要求整理
+#                            （多家合并，非单份 JD 逐字引用）
+#
+#   本文件的证据字段标注要求来自哪类公开材料，不是可逐字反查的招聘原文。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: secondary_school_teacher
+job_name: 中学教师
+
+aliases:
+  - 中学教师
+  - 初中教师
+  - 高中教师
+  - 任课教师
+  - 学科教师
+  - 班主任
+  - 教师
+
+category: education
+domain: teaching
+origin: human-curated
+version: 1
+updated_at: 2026-10-22
+
+# 教师岗没有可逐字反查的招聘原文；岗位要求以本文件的人工整理技能表为准。
+ground_requirements: true
+
+profile:
+  summary: 中学教师承担学科教学、班级管理与家校沟通，通过备课、上课、作业与评价帮助学生达成课程标准；交付教学设计、课堂实施与学习结果。
+  core_tasks:
+    - {name: 研读课程标准与教材, detail: 明确单元目标、重难点与学业质量要求}
+    - {name: 设计单元与课时教案, detail: 设计教学目标、活动、问题链与评价方式}
+    - {name: 组织课堂教学, detail: 讲授、提问、组织互动并维持课堂秩序}
+    - {name: 布置批改作业与命题, detail: 设计分层作业与测试，批改并分析作答情况}
+    - {name: 分析学情与个别辅导, detail: 根据成绩与课堂表现识别困难学生并跟进}
+    - {name: 家校沟通与班级管理, detail: 组织家长会、日常沟通与班级事务}
+  tools: [教材与课程标准, PPT/希沃白板等课件工具, 作业批改与成绩分析工具, 班级管理平台/家校群, 教研与公开课资源]
+  deliverables: [教案与课件, 单元测试/作业设计与成绩分析, 学生评语与成长记录, 家长会与家校沟通记录, 教研反思]
+  entry_requirements: [对应学科师范或相关专业, 教师资格证, 普通话等级证书, 扎实的学科知识与教学基本功, 良好的师德与沟通能力]
+  career_path:
+    - {name: 新任教师, detail: 能在指导下完成备课、上课与作业批改}
+    - {name: 合格教师, detail: 能独立承担学科教学并做好班级管理}
+    - {name: 骨干教师, detail: 能承担公开课、教研与青年教师指导}
+    - {name: 学科带头人/年级主任, detail: 能负责学科建设、课程规划与团队管理}
+
+skills:
+
+  - skill: 学科专业知识
+    importance: 5
+    level: 高级
+    reason: 对任教学科的知识体系与常见疑难要有系统掌握，是站上讲台的前提。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：掌握任教学科的知识体系与课程标准'}
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备任教学科相关专业背景'}
+
+  - skill: 教学设计
+    importance: 5
+    level: 中级
+    reason: 把课程标准转成单元与课时方案，决定一节课教什么、怎么教。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能依据课程标准设计教学目标、活动与评价'}
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：独立完成备课、教案编写与课堂教学'}
+
+  - skill: 课堂管理
+    importance: 4
+    level: 中级
+    reason: 维持课堂秩序、组织互动与处理突发情况，直接影响教学效果。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：具备课堂组织与班级管理能力'}
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责课堂纪律与班级日常管理'}
+
+  - skill: 命题与作业设计
+    importance: 4
+    level: 中级
+    reason: 通过作业与测验检验学习效果，题目质量影响反馈的准确性。
+    evidence:
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：布置与批改作业，参与命题与阅卷'}
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能设计分层作业与评价工具'}
+
+  - skill: 学情分析
+    importance: 4
+    level: 中级
+    reason: 根据成绩、课堂表现与作业情况判断学生卡点，才能做针对性辅导。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能分析学生学习情况并调整教学策略'}
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟踪学情，开展个别辅导与分层教学'}
+
+  - skill: 教育心理学
+    importance: 3
+    level: 中级
+    reason: 理解中学生认知与动机规律，帮助处理厌学、焦虑与同伴关系问题。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：掌握教育心理学与青少年发展规律'}
+
+  - skill: 课件制作
+    importance: 3
+    level: 初级
+    reason: 课件、板书与多媒体素材是课堂呈现的基本工具。
+    evidence:
+      - {source_id: source_teaching_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟练使用办公与课件制作软件者优先'}
+
+  - skill: 家校沟通
+    importance: 3
+    level: 初级
+    reason: 与家长同步学生情况、处理分歧，是班主任与任课教师的常规工作。
+    evidence:
+      - {source_id: source_teaching_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：与家长保持沟通，反馈学生在校表现'}
+
+  - skill: 教育政策与师德规范
+    importance: 3
+    level: 初级
+    reason: 教师资格、课程改革与师德要求是入行与日常执教的硬约束。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：遵守教师职业道德规范与教育法律法规'}
+
+  - skill: 教学反思与研究
+    importance: 3
+    level: 初级
+    reason: 通过课后反思、听评课与教研持续改进教学，是教师成长的主要方式。
+    evidence:
+      - {source_id: source_teaching_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能开展教学反思与校本教研'}
+      - {source_id: source_teaching_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与教研活动与公开课者优先'}

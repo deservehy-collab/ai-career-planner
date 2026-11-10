@@ -1,0 +1,15 @@
+# Project 知识库 —— 体育：体质测试分析与运动损伤预防（进阶）
+name: 体质测试分析与运动损伤预防
+domain: sports
+difficulty: intermediate
+covers_skills: [体质测试与评价, 运动损伤预防, 急救与心肺复苏, 运动生理学基础]
+prerequisites: [体育教学法]
+tech_stack: [体测器材, 体质数据平台, 损伤记录表, 急救流程卡]
+stage_hint: 用一次完整体测的数据，做出能落地的干预方案
+deliverable: 一份班级体质分析报告与损伤预防实施方案
+acceptance_criteria:
+  - 测试流程与动作规范符合标准，数据可复测
+  - 分析指出薄弱项与人群特征，不停留在平均分
+  - 干预方案对应到课时安排与课后练习
+  - 预防方案含热身标准、风险动作清单与急救处置流程
+estimated_weeks: 3

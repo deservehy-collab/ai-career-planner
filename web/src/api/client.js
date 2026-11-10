@@ -54,27 +54,14 @@ export function describeDetail(detail) {
   if (detail == null) return ''
   if (typeof detail === 'string') return detail
 
-  // Pydantic 校验错误数组：[{loc: ['body','evidence'], msg: '...'}]
-  if (Array.isArray(detail)) {
-    const parts = detail.map((item) => {
-      if (item && typeof item === 'object') {
-        const where = Array.isArray(item.loc) ? item.loc.filter((p) => p !== 'body').join('.') : ''
-        const msg = item.msg || item.type || '校验失败'
-        return where ? `${where}：${msg}` : msg
-      }
-      return String(item)
-    })
-    return parts.join('；')
-  }
+  // 校验错误数组里是字段名与英文提示，使用者只需要知道"填的内容有问题"。
+  if (Array.isArray(detail)) return '填写的内容有问题，请检查后再试。'
 
   // 业务 dict，例如任务完成的 404：{task_id, completion_status, reason}
   if (typeof detail === 'object') {
     if (detail.reason) return String(detail.reason)
-    try {
-      return JSON.stringify(detail)
-    } catch {
-      return '请求失败'
-    }
+    if (typeof detail.message === 'string') return detail.message
+    return '请求没有成功，请稍后再试。'
   }
 
   return String(detail)
@@ -95,7 +82,6 @@ async function request(path, { method = 'GET', body, signal } = {}) {
 
   const token = getAuthToken()
   if (token) init.headers.Authorization = `Bearer ${token}`
-
   if (body !== undefined) {
     init.headers['Content-Type'] = 'application/json'
     init.body = JSON.stringify(body)
@@ -108,8 +94,7 @@ async function request(path, { method = 'GET', body, signal } = {}) {
     // 被主动取消的请求不要伪装成"后端挂了"
     if (cause && cause.name === 'AbortError') throw cause
     throw new ApiError(
-      '无法连接后端服务。请确认 FastAPI 已在 http://127.0.0.1:8000 启动，' +
-        '并且 Vite 代理（/api）工作正常。',
+      '连不上服务：可能是服务还没启动完，稍等一会儿再试；一直这样就去「系统状态」页看看。',
       { status: NETWORK_ERROR_STATUS, cause },
     )
   }
@@ -120,18 +105,22 @@ async function request(path, { method = 'GET', body, signal } = {}) {
     // 业务接口的 401 = token 缺失/过期/无效：清掉本地登录态并回登录页。
     // /auth/ 自身的 401（比如密码错误）属于正常业务反馈，不能清登录态。
     if (response.status === 401 && !path.startsWith('/auth/')) {
-      clearAuthStorage()
-      redirectToLogin()
+      // 只让**发出这个请求时**的 token 失效登录态。切换账号后旧请求迟到返回
+      // 401 时，不能把后来登录的账号一起登出。
+      if (getAuthToken() === token) {
+        clearAuthStorage()
+        redirectToLogin()
+      }
     }
     const detail = payload && typeof payload === 'object' ? payload.detail : payload
     const described = describeDetail(detail)
     const fallback = {
-      404: '资源不存在',
-      422: '请求参数不合法',
-      500: '后端内部错误',
+      404: '没有找到相关内容，可能已经被删掉了。',
+      422: '填写的内容有问题，请检查后再试。',
+      500: '服务出了点问题，请稍后再试。',
     }[response.status]
     throw new ApiError(
-      described || fallback || `请求失败（HTTP ${response.status}）`,
+      described || fallback || '请求没有成功，请稍后再试。',
       { status: response.status, detail },
     )
   }
@@ -142,4 +131,6 @@ async function request(path, { method = 'GET', body, signal } = {}) {
 export const api = {
   get: (path, options) => request(path, { ...options, method: 'GET' }),
   post: (path, body, options) => request(path, { ...options, method: 'POST', body }),
+  put: (path, body, options) => request(path, { ...options, method: 'PUT', body }),
+  delete: (path, options) => request(path, { ...options, method: 'DELETE' }),
 }

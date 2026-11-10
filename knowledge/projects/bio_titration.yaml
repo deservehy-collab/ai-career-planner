@@ -1,0 +1,15 @@
+# Project 知识库 —— 生化检验：滴定法测定含量（入门）
+name: 滴定法测定含量
+domain: bio-chemical
+difficulty: beginner
+covers_skills: [分析化学基础, 滴定与容量分析, 试剂配制与标定, 检验记录与报告]
+prerequisites: []
+tech_stack: [滴定管, 电子天平, 容量瓶, 标准溶液, 检验记录模板]
+stage_hint: 学习路线起点，把一次含量测定做到可复核
+deliverable: 一份检验记录、含量计算过程与检验报告
+acceptance_criteria:
+  - 试剂配制与标定过程完整，浓度计算有依据
+  - 平行测定结果在允许偏差内，偏差有解释
+  - 计算公式与单位换算逐步写出，可独立复核
+  - 记录为原始填写，无事后涂改
+estimated_weeks: 2

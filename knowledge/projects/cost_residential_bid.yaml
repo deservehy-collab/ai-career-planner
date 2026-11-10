@@ -1,0 +1,15 @@
+# Project 知识库 —— 机械土木：住宅楼工程量清单与投标报价（高阶）
+name: 住宅楼工程量清单与投标报价
+domain: mechanical-civil
+difficulty: advanced
+covers_skills: [工程识图, 工程计量, 清单计价, 造价软件, 定额与取费, 招投标与合同管理, 成本控制, 工程文档与技术交底]
+prerequisites: [工程识图, 工程计量]
+tech_stack: [广联达 / 斯维尔, AutoCAD, 清单计价规范, 当地定额与信息价]
+stage_hint: 完整走一遍算量、计价与报价，并做成本敏感性分析
+deliverable: 一份工程量清单、投标报价文件与成本分析说明
+acceptance_criteria:
+  - 建模算量与手算抽查结果偏差在说明范围内，差异有解释
+  - 项目特征描述完整，清单项无重复无漏项
+  - 定额套用与取费程序可复核，人材机价格有来源
+  - 成本分析指出主要盈亏项与风险点，并给出投标策略建议
+estimated_weeks: 8

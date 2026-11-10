@@ -1,0 +1,146 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 教研员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_teach_std_001   教育部《关于加强和改进新时代基础教育教研工作的意见》
+#                          等公开文件的要点整理
+#                          https://www.moe.gov.cn/ （访问日期 2026-11-10）
+#   source_teach_std_002   中国教研网公开的教研活动、课程标准与校本研修材料要点整理
+#                          https://www.zgjiaoyan.com/ （访问日期 2026-11-10）
+#   source_teach_jd_001    公开招聘信息中教研员/学科教研员/课程研究员岗位的通用职责
+#                          与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: teaching_researcher
+job_name: 教研员
+
+aliases:
+  - 教研员
+  - 教研主任
+  - 学科教研员
+  - 教研组长
+  - 课程研究员
+
+category: education
+domain: teaching
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 教研员依据课程标准开展教材与教学研究，组织校本研修与听课评课，指导教师改进课堂，并参与课程研发、命题与教学质量评估。
+  core_tasks:
+    - {name: 解读课程标准, detail: 把课标目标与内容要求转化为单元与课堂可执行的目标}
+    - {name: 分析教材与教学问题, detail: 梳理单元结构、重难点与常见学习困难}
+    - {name: 组织教研活动, detail: 设计听课评课、专题研讨与集体备课，形成改进产出}
+    - {name: 指导教师改进教学, detail: 通过观课、反馈与示范课帮助教师调整教学}
+    - {name: 参与课程研发, detail: 开发校本课程与教学资源，组织试用与修订}
+    - {name: 参与命题与质量评估, detail: 依据课标与学情设计试题，分析考试与作业数据}
+  tools: [课程标准, 教材与教参, 听课评课记录表, 命题工具, Excel, 教研平台]
+  deliverables: [课程标准解读材料, 单元教学设计, 教研活动方案与记录, 听课评课报告, 命题与质量分析报告, 校本课程资源]
+  entry_requirements: [师范类/学科相关专业, 具备一线教学经验, 熟悉课程标准与教材, 具备教研组织与写作能力, 有论文、课题或公开课成果优先]
+  career_path:
+    - {name: 兼职教研员/教研组长, detail: 能组织学科教研活动并指导本组教师}
+    - {name: 学科教研员, detail: 能负责区域学科教研、命题与质量分析}
+    - {name: 教研主任, detail: 能统筹多学科教研、课程建设与教师发展}
+    - {name: 教研机构负责人, detail: 能制定区域教研规划与质量标准}
+
+skills:
+
+  - skill: 课程标准解读
+    importance: 5
+    level: 高级
+    reason: 课标是教学、命题与评价的上位依据，解读能力是教研员的核心专业能力。
+    evidence:
+      - {source_id: source_teach_std_001, requirement_type: required, context: responsibility,
+         note: '公开文件整理：教研工作应围绕课程标准与育人目标开展'}
+      - {source_id: source_teach_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟悉课程标准，能指导教师落实课标要求'}
+
+  - skill: 教材分析
+    importance: 5
+    level: 高级
+    reason: 教材是课标落地的主要载体，分析能力决定教研指导的质量。
+    evidence:
+      - {source_id: source_teach_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：开展教材分析、单元整体教学研究'}
+
+  - skill: 课程研发
+    importance: 5
+    level: 中级
+    reason: 教研员要参与校本课程与教学资源建设，而不只是评价课堂。
+    evidence:
+      - {source_id: source_teach_std_002, requirement_type: required, context: responsibility,
+         note: '公开材料整理：参与课程资源开发与校本课程建设'}
+      - {source_id: source_teach_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：参与课程研发与教学资源编写'}
+
+  - skill: 校本研修设计
+    importance: 4
+    level: 中级
+    reason: 组织教师研修是教研员推动课堂改进的主要工作方式。
+    evidence:
+      - {source_id: source_teach_std_001, requirement_type: required, context: responsibility,
+         note: '公开文件整理：组织开展校本研修，服务教师专业发展'}
+      - {source_id: source_teach_std_002, requirement_type: required, context: responsibility,
+         note: '公开材料整理：设计听课评课、集体备课与专题研修活动'}
+
+  - skill: 命题与作业设计
+    importance: 4
+    level: 中级
+    reason: 命题质量影响教学导向，教研员常承担区域命题与作业设计指导。
+    evidence:
+      - {source_id: source_teach_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：参与命题、作业设计与考试质量分析'}
+
+  - skill: 教学设计
+    importance: 5
+    level: 高级
+    reason: 指导课堂改进需要能判断教学目标、活动与评价是否一致。
+    evidence:
+      - {source_id: source_teach_std_002, requirement_type: required, context: qualification,
+         note: '公开材料整理：掌握单元与课时教学设计的基本规范'}
+      - {source_id: source_teach_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备较强的教学设计能力，能上示范课'}
+
+  - skill: 学情分析
+    importance: 4
+    level: 中级
+    reason: 教研建议必须基于学生真实学习情况，而不是抽象原则。
+    evidence:
+      - {source_id: source_teach_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：基于考试与作业数据开展学情分析'}
+
+  - skill: 教学反思与研究
+    importance: 5
+    level: 高级
+    reason: 教研员要能把课堂问题转化为研究问题并形成可推广的成果。
+    evidence:
+      - {source_id: source_teach_std_001, requirement_type: required, context: qualification,
+         note: '公开文件整理：教研员应具备教学研究、反思与成果转化能力'}
+      - {source_id: source_teach_std_002, requirement_type: required, context: responsibility,
+         note: '公开材料整理：通过课例研究、反思与论文沉淀教研成果'}
+
+  - skill: 学科专业知识
+    importance: 5
+    level: 高级
+    reason: 学科功底决定能否准确判断教材、课堂与试题质量。
+    evidence:
+      - {source_id: source_teach_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备扎实的学科专业知识与教学经验'}
+
+  - skill: 教育政策与师德规范
+    importance: 3
+    level: 中级
+    reason: 教研工作必须符合教育政策与师德要求，守住合规底线。
+    evidence:
+      - {source_id: source_teach_std_001, requirement_type: required, context: qualification,
+         note: '公开文件整理：教研工作应落实教育政策与师德规范要求'}

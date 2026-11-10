@@ -1,0 +1,15 @@
+# Project 知识库 —— 法务公共：争议解决与合规风险梳理（高阶）
+name: 争议解决与合规风险梳理
+domain: legal-public
+difficulty: advanced
+covers_skills: [法律检索, 法律文书写作, 诉讼与仲裁程序, 证据整理与归档, 企业合规基础, 法律风险提示, 信息安全与保密]
+prerequisites: [合同法与公司法基础, 合同审查]
+tech_stack: [国家法律法规数据库, 裁判文书网, 证据清单模板, 合规检查表]
+stage_hint: 从一起真实争议出发，同时把背后的合规漏洞补上
+deliverable: 一份争议处理方案、证据清单与合规整改建议
+acceptance_criteria:
+  - 检索结论区分法律、行政法规与司法解释的效力层级
+  - 诉讼或仲裁路径有管辖、时效与成本对比
+  - 证据清单按争议焦点分组，标明原件与待补材料
+  - 整改建议对应到具体制度、岗位与完成时限
+estimated_weeks: 5

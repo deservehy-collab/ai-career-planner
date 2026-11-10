@@ -1,0 +1,127 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 行政专员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_admin_std_001  党政机关公文格式国家标准与机关事务管理相关公开规定
+#                         要点整理
+#                         https://www.gov.cn/ （访问日期 2026-11-10）
+#   source_law_jd_001     公开招聘信息中行政专员/综合事务岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: administrative_specialist
+job_name: 行政专员
+
+aliases:
+  - 行政专员
+  - 行政助理
+  - 综合行政
+  - 行政管理员
+  - 办公室文员
+
+category: legal-public
+domain: legal-public
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 行政专员负责公文与档案管理、会务与活动组织、采购与固定资产管理及日常费用报销，保障办公运转有序、资料可查、流程合规。
+  core_tasks:
+    - {name: 处理公文, detail: 起草通知、请示与纪要，按格式流转与归档}
+    - {name: 组织会议与活动, detail: 编制方案、通知参会、准备材料并跟进落实}
+    - {name: 管理档案与证照, detail: 建立台账，办理借阅、年检与变更}
+    - {name: 采购与资产管理, detail: 按制度询价比价、验收登记与定期盘点}
+    - {name: 费用报销与预算, detail: 审核单据，登记费用台账并做执行分析}
+    - {name: 支撑日常事务, detail: 办公环境、接待与跨部门协调}
+  tools: [Office 套件, OA 系统, 电子签平台, 资产管理系统, 报销系统]
+  deliverables: [公文与纪要, 会务方案, 档案台账, 资产盘点表, 费用月报]
+  entry_requirements: [行政管理/文秘/中文等相关专业, 熟练使用 Office, 文字与沟通表达能力好, 细致有条理, 有学生会或行政实习经历优先]
+  career_path:
+    - {name: 行政专员, detail: 能独立承担日常行政事务}
+    - {name: 行政主管, detail: 能负责流程优化与团队分工}
+    - {name: 行政经理, detail: 能统筹办公、采购、资产与预算}
+    - {name: 综合管理负责人, detail: 能支撑组织运营与制度建设}
+
+skills:
+
+  - skill: 公文写作
+    importance: 5
+    level: 中级
+    reason: 公文是行政的主要输出，格式与口径错误会直接被退回重写。
+    evidence:
+      - {source_id: source_admin_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：党政机关公文格式与文种使用要求'}
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责通知、报告等公文起草'}
+
+  - skill: 行政事务统筹
+    importance: 5
+    level: 中级
+    reason: 行政同时对接多个部门与多类事务，统筹不好就到处救火。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：统筹办公事务与跨部门协调'}
+
+  - skill: Office 办公软件
+    importance: 5
+    level: 中级
+    reason: 文档、表格与汇报材料都靠它完成，效率差距非常明显。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Word、Excel、PPT'}
+
+  - skill: 会务与活动组织
+    importance: 4
+    level: 中级
+    reason: 会议与活动是高频事项，细节疏漏对组织形象影响直接。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责会议组织与活动执行'}
+
+  - skill: 档案与资料管理
+    importance: 4
+    level: 初级
+    reason: 合同、证照与审批资料的留存关系到审计与举证。
+    evidence:
+      - {source_id: source_admin_std_001, requirement_type: required, context: responsibility,
+         note: '规定整理：文件归档、保管期限与借阅管理要求'}
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责档案与证照管理'}
+
+  - skill: 采购与固定资产管理
+    importance: 4
+    level: 中级
+    reason: 采购与资产是行政掌握资源的主要环节，账实不符是审计重点。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责办公采购与固定资产管理'}
+
+  - skill: 预算与报销
+    importance: 4
+    level: 初级
+    reason: 费用审核是行政的固定动作，票据不合规会连带影响部门。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：审核报销单据并跟踪部门预算'}
+
+  - skill: 信息安全与保密
+    importance: 3
+    level: 初级
+    reason: 行政接触人事、合同与高层文件，保密意识是底线。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：具备保密意识，能规范管理敏感文件'}
+
+  - skill: 合同审查
+    importance: 3
+    level: 初级
+    reason: 行政常负责合同用印与归档，看得懂条款才能发现缺件与异常。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：协助合同用印、归档与台账维护'}

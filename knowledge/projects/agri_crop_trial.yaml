@@ -1,0 +1,15 @@
+# Project 知识库 —— 农林：作物种植方案与田间试验（进阶）
+name: 作物种植方案与田间试验
+domain: agriculture-environment
+difficulty: intermediate
+covers_skills: [作物栽培技术, 土壤与肥料, 病虫害防治, 田间试验与记录, 农药安全使用]
+prerequisites: [作物栽培技术]
+tech_stack: [测土报告, 田间记录表, 病虫害图鉴, 气象数据]
+stage_hint: 为一个具体作物制定方案，并用一季试验验证关键措施
+deliverable: 一份种植技术方案、田间记录与试验小结
+acceptance_criteria:
+  - 方案写明品种、播期、密度、水肥与关键管理节点
+  - 施肥量由测土结果计算得出，并说明取舍
+  - 试验设对照与重复，记录生育期与产量构成
+  - 用药符合安全间隔期，记录药剂、剂量与施药时间
+estimated_weeks: 4

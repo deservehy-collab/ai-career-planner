@@ -6,6 +6,8 @@
  *     规划的业务状态仍然只由 stores/analysis.js 与后端工作流负责。
  *   - 会话只有一路：没有多会话列表、没有后端聊天表。消息存在这台浏览器的
  *     localStorage（与画像同口径），刷新后仍在，点「清空会话」即彻底删除。
+ *   - 状态是**模块级单例**：助手页切走再回来，消息、sending 和正在跑的请求
+ *     都还在；整页刷新才会中断请求，但完整回合已经写入 localStorage。
  *   - 上下文长度有硬上限（见 HISTORY_LIMIT），发送前裁剪；后端还会二次裁剪。
  *
  * 状态机（每条 AI 消息）：
@@ -50,7 +52,7 @@ function loadStored() {
     .map((item) => ({ id: nextId(), role: item.role, text: item.text, state: 'done', error: '' }))
 }
 
-export function useChatSession() {
+function createSession() {
   const messages = ref(loadStored())
   const sending = ref(false)
   const inputError = ref('')
@@ -192,4 +194,12 @@ export function useChatSession() {
   return {
     messages, sending, inputError, requestError, hasConversation, send, stop, retry, clear,
   }
+}
+
+// 页面卸载不能把会话一起带走：缓存唯一实例，切路由后仍由同一个 runTurn 收尾。
+let session = null
+
+export function useChatSession() {
+  if (!session) session = createSession()
+  return session
 }

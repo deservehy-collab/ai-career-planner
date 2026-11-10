@@ -1,0 +1,135 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 农业技术员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_agri_std_001   农业农村部发布的测土配方施肥、病虫害防治与农业技术
+#                         推广相关公开规范要点整理
+#                         https://www.moa.gov.cn/ （访问日期 2026-11-10）
+#   source_agri_jd_001    公开招聘信息中农业技术员/农艺师岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: agriculture_technician
+job_name: 农业技术员
+
+aliases:
+  - 农业技术员
+  - 农艺师
+  - 农技员
+  - 种植技术员
+  - 农业技术推广员
+
+category: agriculture-environment
+domain: agriculture-environment
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 农业技术员负责作物种植方案与田间管理指导，开展土壤肥料与病虫害防治工作，组织田间试验与技术培训，保障产量、品质与生产安全。
+  core_tasks:
+    - {name: 制定种植方案, detail: 结合品种、气候与地力确定播期、密度与水肥策略}
+    - {name: 田间巡查指导, detail: 观察长势与病虫情况，给出处理措施}
+    - {name: 土壤与施肥, detail: 看测土报告计算配方肥用量}
+    - {name: 病虫害防治, detail: 按防治指标选药，落实安全间隔期}
+    - {name: 开展田间试验, detail: 设置对照与重复，记录生育期与产量}
+    - {name: 组织技术培训, detail: 做田间观摩与操作示范，跟踪应用效果}
+  tools: [测土报告, 病虫害图鉴, 田间记录表, 气象数据, 常用农机]
+  deliverables: [种植技术方案, 田间记录, 病虫防治记录, 试验报告, 培训材料]
+  entry_requirements: [农学/园艺/植物保护等相关专业, 了解作物栽培与病虫防治, 能下田间作业, 沟通表达清晰, 有基地实习经历优先]
+  career_path:
+    - {name: 农业技术员, detail: 能独立负责一个作物或片区的技术指导}
+    - {name: 农艺师, detail: 能制定区域技术方案并开展试验}
+    - {name: 技术主管, detail: 能统筹多个基地的技术与质量}
+    - {name: 农业技术总监, detail: 能负责技术体系与产品标准}
+
+skills:
+
+  - skill: 作物栽培技术
+    importance: 5
+    level: 高级
+    reason: 从种到收的每个环节都要给得出可执行的意见，这是岗位基本功。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：主要作物栽培技术规程与田间管理要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责作物种植技术指导与田间管理'}
+
+  - skill: 病虫害防治
+    importance: 5
+    level: 中级
+    reason: 病虫爆发窗口很短，判断与处置不及时就会造成实质减产。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：病虫害监测、防治指标与综合防治措施'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：识别病虫害并制定防治方案'}
+
+  - skill: 土壤与肥料
+    importance: 5
+    level: 中级
+    reason: 施肥方案直接影响产量、品质与成本，也关系面源污染。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：测土配方施肥与肥料施用要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：制定施肥方案并指导科学用肥'}
+
+  - skill: 农药安全使用
+    importance: 4
+    level: 中级
+    reason: 用药不当会造成农残超标与人员中毒，属于硬性红线。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：农药安全间隔期、轮换用药与防护要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉农药安全使用规范'}
+
+  - skill: 田间试验与记录
+    importance: 4
+    level: 中级
+    reason: 新品种与新方案能不能推，取决于试验数据是否站得住。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：农业试验设计、观察记载与数据处理要求'}
+      - {source_id: source_agri_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：开展品种与肥料试验并撰写报告'}
+
+  - skill: 农产品质量安全
+    importance: 4
+    level: 初级
+    reason: 抽检不合格会直接影响销售与品牌，生产记录是追溯依据。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：农产品质量安全控制与生产记录要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉农产品质量安全相关要求'}
+
+  - skill: 农业推广与培训
+    importance: 4
+    level: 初级
+    reason: 技术只有被农户用起来才有价值，讲不清等于没推广。
+    evidence:
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：组织技术培训与现场指导'}
+
+  - skill: 采样与现场记录
+    importance: 3
+    level: 初级
+    reason: 测土与品质检测都从规范采样开始，记录缺失就无法解释结果。
+    evidence:
+      - {source_id: source_agri_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：土壤与植株样品的采集与记录要求'}
+
+  - skill: 农机与设施基础
+    importance: 3
+    level: 初级
+    reason: 规模化种植依赖农机与设施，操作不规范会误农时。
+    evidence:
+      - {source_id: source_agri_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解常用农机与设施使用者优先'}

@@ -1,0 +1,15 @@
+# Project 知识库 —— 农林环境：排污单位自行监测方案（高阶）
+name: 排污单位自行监测方案
+domain: agriculture-environment
+difficulty: advanced
+covers_skills: [环境监测方法, 采样与现场记录, 水质与大气检测, 实验室质量控制, 环保法规与标准, 检测报告编制, 危废与安全管理]
+prerequisites: [采样与现场记录, 环境监测方法]
+tech_stack: [排污许可证信息, 排放标准汇编, 监测方案模板, 实验室信息管理系统]
+stage_hint: 站在企业角度把监测、质控与合规串成一套可执行方案
+deliverable: 一份自行监测方案、质控计划与年度监测结果分析
+acceptance_criteria:
+  - 监测点位、指标与频次依据排污许可和排放标准确定，并注明出处
+  - 采样与分析方法逐项写明标准编号
+  - 质控计划覆盖空白、平行、加标与期间核查
+  - 结果分析指出超标项、原因判断与整改建议
+estimated_weeks: 6

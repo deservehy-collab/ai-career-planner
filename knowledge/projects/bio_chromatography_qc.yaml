@@ -1,0 +1,15 @@
+# Project 知识库 —— 生化检验：色谱法测定与质量控制（高阶）
+name: 色谱法测定与质量控制
+domain: bio-chemical
+difficulty: advanced
+covers_skills: [色谱分析, 样品前处理, 分析仪器操作, 分析仪器维护, 药品与产品标准法规, 实验室质量控制, 检验记录与报告]
+prerequisites: [分析化学基础, 分析仪器操作]
+tech_stack: [高效液相色谱仪, 色谱柱, 标准品, 实验室信息管理系统, 药典标准]
+stage_hint: 按药品检验流程完成方法确认、样品检测与异常调查
+deliverable: 一份方法确认报告、检验记录、OOS 调查记录与检验报告
+acceptance_criteria:
+  - 系统适用性数据完整，不合格时不进样
+  - 标准曲线、检出限与回收率符合方法要求
+  - OOS 结果按流程调查，明确是实验室原因还是样品原因
+  - 报告判定引用现行标准条款，结论可追溯
+estimated_weeks: 6

@@ -1,0 +1,15 @@
+# Project 知识库 —— 中学教师：主题班会与家校沟通方案（高级综合项目）
+name: 主题班会与家校沟通方案
+domain: teaching
+difficulty: advanced
+covers_skills: [家校沟通, 课堂管理, 教育政策与师德规范]
+prerequisites: [教育心理学, 课堂管理]
+tech_stack: [班会方案模板, 家长会 PPT, 沟通记录表]
+stage_hint: 学习路线后期，综合班级管理、沟通与政策规范处理真实场景
+deliverable: 一份主题班会方案 + 家长会材料 + 3 个典型沟通场景的话术与处理流程
+acceptance_criteria:
+  - 班会主题与学生真实问题相关，活动有参与度而非单向说教
+  - 家长会材料能说清学生情况、班级安排与家长配合事项
+  - 针对成绩下滑、行为冲突、心理信号三类场景给出合规处理流程
+  - 方案守住师德与未成年人保护底线，涉及风险时明确转介路径
+estimated_weeks: 3

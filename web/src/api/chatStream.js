@@ -12,8 +12,9 @@
  *   event: done   data: {"chars": 128}
  *   event: error  data: {"message": "给人看的一句话"}
  *
- * 取消：调用方传 AbortController 的 signal。abort() 会掐断 fetch，
- * 后端生成器随之关闭并释放上游 Ollama 连接 —— 模型真的会停止生成。
+ * 取消：调用方传 AbortController 的 signal。abort() 会掐断 fetch，后端随之关闭
+ * 上游连接。注意 Ollama 不保证立即终止已开始的生成（它只有一个推理槽），
+ * 真正防止"无限生成占死服务"的是后端下发的 num_predict 上限。
  */
 
 import {
@@ -82,7 +83,7 @@ export async function streamChat({ message, history = [], signal, onStart, onDel
   } catch (cause) {
     if (cause && cause.name === 'AbortError') throw cause
     throw new ApiError(
-      '无法连接后端服务，聊天请求没有发出。请确认 FastAPI 已在 http://127.0.0.1:8000 启动。',
+      '连不上服务，这次消息没有发出去。稍等一会儿再试。',
       { status: NETWORK_ERROR_STATUS, cause },
     )
   }
@@ -95,13 +96,13 @@ export async function streamChat({ message, history = [], signal, onStart, onDel
       redirectToLogin()
     }
     throw new ApiError(
-      describeDetail(detail) || `请求失败（HTTP ${response.status}）`,
+      describeDetail(detail) || '请求没有成功，请稍后再试。',
       { status: response.status, detail },
     )
   }
 
   if (!response.body) {
-    throw new ApiError('当前浏览器不支持流式读取（ReadableStream 不可用），请换用较新的浏览器。')
+    throw new ApiError('这个浏览器版本太旧，用不了边生成边显示的聊天，换一个新一点的浏览器再试。')
   }
 
   const reader = response.body.getReader()
@@ -112,7 +113,7 @@ export async function streamChat({ message, history = [], signal, onStart, onDel
 
   const handle = (frame) => {
     const { event, data, broken } = parseFrame(frame)
-    if (broken) throw new ApiError('后端返回的流式数据格式无法解析，本次回答已中止。')
+    if (broken) throw new ApiError('回答传输出错了，这次生成已中止，请再问一次。')
     if (event === 'start') {
       if (onStart) onStart(data || {})
       return

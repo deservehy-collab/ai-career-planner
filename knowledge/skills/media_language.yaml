@@ -1,0 +1,248 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 传媒与语言服务技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/content-editor.yaml 或
+#     knowledge/jobs/translator.yaml 里。
+#   - 内容策划、文案写作定义在 knowledge/skills/operations.yaml，此处复用不重复定义。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 采访与信息核实
+  category: media-language
+  level_guides:
+    入门: 知道采访需要准备提纲并记录原话。
+    初级: 能完成一次结构化采访并整理成可用素材。
+    中级: 能设计采访角度，交叉核实关键信息与数据来源。
+    高级: 能策划深度选题并处理敏感信息与信源保护。
+  prerequisites: []
+  typical_usage: 一手信息是内容可信度的来源，核实不到位就会传出错误。
+  common_pitfalls:
+    - 只采访单一信源，不做交叉验证。
+    - 把受访者观点当成事实直接写入。
+  learning_resources:
+    - {title: '国家新闻出版署（新闻采编相关规定）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 稿件编辑与校对
+  category: media-language
+  level_guides:
+    入门: 知道标题、导语、正文的基本结构。
+    初级: 能改通顺病句、统一体例并纠正错别字。
+    中级: 能重构稿件结构，处理事实、逻辑与表述问题。
+    高级: 能制定编辑规范并终审把关。
+  prerequisites: []
+  typical_usage: 稿件质量直接决定读者是否读完，编辑是把关环节。
+  common_pitfalls:
+    - 只改错别字，不动结构与逻辑。
+    - 统一体例时不查证专有名词写法。
+  learning_resources:
+    - {title: '国家新闻出版署（新闻出版行业标准）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 标题与版式设计
+  category: media-language
+  level_guides:
+    入门: 知道标题要准确概括内容。
+    初级: 能写出信息明确、不夸大的标题。
+    中级: 能结合平台与受众调整标题与版面结构。
+    高级: 能建立栏目版式规范并带动整体风格。
+  prerequisites: [稿件编辑与校对]
+  typical_usage: 标题与版式决定点击与阅读体验，也最容易踩合规红线。
+  common_pitfalls:
+    - 为点击量做标题党，实际内容对不上。
+    - 版式信息层级混乱，重点被淹没。
+  learning_resources:
+    - {title: '国家新闻出版署（新闻出版行业标准）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 新媒体内容运营
+  category: media-language
+  level_guides:
+    入门: 知道公众号、短视频等平台的内容形态差异。
+    初级: 能按平台规则完成内容发布与基础维护。
+    中级: 能规划内容节奏，结合数据调整选题。
+    高级: 能搭建内容矩阵并沉淀可复用的生产流程。
+  prerequisites: []
+  typical_usage: 内容不再只发一次，运营决定它能不能被看到。
+  common_pitfalls:
+    - 一套内容原样搬多个平台，不按平台改写。
+    - 只追热点不做定位，粉丝画像混乱。
+  learning_resources:
+    - {title: '国家新闻出版署（互联网内容管理相关规定）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 内容合规与版权
+  category: media-language
+  level_guides:
+    入门: 知道转载要授权、图片有版权。
+    初级: 能识别常见违规表述与侵权风险。
+    中级: 能建立素材来源登记与审核流程。
+    高级: 能处理侵权纠纷并制定合规制度。
+  prerequisites: []
+  typical_usage: 一次侵权或违规可能导致删稿、赔偿甚至停号。
+  common_pitfalls:
+    - 直接使用网络图片，不查授权。
+    - 引用数据不标来源，被指造谣。
+  learning_resources:
+    - {title: '国家版权局（著作权相关法规）', url: 'https://www.ncac.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 摄影与素材处理
+  category: media-language
+  level_guides:
+    入门: 知道曝光、构图与常见拍摄场景。
+    初级: 能拍出可用配图并做基础裁剪调色。
+    中级: 能按内容需求设计拍摄方案。
+    高级: 能建立素材库与视觉风格规范。
+  prerequisites: []
+  typical_usage: 配图质量直接影响内容质感，缺图或图不对文很常见。
+  common_pitfalls:
+    - 图片与内容无关，只为凑数。
+    - 过度修图导致失实。
+  learning_resources:
+    - {title: '国家版权局（著作权相关法规）', url: 'https://www.ncac.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 内容数据复盘
+  category: media-language
+  level_guides:
+    入门: 知道阅读量、完读率、转化等基础指标。
+    初级: 能按周汇总数据并描述变化。
+    中级: 能定位数据变化原因并提出选题调整。
+    高级: 能建立内容评估体系支撑策略决策。
+  prerequisites: [新媒体内容运营]
+  typical_usage: 不复盘就只能凭感觉选题，无法判断什么内容真正有效。
+  common_pitfalls:
+    - 只看阅读量，不看转化与留存。
+    - 数据异常不排查，把波动当趋势。
+  learning_resources:
+    - {title: '国家新闻出版署（新闻出版行业标准）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 英汉互译
+  category: media-language
+  level_guides:
+    入门: 能翻译句子结构简单的日常文本。
+    初级: 能完成一般说明性文本的英汉互译，语法正确。
+    中级: 能处理长句与专业文本，译文通顺准确。
+    高级: 能胜任高难度文体翻译并保证风格一致。
+  prerequisites: []
+  typical_usage: 翻译岗位的核心技能，准确与通顺缺一不可。
+  common_pitfalls:
+    - 逐词硬译，中文读起来不像中文。
+    - 漏译修饰成分或改变原意。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 8
+
+- skill: 翻译策略与文体
+  category: media-language
+  level_guides:
+    入门: 知道直译与意译的区别。
+    初级: 能按文本类型选择基本译法。
+    中级: 能针对法律、技术、营销等文体调整表达。
+    高级: 能制定项目翻译策略与风格指南。
+  prerequisites: [英汉互译]
+  typical_usage: 同一句话在不同文体里译法不同，策略错就整体走偏。
+  common_pitfalls:
+    - 所有文体用同一套译法。
+    - 过度归化，丢掉原文关键信息。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 5
+
+- skill: 术语管理
+  category: media-language
+  level_guides:
+    入门: 知道同一术语在同一项目里要统一。
+    初级: 能整理并维护简单的术语表。
+    中级: 能建立术语库并处理多义术语。
+    高级: 能主导跨项目术语标准化。
+  prerequisites: []
+  typical_usage: 术语不统一是译文质量投诉里最常见的问题。
+  common_pitfalls:
+    - 同一术语前后译法不一致。
+    - 术语表建了不用，形同虚设。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 3
+
+- skill: 计算机辅助翻译
+  category: media-language
+  level_guides:
+    入门: 知道 CAT 工具与翻译记忆库的作用。
+    初级: 能用 CAT 工具完成项目并复用记忆库。
+    中级: 能配置项目设置、处理标签与批量替换。
+    高级: 能搭建团队协作流程与质量检查规则。
+  prerequisites: [术语管理]
+  typical_usage: 商业翻译项目普遍用 CAT 保证一致性与效率。
+  common_pitfalls:
+    - 过度依赖记忆库匹配，产生错位译文。
+    - 不检查标签，导出后格式全乱。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 4
+
+- skill: 审校与质量检查
+  category: media-language
+  level_guides:
+    入门: 知道审校要查漏译、错译与格式。
+    初级: 能按清单完成双语对照审校。
+    中级: 能区分错误等级并提出修改方案。
+    高级: 能建立质量评估体系与审校流程。
+  prerequisites: [英汉互译]
+  typical_usage: 交付前的最后一道关，漏检的错误会直接到客户手里。
+  common_pitfalls:
+    - 只看中文不看原文，错译查不出来。
+    - 审校意见模糊，译者无法执行。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 4
+
+- skill: 行业知识
+  category: media-language
+  level_guides:
+    入门: 知道所服务行业的基本概念与常见表达。
+    初级: 能读懂行业文档并准确使用专业词汇。
+    中级: 能理解行业业务逻辑，判断译文是否合理。
+    高级: 能成为某垂直领域的专家型译者或编辑。
+  prerequisites: []
+  typical_usage: 不懂行业就只能翻字面，专业读者一眼看出外行。
+  common_pitfalls:
+    - 用通用词典硬套专业词。
+    - 不理解业务场景，译文逻辑自相矛盾。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 6
+
+- skill: 本地化基础
+  category: media-language
+  level_guides:
+    入门: 知道本地化不只是翻译，还包括格式与文化适配。
+    初级: 能处理日期、货币、单位等本地化要素。
+    中级: 能处理软件或网站的界面文案与长度限制。
+    高级: 能规划多语言发布流程与地区适配策略。
+  prerequisites: [翻译策略与文体]
+  typical_usage: 出海产品必须本地化，直译会在目标市场闹笑话。
+  common_pitfalls:
+    - 只翻文字不管界面长度，按钮文字溢出。
+    - 忽略文化禁忌与地区差异。
+  learning_resources:
+    - {title: '全国翻译专业资格（水平）考试', url: 'http://www.catticenter.com/'}
+  estimated_weeks: 4
+
+- skill: 查证与资料检索
+  category: media-language
+  level_guides:
+    入门: 会用搜索引擎与百科查找基本信息。
+    初级: 能通过官方渠道核实数据与政策。
+    中级: 能交叉比对多来源并判断可信度。
+    高级: 能建立资料库与核查流程。
+  prerequisites: []
+  typical_usage: 编辑与翻译都靠查证兜底，凭印象写很容易出错。
+  common_pitfalls:
+    - 只查一个来源就下结论。
+    - 引用二手转述而不追原始出处。
+  learning_resources:
+    - {title: '国家新闻出版署（新闻采编相关规定）', url: 'https://www.nppa.gov.cn/'}
+  estimated_weeks: 3

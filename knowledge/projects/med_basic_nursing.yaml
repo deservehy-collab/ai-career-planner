@@ -1,0 +1,15 @@
+# Project 知识库 —— 医药护理：基础护理操作与护理文书（入门）
+name: 基础护理操作与护理文书
+domain: healthcare
+difficulty: beginner
+covers_skills: [基础护理操作, 病情观察与护理记录, 无菌操作与院感防控, 护理文书]
+prerequisites: []
+tech_stack: [护理操作流程单, 生命体征记录单, 护理文书模板, 手卫生规范]
+stage_hint: 学习路线起点，围绕一位住院患者完成一班的护理操作与记录
+deliverable: 一份完整的当班护理记录与操作核对单
+acceptance_criteria:
+  - 每项操作前核对患者身份与医嘱，过程写清关键步骤
+  - 生命体征、出入量与观察结果按时间顺序记录，无空项
+  - 异常数值写明报告对象与处理经过
+  - 操作与记录能对应上，可被下一班直接接手
+estimated_weeks: 2

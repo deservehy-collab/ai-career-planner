@@ -16,8 +16,9 @@
 
 三条硬边界
 ----------
-1. **本模块不写 ``growth.json``。** 成长历史的唯一写入方是阶段五的 ``growth_node``
-   （:func:`agents.growth_agent.growth_node`）。在这里再写一次，同一份历史就会被写两遍，
+1. **本模块不写 ``growth.json``。** 正常记账的唯一写入方是阶段五的 ``growth_node``
+   （:func:`agents.growth_agent.growth_node`）；用户显式作废另走
+   ``agents.growth_adjust`` 追加调整记录。在这里再写一次，同一份历史就会被写两遍，
    ``user_skills_after`` 快照与 ``history`` 条数随之错位。
    所以 :func:`evaluate_task_growth` 算出的是**真实计算、但不落盘**的升级计划：
    指纹集合、技能知识库、前置门禁全部取自阶段五的现状，只是由 workflow 那一侧去写。
@@ -60,6 +61,9 @@ from agents.growth_agent import (
 from agents.growth_rules import (
     EVENT_LEARNING,
     EVENT_PROJECT,
+    EVIDENCE_KIND_GROWTH,
+    EVIDENCE_KIND_SELF_REPORT,
+    VALID_EVIDENCE_KINDS,
     event_fingerprint,
     normalize_skills,
     plan_upgrades,
@@ -73,7 +77,7 @@ from agents.loop_store import (
     TASK_COMPLETED,
     LoopStore,
 )
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
 
 
 class GrowthLoopError(RuntimeError):
@@ -166,12 +170,12 @@ def _task_skill_names(task) -> list[str]:
 
 
 def map_task_skills(task, vocabulary=None) -> dict:
-    """把任务关联技能映射到项目已有的**规范技能名**。
+    """把任务关联技能折算成成长记账用的技能键。
 
-    直接调用 ``growth_rules.normalize_skills()``（内部即
-    ``utils.build_skill_mapping`` + ``resolve_canonical``），因此与阶段五同一口径：
-    **只有唯一命中才采用**，没命中或有歧义一律进 ``unmapped``，
-    **绝不自动映射到相似技能**，也**绝不悄悄丢掉**（业务规则 8）。
+    直接调用 ``growth_rules.normalize_skills()``，因此与阶段五同一口径：
+    **唯一命中词表才折算成规范名**；词表没收录的（非 AI 岗位的缺口名）按原名记账
+    并照样列进 ``unmapped``；沾上多个的（歧义）丢弃。**绝不自动映射到相似技能**，
+    也**绝不悄悄丢掉**（业务规则 8）。
 
     返回 ``{raw, canonical, unmapped, vocabulary_available}``。
     """
@@ -190,7 +194,7 @@ def _event_failure(status: str, reason: str) -> dict:
     return {"status": status, "reason": reason, "event": None}
 
 
-def build_growth_event(task, evidence=None) -> dict:
+def build_growth_event(task, evidence=None, evidence_kind=None, note=None) -> dict:
     """从任务与完成证据构造阶段五可识别的成长成果。
 
     返回 ``{"status", "reason", "event"}``；``event`` 为 None 表示**不该升到这个流水线里去**。
@@ -203,7 +207,9 @@ def build_growth_event(task, evidence=None) -> dict:
       ``plan_upgrades()`` 自己会归一、自己会报告未识别项；这里再折算一次，
       等于把同一个决策做两遍，还可能和阶段五的结果对不上。
     - ``evidence`` **原样透传**（只对"是不是空的"做判断，不做清洗/改写）。
-      空证据 → 返回 ``no_evidence``，**不伪造**（业务规则 6）。
+      自述完成（``evidence_kind=self_report``）允许空证据：升级照规则走，
+      但下游评估只按"未验证"处理；附了凭证（``growth``）则必须有证据。
+    - ``note`` 是用户心得，单独保留，**绝不并入 evidence、也不当凭证**。
     - ``type`` 由 ``kind`` 映射并校验；认不出的类型返回 ``unknown_kind``，
       **不做默认假设**（与 ``growth_rules.validate_event`` 的口径一致）。
     """
@@ -233,11 +239,20 @@ def build_growth_event(task, evidence=None) -> dict:
         # 不传就取任务自己留下的那份 —— 已完成任务的证据就存在 loop.json 里
         evidence = task.get("evidence")
     text = "" if evidence is None else str(evidence)
-    if not text.strip():
+
+    kind_text = str(evidence_kind or task.get("evidence_kind") or "").strip()
+    if kind_text not in VALID_EVIDENCE_KINDS:
+        # 旧任务没有该字段：有证据按 growth，没证据只能算自述
+        kind_text = EVIDENCE_KIND_GROWTH if text.strip() else EVIDENCE_KIND_SELF_REPORT
+    if kind_text != EVIDENCE_KIND_SELF_REPORT and not text.strip():
         return _event_failure(
             EVENT_NO_EVIDENCE,
-            "没有完成证据（任务本身也没留下证据）；仅凭标题不得宣称技能提升",
+            "附凭证完成必须有证据；仅凭标题不得宣称技能提升",
         )
+
+    if note is None:
+        note = task.get("note")
+    note_text = "" if note is None else str(note)
 
     return {
         "status": EVENT_OK,
@@ -247,6 +262,8 @@ def build_growth_event(task, evidence=None) -> dict:
             "title": title,
             "skills": skills,
             "evidence": text,                        # 原样保留
+            "evidence_kind": kind_text,
+            "note": note_text,
             "at": task.get("completed_at") or None,  # 真实来源时间，不编
         },
     }
@@ -339,7 +356,7 @@ def pending_growth_events(loop_store=None, growth_store=None, vocabulary=None) -
         canonical, missed = normalize_skills(built["event"]["skills"], vocabulary)
         if not canonical:
             skipped.append({"task_id": task.get("task_id"), "status": "skills_unmapped",
-                            "reason": f"技能名全部无法归一到规范技能名：{missed}"})
+                            "reason": f"技能名全部有歧义、无法确定对应哪个规范技能：{missed}"})
             continue
         fingerprint = event_fingerprint(built["event"]["type"],
                                         built["event"]["title"], canonical)
@@ -491,6 +508,8 @@ def process_task_completion(
     vocabulary=None,
     now=None,
     profile_skills=None,
+    evidence_kind=None,
+    note=None,
 ) -> dict:
     """完成一个任务，并把它带来的成长算清楚。
 
@@ -514,11 +533,19 @@ def process_task_completion(
     store = loop_store if loop_store is not None else get_loop_store()
     warnings: list[str] = []
 
+    text = "" if evidence is None else str(evidence)
+    kind_text = str(evidence_kind or "").strip()
+    if kind_text not in VALID_EVIDENCE_KINDS:
+        kind_text = EVIDENCE_KIND_GROWTH if text.strip() else EVIDENCE_KIND_SELF_REPORT
+
     # 1) 查询（只读）—— 只用于报告，判定权在 mark_completed
     existing = store.find_task(task_id)
 
     # 2) 先持久化完成记录
-    completion = store.mark_completed(task_id, evidence=evidence, round_no=round_no, now=now)
+    completion = store.mark_completed(
+        task_id, evidence=text, round_no=round_no, now=now,
+        evidence_kind=kind_text, note="" if note is None else str(note),
+    )
     completion_status = completion.get("status")
 
     result = {

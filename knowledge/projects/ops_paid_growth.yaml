@@ -1,0 +1,15 @@
+# Project 知识库 —— 新媒体运营：投放测试与增长复盘（高级综合项目）
+name: 投放测试与增长复盘
+domain: operations
+difficulty: advanced
+covers_skills: [投放优化, 用户增长, 运营数据分析]
+prerequisites: [运营数据分析, 内容策划, 文案写作]
+tech_stack: [巨量千川/腾讯广告模拟后台, Excel, 素材 A/B 测试表]
+stage_hint: 学习路线后期，用有限预算练习素材测试、人群调整与成本控制
+deliverable: 一份投放方案 + 素材测试记录 + 预算分配表 + 增长复盘报告
+acceptance_criteria:
+  - 能设计至少 3 组素材 A/B 测试，变量控制清晰
+  - 能根据点击、转化与获客成本调整人群与出价，而不是频繁推翻计划
+  - 预算分配有依据，能说明哪个渠道/素材值得加量
+  - 复盘区分前端点击与后端转化，给出下一轮可执行结论
+estimated_weeks: 3

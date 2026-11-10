@@ -1,0 +1,15 @@
+# Project 知识库 —— 运营：电商店铺运营与商品优化（进阶）
+name: 电商店铺运营与商品优化
+domain: operations
+difficulty: intermediate
+covers_skills: [电商平台运营, 商品运营, 客服与售后, 运营数据分析, Excel]
+prerequisites: [电商平台运营]
+tech_stack: [平台商家后台, Excel]
+stage_hint: 学习路线中期，用一家模拟店铺跑完上架、优化与售后
+deliverable: 一份店铺运营方案：商品结构、详情页优化点、客服话术与数据复盘
+acceptance_criteria:
+  - 商品结构有主推、引流与利润款的区分，并说明依据
+  - 优化建议落到标题、主图或详情页的具体改动
+  - 客服话术覆盖售前咨询、物流异常与退换货
+  - 复盘用真实口径的指标说明改动前后差异
+estimated_weeks: 3

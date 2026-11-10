@@ -1,0 +1,15 @@
+# Project 知识库 —— 公共事务：办公资产盘点与采购流程（入门）
+name: 办公资产盘点与采购流程
+domain: legal-public
+difficulty: beginner
+covers_skills: [采购与固定资产管理, 档案与资料管理, Office 办公软件, 预算与报销]
+prerequisites: []
+tech_stack: [资产管理系统, 报销系统, Excel, 采购比价表]
+stage_hint: 学习路线起点，把一次采购与一轮盘点做规范
+deliverable: 一份采购比价记录、资产盘点表与差异说明
+acceptance_criteria:
+  - 采购有申请、比价与验收记录，流程可追溯
+  - 资产台账与实物标签一一对应，盘点差异有原因
+  - 报销单据与采购记录金额一致，科目正确
+  - 盘点结果给出整改建议与责任人
+estimated_weeks: 2

@@ -1,0 +1,280 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 医药护理技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/nurse.yaml 或
+#     knowledge/jobs/clinical-lab-technician.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 基础护理操作
+  category: healthcare
+  level_guides:
+    入门: 知道生命体征测量、翻身、口腔护理等基础操作的目的。
+    初级: 能在带教下按流程完成常见基础护理操作。
+    中级: 能独立完成操作并处理卧位、皮肤等个体差异。
+    高级: 能制定护理计划并指导新人规范执行。
+  prerequisites: []
+  typical_usage: 住院护理的日常主体，操作规范直接影响患者安全与舒适。
+  common_pitfalls:
+    - 操作前不核对患者身份与医嘱。
+    - 只完成动作，不观察患者反应并记录。
+  learning_resources:
+    - {title: '国家卫生健康委员会（护理管理与技术规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 无菌操作与院感防控
+  category: healthcare
+  level_guides:
+    入门: 知道无菌区、污染区与手卫生的基本概念。
+    初级: 能按规范完成洗手、戴手套与无菌物品取用。
+    中级: 能独立完成导尿、换药等无菌操作并处理污染。
+    高级: 能落实院感监测与培训，分析感染风险环节。
+  prerequisites: []
+  typical_usage: 任何侵入性操作的前提，做不好会直接造成院内感染。
+  common_pitfalls:
+    - 操作中跨越无菌区或反复调整已污染物品。
+    - 手卫生时机缺失，戴手套代替洗手。
+  learning_resources:
+    - {title: '国家卫生健康委员会（医院感染管理规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 病情观察与护理记录
+  category: healthcare
+  level_guides:
+    入门: 知道需要观察意识、生命体征、引流与疼痛等指标。
+    初级: 能按班次记录观察结果，发现明显异常及时报告。
+    中级: 能从趋势变化识别恶化信号并说明依据。
+    高级: 能建立重点患者观察方案并指导团队。
+  prerequisites: [基础护理操作]
+  typical_usage: 护士是最早发现病情变化的人，记录是交接与追责依据。
+  common_pitfalls:
+    - 记录照抄上一班，没有当班实际观察。
+    - 只写数值，不写患者主诉与处理经过。
+  learning_resources:
+    - {title: '国家卫生健康委员会（护理文书书写规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 静脉输液与给药
+  category: healthcare
+  level_guides:
+    入门: 知道输液流程、常用药物作用与不良反应的基本概念。
+    初级: 能在带教下完成配液、穿刺与滴速调节。
+    中级: 能独立完成输液全流程并处理渗漏、发热等反应。
+    高级: 能管理高危药物使用规范并处理复杂静脉通路问题。
+  prerequisites: [无菌操作与院感防控]
+  typical_usage: 住院治疗最常见的给药方式，差错后果严重。
+  common_pitfalls:
+    - 三查七对执行不到位，患者或药物核对错误。
+    - 滴速凭习惯调节，忽略药物与病情要求。
+  learning_resources:
+    - {title: '国家卫生健康委员会（临床护理技术规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 急救与心肺复苏
+  category: healthcare
+  level_guides:
+    入门: 知道心跳呼吸骤停的识别与呼救流程。
+    初级: 能按规范完成胸外按压与人工通气。
+    中级: 能参与团队抢救并正确使用除颤仪。
+    高级: 能组织抢救分工、复盘并开展全员培训。
+  prerequisites: []
+  typical_usage: 抢救窗口以分钟计，任何临床岗位都必须会。
+  common_pitfalls:
+    - 按压深度与频率不达标，中断时间过长。
+    - 只做按压不呼救，缺少团队配合。
+  learning_resources:
+    - {title: '国家卫生健康委员会（急诊急救技术规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 护理文书
+  category: healthcare
+  level_guides:
+    入门: 知道体温单、护理记录单与交班报告的用途。
+    初级: 能按规范填写常见护理文书，字迹与时间准确。
+    中级: 能写出可追溯的护理过程记录与异常处理经过。
+    高级: 能审核护理文书质量并改进记录流程。
+  prerequisites: []
+  typical_usage: 护理文书既是交接依据，也是医疗纠纷中的关键证据。
+  common_pitfalls:
+    - 事后补记且时间与实际不符。
+    - 使用模糊表述，无法看出观察与处理过程。
+  learning_resources:
+    - {title: '国家卫生健康委员会（病历书写基本规范）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 护患沟通
+  category: healthcare
+  level_guides:
+    入门: 知道沟通要使用患者能听懂的语言并保护隐私。
+    初级: 能完成入院介绍、操作前解释与出院指导。
+    中级: 能处理焦虑、投诉与坏消息告知等困难沟通。
+    高级: 能建立沟通规范并培训团队应对冲突。
+  prerequisites: []
+  typical_usage: 患者配合度与满意度很大程度取决于沟通质量。
+  common_pitfalls:
+    - 用专业术语解释，患者听不懂也不敢问。
+    - 承诺超出医疗范围的结果。
+  learning_resources:
+    - {title: '国家卫生健康委员会（医疗服务与人文关怀）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 护理评估
+  category: healthcare
+  level_guides:
+    入门: 知道护理评估包括病史、体征、自理能力与风险筛查。
+    初级: 能使用评估量表完成入院评估。
+    中级: 能根据评估结果提出护理诊断与措施。
+    高级: 能设计专科评估方案并验证效果。
+  prerequisites: [基础护理操作]
+  typical_usage: 护理计划从评估开始，评估不全就会漏掉风险。
+  common_pitfalls:
+    - 量表照填不结合观察，评分与患者实际不符。
+    - 评估一次到底，病情变化后不重新评估。
+  learning_resources:
+    - {title: '国家卫生健康委员会（护理评估与分级护理）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 医疗法规与伦理
+  category: healthcare
+  level_guides:
+    入门: 知道护士执业资格、知情同意与患者隐私的基本要求。
+    初级: 能按规范执行查对、告知与隐私保护。
+    中级: 能识别执业范围与伦理冲突，按流程上报。
+    高级: 能参与制度制定与不良事件分析。
+  prerequisites: []
+  typical_usage: 护理行为受法规约束，越界操作会带来执业风险。
+  common_pitfalls:
+    - 执行口头医嘱未按规定补记。
+    - 在公共场合讨论患者病情。
+  learning_resources:
+    - {title: '国家法律法规数据库（护士条例等）', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 临床检验基础
+  category: healthcare
+  level_guides:
+    入门: 知道血常规、生化、免疫等常见检验项目的目的。
+    初级: 能说出常见项目的标本类型与影响因素。
+    中级: 能结合临床解释异常结果的常见原因。
+    高级: 能参与检验项目组合与危急值管理。
+  prerequisites: []
+  typical_usage: 检验结果是临床诊断依据，项目理解错会误导判断。
+  common_pitfalls:
+    - 只报数值不看参考区间与患者情况。
+    - 忽略药物、饮食对结果的干扰。
+  learning_resources:
+    - {title: '国家卫生健康委员会（临床检验专业标准）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 标本采集与处理
+  category: healthcare
+  level_guides:
+    入门: 知道不同检验项目需要不同采血管与采集时机。
+    初级: 能按规范完成常见标本采集与标识。
+    中级: 能处理溶血、凝集、量不足等不合格标本。
+    高级: 能建立标本全流程质量控制与追溯机制。
+  prerequisites: [临床检验基础]
+  typical_usage: 标本质量决定结果可靠性，采错等于白做。
+  common_pitfalls:
+    - 采血管顺序错误导致结果偏差。
+    - 标本标识不清或送检超时。
+  learning_resources:
+    - {title: '国家卫生健康委员会（临床检验标本采集指南）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 检验仪器操作与维护
+  category: healthcare
+  level_guides:
+    入门: 知道生化、血细胞分析等常见仪器的基本用途。
+    初级: 能按操作规程开机、做日常保养与关机。
+    中级: 能处理常见报警、校准与简单故障。
+    高级: 能制定仪器维护计划并参与性能验证。
+  prerequisites: [临床检验基础]
+  typical_usage: 仪器状态不稳会直接产生批量错误结果。
+  common_pitfalls:
+    - 跳过日保养直接上机。
+    - 报警后强行复测，不排查原因。
+  learning_resources:
+    - {title: '国家卫生健康委员会（医疗机构临床实验室管理）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 实验室质量控制
+  category: healthcare
+  level_guides:
+    入门: 知道室内质控用于判断当天结果是否可靠。
+    初级: 能按规范做质控并记录结果。
+    中级: 能识别失控规则并采取纠正措施。
+    高级: 能设计质控方案并参与室间质评分析。
+  prerequisites: [临床检验基础]
+  typical_usage: 质控不过关，当天所有结果都不能发。
+  common_pitfalls:
+    - 只做质控不判读，失控仍照发报告。
+    - 质控品保存不当，结果不可比。
+  learning_resources:
+    - {title: '国家卫生健康委员会（临床检验质量控制指标）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 检验结果审核
+  category: healthcare
+  level_guides:
+    入门: 知道报告需核对患者信息、项目与参考区间。
+    初级: 能发现明显异常值并按流程复检。
+    中级: 能结合历史结果与临床信息判断结果合理性。
+    高级: 能制定危急值报告与结果审核规范。
+  prerequisites: [实验室质量控制]
+  typical_usage: 审核是发报告前的最后一道关，漏掉异常会直接影响诊疗。
+  common_pitfalls:
+    - 只看是否超范围，不核对与历史结果的一致性。
+    - 危急值发现后未及时通知临床并记录。
+  learning_resources:
+    - {title: '国家卫生健康委员会（危急值报告制度）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 实验室安全与生物安全
+  category: healthcare
+  level_guides:
+    入门: 知道生物安全等级、个人防护与废弃物分类。
+    初级: 能按规范穿戴防护、处理溢出与锐器。
+    中级: 能识别职业暴露风险并执行暴露后处置流程。
+    高级: 能组织生物安全培训与应急演练。
+  prerequisites: []
+  typical_usage: 检验科每天接触血液与病原体，防护不到位就是职业暴露。
+  common_pitfalls:
+    - 徒手处理锐器或重新回套针帽。
+    - 标本溢洒只擦表面，不做消毒与记录。
+  learning_resources:
+    - {title: '国家卫生健康委员会（病原微生物实验室生物安全）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 检验信息系统
+  category: healthcare
+  level_guides:
+    入门: 知道 LIS 用于标本流转、结果录入与报告发布。
+    初级: 能在系统中完成标本签收与结果查询。
+    中级: 能处理条码、危急值与报告推送异常。
+    高级: 能参与系统流程配置与数据质量管理。
+  prerequisites: []
+  typical_usage: 标本流转与报告发布都依赖系统，操作错误会造成错报。
+  common_pitfalls:
+    - 标本签收与实物不一致。
+    - 报告已发布才发现信息错误，不做撤回记录。
+  learning_resources:
+    - {title: '国家卫生健康委员会（医疗机构信息化建设）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 临床沟通基础
+  category: healthcare
+  level_guides:
+    入门: 知道检验与临床需要就标本、结果与危急值沟通。
+    初级: 能清楚说明标本不合格原因与重采要求。
+    中级: 能就异常结果与临床讨论并跟进复检。
+    高级: 能建立检验与临床的定期沟通机制。
+  prerequisites: []
+  typical_usage: 检验结果脱离临床信息容易误判，沟通能减少无效复检。
+  common_pitfalls:
+    - 只发报告不说明异常背景。
+    - 电话通知危急值不留记录。
+  learning_resources:
+    - {title: '国家卫生健康委员会（医疗质量安全核心制度）', url: 'https://www.nhc.gov.cn/'}
+  estimated_weeks: 2

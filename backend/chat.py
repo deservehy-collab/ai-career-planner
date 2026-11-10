@@ -8,10 +8,14 @@
 
 为什么不复用 ``agents/llm.py`` 的全局 ``llm``
 --------------------------------------------
-那个 ``ChatOllama`` 实例是为结构化输出（``with_structured_output``）配置的，
+那个实例是为结构化输出（``with_structured_output``）配置的，
 流水线每次调用都要它。聊天只需要一段人话 + 逐 token 推送 + **可被中途取消**，
-所以这里直接用 Ollama 的 ``POST /api/chat``（``stream: true``）NDJSON 流，
-用标准库 ``urllib`` 实现：
+所以这里用标准库 ``urllib`` 直连上游：
+
+- 本地通道：Ollama 的 ``POST /api/chat``（``stream: true``）NDJSON 流；
+- 云端通道：OpenAI 兼容的 ``POST /chat/completions`` SSE 流（Authorization 头）。
+
+两条路都不经过 langchain，因此：
 
 - 不新增任何依赖；
 - 客户端断开（点「停止生成」/关页面）时能显式关闭上游响应，Ollama 随即停止推理
@@ -20,7 +24,7 @@
 模型名与地址的唯一来源
 ----------------------
 - 模型：``agents.llm.MODEL_NAME``（全项目唯一定义，backend/config.py 也从这里导入），
-  聊天只用它，**不会误用嵌入模型** ``nomic-embed-text``。
+  聊天与流水线用的是同一个模型，不另立第二套。
 - 地址：环境变量 ``OLLAMA_HOST`` 优先（``ChatOllama`` 未传 base_url 时就是这个口径），
   否则退回 ``backend.config.OLLAMA_BASE_URL``。两处都指向同一个解析函数，不散落硬编码。
 
@@ -41,6 +45,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import time
 import urllib.error
 import urllib.request
 from collections.abc import Iterator
@@ -50,7 +55,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field, StringConstraints, field_validator
 
-from agents.llm import MODEL_NAME
+from agents.llm import (
+    CHANNEL_CLOUD, CONTEXT_TOKENS, MODEL_NAME, cloud_configured, cloud_settings,
+    get_channel, mark_cloud_auth_failed,
+)
 from backend import config
 
 __all__ = ["router", "build_model_messages", "resolve_base_url"]
@@ -72,6 +80,9 @@ CHAT_MAX_HISTORY_ITEM_CHARS = 4000
 CHAT_MAX_HISTORY_SUBMITTED = 60
 #: 聊天温度：比流水线的 0.2 略高，问答更自然；不影响任何规划业务
 CHAT_TEMPERATURE = 0.4
+#: 单次回答的 token 上限。聊天答案不需要规划那么长，收紧到 800；
+#: 不设的话 Ollama 会无限生成并独占推理槽（见 agents/llm.py 的 MAX_OUTPUT_TOKENS）。
+CHAT_MAX_OUTPUT_TOKENS = 800
 #: 上游 Ollama 的 socket 超时（秒）。首次加载模型可能较慢，给足余量。
 CHAT_UPSTREAM_TIMEOUT = 180.0
 
@@ -91,6 +102,17 @@ STREAM_FAILURE_MESSAGE = (
     "本地模型在生成过程中断开或超时了。可能是 Ollama 正在加载模型、显存不足或响应过慢，"
     "请稍等几秒重试；若持续失败，请检查「系统状态」页里的 Ollama 与模型是否就绪。"
 )
+
+#: 云端流失败文案。不能复用本地那条 —— 免费档失败最常见的原因是 429 限流，
+#: 告诉用户去查 Ollama 只会把人带偏。
+CLOUD_STREAM_FAILURE_MESSAGE = (
+    "云端模型这次没能返回结果。免费档最常见的是访问量限流，也可能是网络波动。"
+    "请稍等十几秒再试；若持续失败，可以在「系统状态」页先切回本地模型。"
+)
+
+#: 流开始前的 429 / 连接失败重试间隔（秒）。限流通常几秒内恢复，
+#: 流一旦开始就不能重试，否则会把前半段回答重复推给前端。
+CLOUD_RETRY_DELAYS = (2.0, 5.0)
 
 VALID_ROLES = ("user", "assistant")
 
@@ -230,14 +252,20 @@ def _sse(event: str, data: dict[str, Any]) -> str:
 def _stream_upstream(messages: list[dict[str, str]]) -> Iterator[str]:
     """把 Ollama 的 NDJSON 流转成前端约定的 SSE 事件。
 
-    ``with response`` 是关键：客户端断开 → 本生成器被 close → 上游连接立即关闭
-    → Ollama 停止推理。所以「停止生成」是真的停止，不是只藏掉了文字。
+    ``with response`` 会在上游连接关闭时通知 Ollama，但**这不构成可靠的停止手段**：
+    Ollama 0.34.4 实测在客户端断开后仍继续生成（日志里 n_gen 持续上涨，请求返回 500
+    而任务未终止），且它只有单个推理槽，一次失控生成会饿死之后的所有请求。
+    真正兜住这件事的是 ``num_predict`` —— 所以它必须留在这里。
     """
     payload = {
         "model": MODEL_NAME,
         "messages": messages,
         "stream": True,
-        "options": {"temperature": CHAT_TEMPERATURE},
+        "options": {
+            "temperature": CHAT_TEMPERATURE,
+            "num_predict": CHAT_MAX_OUTPUT_TOKENS,
+            "num_ctx": CONTEXT_TOKENS,
+        },
     }
     base_url = resolve_base_url()
     emitted = 0
@@ -276,15 +304,138 @@ def _stream_upstream(messages: list[dict[str, str]]) -> Iterator[str]:
     yield _sse("done", {"chars": emitted})
 
 
+#: 云端鉴权失败的文案（key 无效/过期，指导用户自查而不是甩堆栈）
+CLOUD_AUTH_FAILURE_MESSAGE = (
+    "云端 API 拒绝了请求：key 无效或已过期。请检查 .env 里的 CLOUD_API_KEY，"
+    "或到「系统状态」页把通道切回本地模型。"
+)
+
+
+def _stream_upstream_cloud(messages: list[dict[str, str]]) -> Iterator[str]:
+    """把 OpenAI 兼容的云端 SSE 流转成前端约定的 SSE 事件。
+
+    协议与本地分支完全一致（start / delta / done / error），前端零改动。
+    差异只在：目标地址、Authorization 头、以及 delta 的取值路径
+    （``choices[0].delta.content`` 而非 ``message.content``）。
+    """
+    settings = cloud_settings()
+    payload = {
+        "model": settings["model"],
+        "messages": messages,
+        "stream": True,
+        "temperature": CHAT_TEMPERATURE,
+        "max_tokens": CHAT_MAX_OUTPUT_TOKENS,
+    }
+    emitted = 0
+    yield _sse("start", {"model": settings["model"]})
+    try:
+        request = urllib.request.Request(
+            f"{settings['base_url']}/chat/completions",
+            data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {settings['api_key']}",
+            },
+            method="POST",
+        )
+        attempt = 0
+        while True:
+            try:
+                response = urllib.request.urlopen(request, timeout=CHAT_UPSTREAM_TIMEOUT)  # noqa: S310
+                break
+            except urllib.error.HTTPError as exc:
+                if exc.code in (401, 403):
+                    mark_cloud_auth_failed()
+                    yield _sse("error", {"message": CLOUD_AUTH_FAILURE_MESSAGE})
+                    return
+                if exc.code == 429 and attempt < len(CLOUD_RETRY_DELAYS):
+                    delay = CLOUD_RETRY_DELAYS[attempt]
+                    attempt += 1
+                    logger.info("云端聊天被限流（429），%.0f 秒后第 %d 次重试", delay, attempt)
+                    time.sleep(delay)
+                    continue
+                logger.warning("云端聊天调用失败：HTTP %s", exc.code)
+                yield _sse("error", {"message": CLOUD_STREAM_FAILURE_MESSAGE})
+                return
+            except (urllib.error.URLError, OSError, ValueError) as exc:
+                if attempt < len(CLOUD_RETRY_DELAYS):
+                    delay = CLOUD_RETRY_DELAYS[attempt]
+                    attempt += 1
+                    logger.info(
+                        "云端聊天连接失败（%s），%.0f 秒后第 %d 次重试",
+                        type(exc).__name__, delay, attempt,
+                    )
+                    time.sleep(delay)
+                    continue
+                logger.warning("云端聊天流式调用失败：%s", type(exc).__name__)
+                yield _sse("error", {"message": CLOUD_STREAM_FAILURE_MESSAGE})
+                return
+
+        with response:
+            for raw_line in response:
+                line = raw_line.decode("utf-8", errors="replace").strip()
+                if not line or not line.startswith("data:"):
+                    continue
+                data = line[len("data:"):].strip()
+                if data == "[DONE]":
+                    break
+                try:
+                    chunk = json.loads(data)
+                except ValueError:
+                    logger.warning("云端返回了无法解析的一行响应，已跳过")
+                    continue
+                text = ""
+                try:
+                    text = chunk["choices"][0]["delta"].get("content") or ""
+                except (KeyError, IndexError, TypeError):
+                    pass
+                if text:
+                    emitted += len(text)
+                    yield _sse("delta", {"text": text})
+    except GeneratorExit:
+        logger.info("客户端中断了云端聊天流，已生成 %d 字", emitted)
+        raise
+    yield _sse("done", {"chars": emitted})
+
+
 # ── 路由 ────────────────────────────────────────────────────────────────
 @router.post("/stream", summary="AI 助手流式对话")
 def post_chat_stream(payload: ChatRequest) -> StreamingResponse:
-    """校验输入 → 确认本地模型可用 → 返回 SSE 流。
+    """校验输入 → 确认当前通道的模型可用 → 返回 SSE 流。
+
+    通道由 ``agents.llm.get_channel()`` 决定（/api/status/llm-channel 切换）：
+
+    - **本地**：探测 Ollama 可达且模型已装，否则 503；
+    - **云端**：确认 CLOUD_API_KEY 已配置，否则 503 —— 这时提示用户回
+      「系统状态」页切回本地，不替用户做决定。
 
     鉴权与业务接口同口径：在 ``backend/app.py`` 里以 ``auth_required`` 注册，
     所以聊天同样要求 Bearer token（测试可覆盖该依赖）。
     """
-    # 先探模型：不启动/没装模型时直接 503 给人话，绝不让前端无限转圈
+    messages = build_model_messages(payload.message, payload.history)
+
+    if get_channel() == CHANNEL_CLOUD:
+        if not cloud_configured():
+            raise HTTPException(
+                status_code=503,
+                detail="当前通道是云端，但 .env 里没有配置 CLOUD_API_KEY。"
+                       "请先配置 key，或到「系统状态」页把通道切回本地模型。",
+            )
+        logger.info(
+            "聊天请求：model=%s（云端）本轮 %d 字，上下文 %d 条消息 / %d 字",
+            cloud_settings()["model"], len(payload.message), len(messages),
+            sum(len(item["content"]) for item in messages),
+        )
+        return StreamingResponse(
+            _stream_upstream_cloud(messages),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "X-Accel-Buffering": "no",  # 反向代理不缓冲，保证真增量
+            },
+        )
+
+    # 本地通道：先探模型，不启动/没装模型时直接 503 给人话，绝不让前端无限转圈
     reachable, names, _error = _probe_models(resolve_base_url())
     if not reachable:
         raise HTTPException(
@@ -298,7 +449,6 @@ def post_chat_stream(payload: ChatRequest) -> StreamingResponse:
             detail=f"Ollama 里没有聊天模型 {MODEL_NAME}，请先执行 `ollama pull {MODEL_NAME}`。",
         )
 
-    messages = build_model_messages(payload.message, payload.history)
     logger.info(
         "聊天请求：model=%s 本轮 %d 字，上下文 %d 条消息 / %d 字",
         MODEL_NAME, len(payload.message), len(messages),

@@ -20,7 +20,7 @@ import {
   loopStatusText,
   loopStatusTone,
 } from '../utils/enums'
-import { formatDateTime, joinList } from '../utils/format'
+import { formatDateTime, formatEvidence, joinList } from '../utils/format'
 
 /**
  * 「提交任务完成」的结果面板。
@@ -52,16 +52,58 @@ const hasEvent = computed(() => !!r.value.growth_event)
 /** 本次是否真的算出了升级计划（注意：是"计划"，不是"已升级"）。 */
 const hasPreview = computed(() => r.value.growth_evaluated === true && updates.value.length > 0)
 
+/**
+ * 这条成果是自述完成还是附了凭证。
+ * 历史数据没有 evidence_kind：有证据就按凭证算，没有就是自述。
+ */
+const eventProofText = computed(() => {
+  const event = r.value.growth_event || {}
+  const kind = event.evidence_kind || (event.evidence ? 'growth' : '')
+  return kind === 'growth' || kind === 'project'
+    ? '已附凭证'
+    : '自述完成 · 未附凭证'
+})
+const eventHasProof = computed(() => eventProofText.value === '已附凭证')
+
 const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
+
+/**
+ * 后台把同一句失败原因同时放在 `reason` 和 `warnings` 里，②③两块又各读一遍，
+ * 结果用户看见三遍同一句话。原因按"谁拥有它"只说一次：
+ * 完成记录没写成 → ①；写成了但构不成成果 → ②；其余 → ③。
+ */
+const eventFailed = computed(
+  () => !hasEvent.value && !!r.value.reason && r.value.completion_written === true,
+)
+const reasonShownElsewhere = computed(
+  () => r.value.completion_written === false || eventFailed.value,
+)
+const previewNote = computed(() =>
+  reasonShownElsewhere.value ? '' : r.value.reason || '',
+)
+const visibleWarnings = computed(() =>
+  warnings.value.filter((w) => !(reasonShownElsewhere.value && w === r.value.reason)),
+)
+
+/**
+ * 技能名没进技能标准词表有两种下场，得说清楚是哪一种：
+ * 词表压根没有这项技能 → 按任务里写的原名记账；同时沾上好几项 → 不猜，本次不升级。
+ * 两边都取后端已经算好的字段对照，前端不重实现判定规则。
+ */
+const nameKey = (s) => String(s ?? '').trim().toLowerCase().replace(/ /g, '')
+const canonicalKeys = computed(() => new Set((r.value.skills_canonical || []).map(nameKey)))
+const skillsBookedByRawName = computed(() =>
+  unmappedSkills.value.filter((s) => canonicalKeys.value.has(nameKey(s))),
+)
+const skillsNotJudged = computed(() =>
+  unmappedSkills.value.filter((s) => !canonicalKeys.value.has(nameKey(s))),
+)
 </script>
 
 <template>
   <section class="card">
     <div class="card-head">
-      <h2>
-        提交结果
-        <span class="sub mono">{{ r.task_id }}</span>
-      </h2>
+      <h2>提交结果</h2>
       <div class="btn-row">
         <AppBadge :text="loopStatusText(r.status)" :tone="loopStatusTone(r.status)" />
         <AgentTag node="growth" />
@@ -73,26 +115,32 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
       <div class="result-block">
         <h3 class="result-title">
           ① 任务完成记录
-          <span class="sub">写入 runs/loop.json，这是唯一真正落盘的一步</span>
+          <span class="sub">这一步已经正式保存，下面三块里只有它是真正存下来的</span>
         </h3>
         <div class="btn-row btn-row--tight">
           <AppBadge
             :text="completionStatusText(r.completion_status)"
             :tone="completionStatusTone(r.completion_status)"
           />
-          <span class="faint">磁盘写入：{{ r.completion_written ? '是' : '否' }}</span>
+          <span class="faint">已保存：{{ r.completion_written ? '是' : '否' }}</span>
         </div>
         <dl class="kv kv--mid">
           <dt>完成时间</dt>
           <dd>{{ formatDateTime(r.task?.completed_at) }}</dd>
-          <dt>提交证据</dt>
-          <dd>{{ r.task?.evidence || '（空）' }}</dd>
+          <dt>提交凭证</dt>
+          <dd class="preserve-text">
+            {{ r.task?.evidence ? formatEvidence(r.task.evidence) : '（没附凭证 · 按自述完成记账）' }}
+          </dd>
+          <template v-if="r.task?.note">
+            <dt>心得笔记</dt>
+            <dd class="preserve-text">{{ r.task.note }}</dd>
+          </template>
         </dl>
         <p v-if="r.already_completed" class="faint result-note">
-          该任务此前已完成，本次<strong>未改动磁盘</strong>，第一次提交的证据不会被覆盖。
+          该任务此前已完成，这次<strong>没有重复保存</strong>，第一次提交的证据不会被覆盖。
         </p>
         <p v-if="!r.completion_written && !r.already_completed" class="faint result-note">
-          完成记录<strong>没有写入</strong>：{{ r.reason || '原因未给出' }}。
+          完成记录<strong>没有保存</strong>：{{ r.reason || '原因未给出' }}。
         </p>
       </div>
 
@@ -100,12 +148,17 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
       <div class="result-block">
         <h3 class="result-title">
           ② 成长成果
-          <span class="sub">这条任务能否构造成一个成长事件</span>
+          <span class="sub">这条任务能不能算作一次成长记录</span>
         </h3>
         <div class="btn-row btn-row--tight">
           <AppBadge
             :text="eventStatusText(r.growth_event_status)"
             :tone="eventStatusTone(r.growth_event_status)"
+          />
+          <AppBadge
+            v-if="hasEvent"
+            :text="eventProofText"
+            :tone="eventHasProof ? 'ok' : 'warn'"
           />
         </div>
 
@@ -117,24 +170,36 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
             <dd>{{ r.growth_event.title }}</dd>
             <dt>涉及技能</dt>
             <dd>{{ joinList(r.growth_event.skills, '（未关联技能）') }}</dd>
-            <dt>证据原文</dt>
-            <dd>{{ r.growth_event.evidence }}</dd>
+            <dt>依据类型</dt>
+            <dd>{{ eventProofText }}</dd>
+            <dt>凭证内容</dt>
+            <dd class="preserve-text">
+              {{ r.growth_event.evidence || '（没附凭证，只记了完成）' }}
+            </dd>
+            <template v-if="r.growth_event.note">
+              <dt>心得笔记</dt>
+              <dd class="preserve-text">{{ r.growth_event.note }}</dd>
+            </template>
           </dl>
         </template>
-        <p v-else class="faint flush-first">
-          没有构造成长成果：{{ r.reason || '原因未给出' }}。
+        <p v-else-if="eventFailed" class="faint flush-first">
+          没有构造成长成果：{{ r.reason }}。
           <strong>任务完成记录不受影响</strong>，只是这条任务无法作为技能升级的依据。
         </p>
 
-        <div v-if="unmappedSkills.length" class="notice notice-warn">
-          未识别的技能名（不会自动映射到相似技能）：{{ joinList(unmappedSkills) }}
+        <div v-if="skillsBookedByRawName.length" class="notice notice-info">
+          技能标准清单里没有这几项，已按任务里写的原名记账：
+          {{ joinList(skillsBookedByRawName) }}
+        </div>
+        <div v-if="skillsNotJudged.length" class="notice notice-warn">
+          这几项技能名同时对应好几项技能，系统不猜，本次没有据此升级：
+          {{ joinList(skillsNotJudged) }}。把任务名或技能写得更具体一些就能认出来。
         </div>
         <div v-if="duplicateEvents.length" class="notice notice-info">
-          该成果历史上已处理过（指纹
-          <span class="mono">{{ duplicateEvents[0].fingerprint }}</span>），跳过以免重复升级。
+          这条成果之前已经记过了，这次跳过，不会重复升级。
         </div>
         <div v-for="(item, i) in invalidEvents" :key="i" class="notice notice-warn">
-          成果未通过校验：{{ item.reason }}
+          这条成果没有通过检查：{{ item.reason }}
         </div>
       </div>
 
@@ -146,9 +211,9 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
         </h3>
 
         <div class="notice notice-warn notice--tight">
-          <strong>预览尚未写入成长历史。</strong>
-          本接口不会改动 <span class="mono">runs/growth.json</span>；
-          技能等级正式落盘发生在「成长记录」页点击「生成下一轮」时，由 growth_node 完成。
+          <strong>预览还没有记进成长记录。</strong>
+          提交这一步不会改动成长记录；技能等级正式生效，是在「成长记录」页点
+          「生成下一轮」的时候。
         </div>
 
         <template v-if="!r.growth_evaluated">
@@ -158,7 +223,7 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
               :tone="growthOutcomeTone(r.growth_outcome)"
             />
           </div>
-          <p class="faint result-note">{{ r.reason || '' }}</p>
+          <p v-if="previewNote" class="faint result-note">{{ previewNote }}</p>
         </template>
 
         <template v-else>
@@ -168,7 +233,7 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
               :tone="growthOutcomeTone(r.growth_outcome)"
             />
             <span v-if="r.knowledge_base_status" class="faint">
-              技能知识库：{{ knowledgeBaseStatusText(r.knowledge_base_status) }}
+              技能标准：{{ knowledgeBaseStatusText(r.knowledge_base_status) }}
             </span>
           </div>
 
@@ -178,8 +243,8 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
               <li v-for="item in updates" :key="item.skill">
                 <strong>{{ item.skill }}</strong>：{{ item.from || '无' }} → {{ item.to }}
                 <span class="faint">
-                  （前置门禁：{{ gateStatusText(item.gate_status) }}
-                  <template v-if="item.gate_unavailable"> ⚠ 未经过校验</template>）
+                  （前置检查：{{ gateStatusText(item.gate_status) }}
+                  <template v-if="item.gate_unavailable"> ⚠ 没有经过检查</template>）
                 </span>
               </li>
             </ul>
@@ -187,7 +252,7 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
           <p v-else class="faint result-note">本次没有产生任何等级提升。</p>
 
           <div v-if="blocked.length" class="sub-block">
-            <h4 class="mini-title">被前置门禁拦下（{{ blocked.length }} 项）</h4>
+            <h4 class="mini-title">被前置检查拦下（{{ blocked.length }} 项）</h4>
             <ul class="muted mini-list">
               <li v-for="item in blocked" :key="item.skill">
                 {{ item.skill }}：{{ item.current_level || '无' }} → 本可升到 {{ item.candidate_level }}
@@ -196,7 +261,7 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
                   · 缺前置：{{ joinList(item.missing_prerequisites, '未给出') }}）
                 </span>
                 <span v-if="item.gate_unavailable" class="faint">
-                  ⚠ 该技能因知识库不可用而未经过前置校验，不能当成"已通过门禁"
+                  ⚠ 这项技能因为技能标准读不出来，没有经过前置检查，不能当成"已通过"
                 </span>
               </li>
             </ul>
@@ -215,13 +280,13 @@ const isHistoryOnly = computed(() => r.value.baseline_source === 'history_only')
               :text="baselineSourceText(r.baseline_source)"
               :tone="baselineSourceTone(r.baseline_source)"
             />
-            本次预览仅依据成长历史，可能比结合完整画像的评估更严格。
-            在「岗位分析」页完成一次分析后，再提交任务即可让预览与正式判定使用同一基线。
+            这次预览只看成长记录，可能比结合当前画像的评估更严格。
+            在「岗位分析」页完成一次分析后，再提交任务，预览和正式判定就会用同一份数据。
           </div>
         </template>
       </div>
 
-      <div v-for="(warn, i) in warnings" :key="i" class="notice notice-warn">{{ warn }}</div>
+      <div v-for="(warn, i) in visibleWarnings" :key="i" class="notice notice-warn">{{ warn }}</div>
     </div>
   </section>
 </template>

@@ -1,0 +1,147 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 嵌入式软件工程师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_ee_std_001     全国计算机技术与软件专业技术资格（嵌入式系统设计师）
+#                         考试大纲与知识要求的公开要点整理
+#                         https://www.ruankao.org.cn/ （访问日期 2026-11-10）
+#   source_ee_safety_001  电气安全与设备相关国家标准公开要点整理
+#                         https://openstd.samr.gov.cn/ （访问日期 2026-11-10）
+#   source_ee_jd_001      公开招聘信息中嵌入式软件/单片机开发岗位的通用职责与
+#                         要求汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: embedded_engineer
+job_name: 嵌入式软件工程师
+
+aliases:
+  - 嵌入式软件工程师
+  - 嵌入式工程师
+  - 单片机工程师
+  - 嵌入式开发工程师
+  - 嵌入式软件开发
+
+category: electronics
+domain: electronics
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 嵌入式软件工程师在单片机或嵌入式 Linux 平台上开发设备控制与通信程序，配合硬件完成板级调试，保证产品在资源受限与实时性要求下稳定运行。
+  core_tasks:
+    - {name: 开发外设驱动, detail: 按数据手册配置 GPIO、串口、ADC 等外设并封装接口}
+    - {name: 实现业务逻辑, detail: 在 RTOS 或裸机上组织任务，处理中断与资源共享}
+    - {name: 联调硬件, detail: 用示波器与日志定位板级时序、电源与通信问题}
+    - {name: 编写通信协议, detail: 按帧格式组包解析，处理校验与重传}
+    - {name: 做测试与验证, detail: 覆盖边界、异常与长时间运行场景}
+    - {name: 维护交付文档, detail: 记录接口、参数与调试结论，支撑量产与维护}
+  tools: [Keil / IAR, STM32CubeMX, 示波器, 逻辑分析仪, Git, J-Link 调试器]
+  deliverables: [驱动与业务代码, 通信协议说明, 测试记录, 调试报告, 烧录与版本说明]
+  entry_requirements: [电子信息/自动化/计算机等相关专业, 熟练 C 语言, 了解单片机与外设, 能看懂原理图, 有板级调试经验优先]
+  career_path:
+    - {name: 嵌入式软件工程师, detail: 能独立完成单模块驱动与业务开发}
+    - {name: 高级嵌入式工程师, detail: 能负责整机软件架构与平台移植}
+    - {name: 嵌入式技术负责人, detail: 能统筹软硬件协作与产品化落地}
+    - {name: 研发经理, detail: 能管理研发团队与产品技术路线}
+
+skills:
+
+  - skill: C语言
+    importance: 5
+    level: 高级
+    reason: 嵌入式代码几乎全用 C，指针与内存管理失误会直接导致设备死机。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：熟练掌握 C 语言程序设计'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：精通 C 语言，熟悉指针与内存管理'}
+
+  - skill: 单片机与外设
+    importance: 5
+    level: 高级
+    reason: 设备控制逻辑最终落在寄存器与中断上，外设不会用就写不出功能。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握微处理器体系结构与常用外设接口'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责 MCU 外设驱动开发与调试'}
+
+  - skill: 通信协议
+    importance: 5
+    level: 中级
+    reason: 板内器件与上位机通信都靠协议，联调问题大多出在帧与校验。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握串口、I2C、SPI、CAN 等通信接口'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：实现设备通信协议与数据解析'}
+
+  - skill: 硬件调试与仪器使用
+    importance: 5
+    level: 中级
+    reason: 软硬件耦合问题只能靠波形与原理图定位，不能靠猜。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：具备硬件调试与测试仪器使用能力'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：配合硬件完成板级调试与问题定位'}
+
+  - skill: 电路基础
+    importance: 4
+    level: 中级
+    reason: 看懂原理图才能判断引脚电平、供电与接口是否正常。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握数字电路与模拟电路基础知识'}
+      - {source_id: source_ee_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能读懂原理图者优先'}
+
+  - skill: 实时操作系统
+    importance: 4
+    level: 中级
+    reason: 多任务设备需要确定性调度，任务优先级与同步设计不当会偶发死机。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握嵌入式操作系统任务调度与同步机制'}
+      - {source_id: source_ee_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉 FreeRTOS 等实时操作系统者优先'}
+
+  - skill: 嵌入式 Linux
+    importance: 4
+    level: 中级
+    reason: 带屏与联网的中高端设备普遍跑 Linux，驱动与应用都要在这里做。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握嵌入式 Linux 系统移植与驱动开发'}
+      - {source_id: source_ee_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：有嵌入式 Linux 开发经验者优先'}
+
+  - skill: 嵌入式软件测试
+    importance: 4
+    level: 初级
+    reason: 设备量产后再改成本极高，边界与异常场景必须在出厂前覆盖。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责软件功能测试与问题复现'}
+
+  - skill: 工程文档与技术交底
+    importance: 3
+    level: 初级
+    reason: 接口与参数不留文档，后续维护只能依赖原作者。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：编写开发文档与调试记录'}
+
+  - skill: 电气安全规范
+    importance: 3
+    level: 初级
+    reason: 调试与试产都要接触带电设备，基本安全规则不能靠运气。
+    evidence:
+      - {source_id: source_ee_safety_001, requirement_type: required, context: qualification,
+         note: '标准整理：电气设备作业的接地、绝缘与防护要求'}

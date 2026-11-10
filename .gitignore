@@ -12,18 +12,11 @@ wheels/
 # Environment variables
 .env
 
-# Vector index（Chroma 持久化文件，可由 scripts/build_index.py 从 knowledge/jobs 与 knowledge/jd 重建，不入库）
-knowledge/index/
-
-# 本地验收测试（仅保留在本地，不进入 GitHub 提交）
-# 注意：本规则只对**未跟踪**文件生效；tests/test_retriever.py 与
-# tests/test_job_agent_evidence.py 是 v1.1.0 已入库的跟踪文件，仍会被 git add 带上。
-# 因此后续提交必须显式指定文件，不要用 git add -A。
-#
-# 测试文件一律不入库（仅保留在本地）
-tests/
-# 例外：backend/tests/ 是后端 P0 的并发/生命周期回归用例，入库留档
-!backend/tests/
+# 测试全部入库：tests/ 是全量测试，backend/tests/ 是后端回归。
+# 这里曾经排除 tests/（"本地验收测试不入库"），交作品时改掉了 —— 测试是本项目
+# 最拿得出手的证据之一，藏起来等于自废武功。两个目录都不含真实用户数据：全部用
+# tempfile 隔离，凭证是 s3cret-pw / pw123456 这类假值，也没有硬编码本机路径。
+# 提交仍请显式指定文件，不要用 git add -A。
 
 # 本地验收报告与本地文档（仅保留在本地，不进入 GitHub 提交）
 报告路径.json

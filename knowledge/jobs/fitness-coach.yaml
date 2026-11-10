@@ -1,0 +1,139 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 健身教练 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_fitness_std_001  国家体育总局健身教练职业标准与科学健身指导相关
+#                           公开材料要点整理
+#                           https://www.sport.gov.cn/ （访问日期 2026-11-10）
+#   source_sport_jd_001     公开招聘信息中健身教练/私人教练岗位的通用职责与要求
+#                           汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: fitness_coach
+job_name: 健身教练
+
+aliases:
+  - 健身教练
+  - 私人教练
+  - 体适能教练
+  - 健身指导
+  - 私教
+
+category: sports
+domain: sports
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 健身教练负责会员体态与体能评估、训练计划制定与动作指导，提供营养与体重管理建议，维护训练安全与器械规范，并通过沟通完成课程服务与续课。
+  core_tasks:
+    - {name: 体测与体态评估, detail: 完成基础体测、静态观察与动作筛查}
+    - {name: 制定训练计划, detail: 按目标与评估结果安排周期与负荷}
+    - {name: 现场指导, detail: 讲解示范、纠正动作并做保护}
+    - {name: 营养与体重管理, detail: 结合训练目标给出饮食调整建议}
+    - {name: 安全与器械管理, detail: 检查器械状态，落实训练区安全}
+    - {name: 会员服务, detail: 记录训练进展，复评并跟进续课}
+  tools: [体测仪, 训练器械, 心率监测设备, 训练记录表, 体态评估表]
+  deliverables: [体测与评估报告, 训练计划, 训练记录, 阶段复评报告]
+  entry_requirements: [体育/运动康复等相关专业或持证培训经历, 掌握解剖与训练基础, 具备急救常识, 沟通与销售意识, 持健身教练职业资格证优先]
+  career_path:
+    - {name: 助理教练, detail: 能完成基础动作指导与场地服务}
+    - {name: 健身教练, detail: 能独立完成评估、计划与授课}
+    - {name: 高级教练/主管, detail: 能带团队并负责课程质量}
+    - {name: 店长/培训师, detail: 能负责门店运营或教练培养}
+
+skills:
+
+  - skill: 体能训练方法
+    importance: 5
+    level: 高级
+    reason: 动作质量与负荷安排是教练的核心产品，练错比不练更糟。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：力量、耐力、柔韧等体适能训练方法'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责会员训练指导与动作纠正'}
+
+  - skill: 训练计划设计
+    importance: 5
+    level: 高级
+    reason: 没有计划的训练看不到结果，会员也不会续课。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：按评估结果制定训练计划与进阶安排'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：为会员制定个性化训练方案'}
+
+  - skill: 运动解剖学
+    importance: 5
+    level: 中级
+    reason: 不懂肌肉与关节就无法判断代偿，也纠正不了动作。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：掌握运动解剖与动作分析基础'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉运动解剖与生物力学基础'}
+
+  - skill: 体态评估
+    importance: 5
+    level: 中级
+    reason: 评估是制定计划的依据，跳过评估就是盲练。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：体态与动作功能评估方法'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责会员体测与体态评估'}
+
+  - skill: 运动损伤预防
+    importance: 4
+    level: 中级
+    reason: 训练事故一次就可能毁掉口碑甚至引发赔偿。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：训练安全防护与常见损伤预防'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：掌握运动损伤预防与应急处理'}
+
+  - skill: 运动生理学基础
+    importance: 4
+    level: 中级
+    reason: 负荷与恢复安排要靠生理依据，凭感觉容易练废。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：运动中的能量代谢与身体适应规律'}
+      - {source_id: source_sport_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解运动生理学基础知识'}
+
+  - skill: 营养与体重管理
+    importance: 4
+    level: 初级
+    reason: 减脂与增肌效果很大程度取决于饮食，会员会直接问。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：体重管理与运动营养基础建议'}
+      - {source_id: source_sport_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能提供基础营养与体重管理建议'}
+
+  - skill: 器械使用与保护
+    importance: 3
+    level: 初级
+    reason: 器械区是事故高发区，调器械与做保护都是教练的日常。
+    evidence:
+      - {source_id: source_fitness_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：器械使用规范与训练保护方法'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责器械指导与训练保护'}
+
+  - skill: 会员沟通与课程销售
+    importance: 3
+    level: 初级
+    reason: 专业之外还要能讲明白，否则会员留不住。
+    evidence:
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责会员维护与课程销售'}

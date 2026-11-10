@@ -31,7 +31,7 @@ from agents.growth_rules import (
     KB_STATUS_LOAD_FAILED,
     validate_event,
 )
-from agents.growth_store import STATUS_EMPTY, WRITE_REFUSED
+from agents.growth_store import ENTRY_KIND_ADJUSTMENT, STATUS_EMPTY, WRITE_REFUSED
 from agents.loop_store import (
     COMPLETE_ALREADY,
     COMPLETE_OK,
@@ -56,17 +56,9 @@ user_profile = {
 
 target_job = "AI应用开发工程师"
 
-# 阶段四：真实 JD 定向匹配的可选入口目标。
-# - 传 jd_source_id（如 "jd_hundsun_001"）：精确匹配某一份真实 JD，优先级最高；
-# - 传 target_company（如 "恒生电子" 或 "hundsun"）：公司级匹配；
-# - 都不传：保持阶段二以来默认的跨公司概览行为。
-# 两者同时传入时必须归属一致，否则入口解析会明确报错（见 retrieval_agent）。
-jd_source_id = None
-target_company = None  # 例如 "恒生电子" 或 "hundsun" 解析出 hundsun
-extra_input = {k: v for k, v in {
-    "jd_source_id": jd_source_id,
-    "target_company": target_company,
-}.items() if v}
+# 招聘要求原文：把招聘页上那段「任职要求」原样粘进来，本次岗位要求就以它为依据。
+# 留空则没有原文 —— 岗位要求全部由模型推断，前端会如实标灰、不给匹配度百分比。
+jd_text = ""
 
 
 def show(title: str, data) -> None:
@@ -105,15 +97,15 @@ def public_learning_plan(stages: list) -> list:
 
 
 def show_jd_match(match: dict) -> None:
-    """展示阶段四的真实 JD 定向匹配结论（纯展示，复用 jd_match 结果）。"""
-    print(f"\n{'=' * 10} 真实 JD 匹配 {'=' * 10}")
+    """展示岗位匹配结论（纯展示，复用 jd_match 结果）。"""
+    print(f"\n{'=' * 10} 岗位匹配 {'=' * 10}")
     if not match:
-        print("（没有 JD 匹配结论）")
+        print("（没有匹配结论）")
         return
 
     print(f"总体结论：{match.get('overall', 'unknown')}")
-    print(f"参与匹配 JD 数量：{match.get('matched_jd_count', 0)}")
-    print(f"目标 JD（source_id）：{match.get('jd_target') or '未指定（跨公司概览）'}")
+    for line in match.get("jd_source_warning") or []:
+        print(f"依据说明：{line}")
 
     # 计数口径分三层，不能把"有证据归属数"说成"可判定数"：
     # 有证据归属 = 归属该目标 + 能回查到证据；可判定 = 其中还能对上能力差距的。
@@ -161,43 +153,26 @@ def show_jd_match(match: dict) -> None:
 
 
 def show_retrieval(result: dict) -> None:
-    """展示岗位知识库检索结果（纯展示，不参与后续规划计算）。"""
-    print(f"\n{'=' * 10} 岗位知识库检索 {'=' * 10}")
+    """展示岗位依据（用户粘贴的招聘要求原文，一句一条；纯展示，不参与规划计算）。"""
+    print(f"\n{'=' * 10} 岗位依据原文 {'=' * 10}")
 
     evidence = result.get("job_evidence") or []
     diagnostics = result.get("retrieval_diagnostics") or {}
 
-    print(f"检索状态：{result.get('retrieval_status', '未执行')}")
-    print(f"证据数量：{len(evidence)} 条")
-    if diagnostics.get("match_kind"):
-        print(f"命中路径：{diagnostics['match_kind']}")
-
-    scope = diagnostics.get("sample_scope")
-    if scope:
-        companies = "、".join(scope.get("companies") or []) or "未标注"
-        print(f"样本范围：{scope.get('jd_count')} 份 JD（{companies}）")
-        if scope.get("caveat"):
-            print(f"          {scope['caveat']}")
+    print(f"依据状态：{result.get('retrieval_status', '未执行')}")
+    print(f"原话句数：{len(evidence)} 句")
+    dropped = diagnostics.get("dropped_sentences")
+    if dropped:
+        print(f"超出句数上限被丢弃：{dropped} 句（后半段原文没有参与分析）")
     if diagnostics.get("reason"):
         print(f"说明：{diagnostics['reason']}")
-    for error in diagnostics.get("errors") or []:
-        print(f"警告：{error}")
 
     if not evidence:
-        print("（没有可用证据，已降级继续；岗位要求仍由 Job Agent 生成）")
+        print("（没有原文可依：岗位要求将由模型推断，并逐条标成「模型补充」）")
         return
 
     for index, item in enumerate(evidence, start=1):
-        importance = item.get("importance")
-        importance = f"{importance}/5" if importance is not None else "未知"
-        print(
-            f"  {index}. [{item.get('company_slug') or '未标注公司'}] {item.get('skill')}"
-            f"｜要求类型：{item.get('requirement_type')}"
-            f"｜重要程度：{importance}"
-        )
-        if item.get("companies"):
-            print(f"      覆盖公司：{'、'.join(item['companies'])}（仅本样本内）")
-        print(f"      原文出处：{item.get('context')}｜{item.get('note')}")
+        print(f"  E{index:02d}. {item.get('note')}")
 
 
 # ── 阶段五：动态能力成长的输入与展示 ────────────────────────────────────
@@ -479,8 +454,8 @@ def run_pipeline(growth_events=None, announce=False) -> tuple:
             "user_profile": user_profile,
             "target_job": target_job,
             "growth_events": list(growth_events or []),
+            "jd_text": jd_text,
         }
-        | extra_input
     )
 
     show("用户能力", result.get("user_skills", []))
@@ -679,7 +654,10 @@ def show_progress(store) -> None:
         print(f"  ⚠ 不可读（{loaded.status}）：{loaded.warning}")
     else:
         history = loaded.data.get("history") or []
-        print(f"  已确认 {len(history)} 次成长记录")
+        confirmed = sum(1 for e in history if e.get("kind") != ENTRY_KIND_ADJUSTMENT)
+        adjustments = len(history) - confirmed
+        suffix = f"（另有 {adjustments} 条作废调整）" if adjustments else ""
+        print(f"  已确认 {confirmed} 次成长记录{suffix}")
         skills = growth_store.latest_skills(loaded.data)
         if skills:
             print("  最近一次确认的能力："

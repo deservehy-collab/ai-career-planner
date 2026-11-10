@@ -7,6 +7,7 @@
 # ═══════════════════════════════════════════════════════════════════════════
 
 name: RAG 知识库问答系统
+domain: ai-application
 difficulty: beginner
 covers_skills: [Python, LLM API, Embedding, RAG]
 prerequisites: [Python, Embedding, Prompt Engineering]

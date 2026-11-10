@@ -1,0 +1,139 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 数据分析师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_data_std_001    国家统计局公开的统计知识、统计指标与数据发布说明整理
+#                          https://www.stats.gov.cn/ （访问日期 2026-11-10）
+#   source_data_std_002    工业和信息化部公开的大数据相关产业与人才需求材料整理
+#                          https://www.miit.gov.cn/ （访问日期 2026-11-10）
+#   source_data_jd_001     公开招聘信息中数据分析/商业分析/数据运营岗位的通用职责
+#                          与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: data_analyst
+job_name: 数据分析师
+
+aliases:
+  - 数据分析师
+  - 数据分析
+  - 业务数据分析
+  - 商业分析
+  - 数据运营
+
+category: data
+domain: data-analysis
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 数据分析师从业务问题出发，用 SQL、Excel 与 Python 取数与清洗数据，建立指标体系并做可视化，最终用分析报告支撑业务决策。
+  core_tasks:
+    - {name: 理解业务问题并定义指标, detail: 与业务方确认问题、口径与期望产出，拆解可衡量指标}
+    - {name: 取数与数据清洗, detail: 用 SQL 查询数据，处理缺失、重复与口径不一致}
+    - {name: 开展专题分析, detail: 通过对比、分组、趋势与相关性分析定位问题原因}
+    - {name: 搭建指标看板, detail: 设计分层指标体系并制作可持续更新的可视化看板}
+    - {name: 撰写分析报告, detail: 写清背景、方法、结论与建议，区分事实与推断}
+    - {name: 跟踪结论落地, detail: 与业务方复盘行动效果，迭代指标与分析模型}
+  tools: [SQL, Excel, Python, BI 工具, 数据平台, 统计方法]
+  deliverables: [专题分析报告, 指标体系说明, 数据看板, 清洗后的数据集, 结论与行动建议]
+  entry_requirements: [统计/数学/计算机/经管等相关专业, 熟练使用 SQL 与 Excel, 掌握 Python 或 R 做数据处理, 具备业务理解与表达能力, 有分析项目作品优先]
+  career_path:
+    - {name: 数据分析助理, detail: 能完成取数、清洗与基础报表}
+    - {name: 数据分析师, detail: 能独立负责业务线专题分析与看板}
+    - {name: 高级数据分析师, detail: 能搭建指标体系、设计实验并推动决策}
+    - {name: 数据分析负责人, detail: 能建设分析团队与数据文化，负责数据产品规划}
+
+skills:
+
+  - skill: SQL
+    importance: 5
+    level: 高级
+    reason: 取数、聚合、关联与数据校验都依赖 SQL，是分析岗位的硬门槛。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 SQL 完成多表查询与数据提取'}
+      - {source_id: source_data_std_002, requirement_type: required, context: qualification,
+         note: '公开材料整理：具备数据处理与数据库查询的基本能力'}
+
+  - skill: Excel
+    importance: 4
+    level: 高级
+    reason: 快速探查、透视汇总与业务方交付仍大量使用 Excel。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Excel 函数、透视表与图表'}
+
+  - skill: Python
+    importance: 4
+    level: 中级
+    reason: 批量清洗、复杂计算与重复分析任务需要脚本化处理。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：掌握 Python 进行数据处理者优先'}
+
+  - skill: 统计学基础
+    importance: 4
+    level: 中级
+    reason: 判断差异是否显著、样本是否有代表性，需要统计方法支撑。
+    evidence:
+      - {source_id: source_data_std_001, requirement_type: required, context: qualification,
+         note: '公开材料整理：掌握描述统计、抽样与常用统计指标的含义'}
+
+  - skill: 数据清洗
+    importance: 5
+    level: 中级
+    reason: 数据质量决定结论可信度，清洗规则必须可复现。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成数据清洗、口径统一与质量校验'}
+
+  - skill: 数据可视化
+    importance: 4
+    level: 中级
+    reason: 看板与报告需要用合适的图表让结论一目了然。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：制作数据看板与分析图表'}
+
+  - skill: 指标体系
+    importance: 5
+    level: 中级
+    reason: 指标定义与分层是跨部门对齐和持续追踪的前提。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：搭建业务指标体系并维护指标口径'}
+      - {source_id: source_data_std_001, requirement_type: required, context: qualification,
+         note: '公开材料整理：理解统计指标的定义、口径与可比性'}
+
+  - skill: 业务分析
+    importance: 5
+    level: 中级
+    reason: 分析要回答业务问题，而不是只输出数据。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：理解业务流程，能定位问题并提出改进建议'}
+
+  - skill: 分析报告
+    importance: 4
+    level: 中级
+    reason: 报告是分析价值的交付形式，结论必须清晰可执行。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：撰写分析报告并向业务方汇报结论'}
+
+  - skill: 运营数据分析
+    importance: 4
+    level: 中级
+    reason: 用户、内容与活动数据是多数分析岗位的高频场景。
+    evidence:
+      - {source_id: source_data_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：有用户增长、活动或运营数据分析经验者优先'}

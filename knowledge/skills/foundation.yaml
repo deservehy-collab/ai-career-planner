@@ -19,5 +19,6 @@
     - 用 embedding 做关键词精确匹配，搞混语义检索与字面检索。
     - 不统一向量化模型，导致查询与文档向量空间不一致。
     - 忽略文本切分，把过长的混合内容一次向量化。
-  learning_resources: []
+  learning_resources:
+    - {title: 'OpenAI Embeddings 指南', url: 'https://platform.openai.com/docs/guides/embeddings'}
   estimated_weeks: 2

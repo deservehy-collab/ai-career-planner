@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：财务建模与经营分析（进阶）
+name: 财务建模与经营分析
+domain: accounting
+difficulty: intermediate
+covers_skills: [财务建模, 经营分析, 业务分析, 数据可视化]
+prerequisites: [财务报表分析, Excel]
+tech_stack: [Excel, 财务模型模板, 图表工具]
+stage_hint: 学习路线中期，用一套假设驱动的模型回答经营问题
+deliverable: 一个可调假设的财务模型，以及一页结论清晰的经营分析报告
+acceptance_criteria:
+  - 模型的假设、公式与输出分区清楚，改一个假设能联动更新
+  - 三张报表之间勾稽关系正确，不出现硬编码平衡数
+  - 分析结论能指出现金流或利润变化的主要驱动因素
+  - 图表服务于结论，标题直接说明发现了什么
+estimated_weeks: 3

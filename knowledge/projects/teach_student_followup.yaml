@@ -1,0 +1,15 @@
+# Project 知识库 —— 教学：学员跟进与续费维护（入门）
+name: 学员跟进与续费维护
+domain: teaching
+difficulty: beginner
+covers_skills: [学员关系维护, 咨询沟通, 学情分析]
+prerequisites: [教育心理学]
+tech_stack: [学员档案模板, Excel]
+stage_hint: 学习路线前期，用一批模拟学员练习跟进节奏与沟通
+deliverable: 一组学员跟进记录：学情摘要、沟通节点、风险提示与续费建议
+acceptance_criteria:
+  - 每个学员的跟进记录能看出学习状态变化
+  - 沟通内容具体到作业、出勤或测评结果，不是空泛关心
+  - 能识别出流失风险并说明依据
+  - 续费建议基于学习目标进度，而不是只讲优惠
+estimated_weeks: 2

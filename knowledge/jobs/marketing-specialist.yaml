@@ -1,0 +1,146 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 市场推广 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_mkt_std_001     人社部技能人才评价工作网公开的营销员相关职业技能标准要点整理
+#                          http://www.osta.org.cn/ （访问日期 2026-11-10）
+#   source_mkt_std_002     巨量引擎公开的营销方法与投放优化材料要点整理
+#                          https://www.oceanengine.com/ （访问日期 2026-11-10）
+#   source_mkt_jd_001      公开招聘信息中市场推广/市场营销/品牌推广岗位的通用职责
+#                          与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: marketing_specialist
+job_name: 市场推广
+
+aliases:
+  - 市场推广
+  - 市场专员
+  - 市场营销
+  - 推广专员
+  - 品牌推广
+  - 营销策划
+
+category: operations
+domain: operations
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 市场推广围绕目标人群与市场机会，完成调研、推广方案、内容与渠道执行，并通过数据复盘持续提升获客效率与品牌认知。
+  core_tasks:
+    - {name: 开展市场与竞品调研, detail: 收集行业、人群与竞品信息，形成可支撑决策的结论}
+    - {name: 制定推广方案, detail: 明确目标、人群、渠道、内容、预算与衡量指标}
+    - {name: 组织内容与传播, detail: 输出文案与物料，协调渠道按节奏发布并保持品牌一致}
+    - {name: 执行与优化投放, detail: 跟踪渠道效果，调整预算、素材与人群定向}
+    - {name: 复盘推广效果, detail: 对比目标与实际，分析投入产出并沉淀可复用打法}
+    - {name: 协同销售与产品, detail: 把线索与反馈交接给相关团队，形成闭环}
+  tools: [Excel, 数据分析平台, 广告投放后台, 内容管理工具, 问卷与调研工具]
+  deliverables: [市场调研报告, 推广方案与预算表, 内容与物料清单, 投放数据复盘, 获客成本与转化分析]
+  entry_requirements: [市场营销/新闻传播/管理类等相关专业, 具备文案与策划能力, 熟悉主流推广渠道, 能用数据评估效果, 有校园或实习推广项目优先]
+  career_path:
+    - {name: 市场推广专员, detail: 能执行渠道推广、内容发布与数据整理}
+    - {name: 市场推广经理, detail: 能独立制定并负责推广方案与预算}
+    - {name: 市场经理, detail: 能统筹品牌与效果推广、管理渠道与团队}
+    - {name: 市场总监, detail: 能制定市场战略并对增长与品牌结果负责}
+
+skills:
+
+  - skill: 市场调研
+    importance: 4
+    level: 中级
+    reason: 推广方案的前提是了解目标人群、竞品与市场机会。
+    evidence:
+      - {source_id: source_mkt_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：掌握市场信息收集、整理与分析的基本方法'}
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：开展市场与竞品调研并输出分析结论'}
+
+  - skill: 市场推广策划
+    importance: 5
+    level: 中级
+    reason: 岗位核心产出是可执行、可衡量的推广方案。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：制定推广方案，明确渠道、预算与目标'}
+      - {source_id: source_mkt_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：具备营销策划与方案撰写能力'}
+
+  - skill: 品牌传播
+    importance: 4
+    level: 中级
+    reason: 推广既要获客，也要保证品牌信息一致、可积累。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责品牌内容传播与渠道调性统一'}
+
+  - skill: 内容策划
+    importance: 4
+    level: 中级
+    reason: 内容是与用户沟通的载体，决定点击与转化。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：策划推广内容与物料，配合渠道发布'}
+
+  - skill: 文案写作
+    importance: 4
+    level: 中级
+    reason: 标题、卖点与活动文案直接影响推广效果。
+    evidence:
+      - {source_id: source_mkt_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：具备营销文案撰写与表达能力'}
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备良好文案能力，能独立产出推广素材'}
+
+  - skill: 投放优化
+    importance: 4
+    level: 中级
+    reason: 付费推广需要持续优化人群、素材与出价，控制获客成本。
+    evidence:
+      - {source_id: source_mkt_std_002, requirement_type: required, context: responsibility,
+         note: '公开材料整理：理解投放目标、人群定向与效果优化方法'}
+      - {source_id: source_mkt_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：有信息流或搜索投放经验者优先'}
+
+  - skill: 竞品分析
+    importance: 3
+    level: 初级
+    reason: 了解竞品卖点与投放策略，才能找到差异化空间。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：跟踪竞品动态并提炼差异化卖点者优先'}
+
+  - skill: 运营数据分析
+    importance: 4
+    level: 中级
+    reason: 推广效果必须用曝光、点击、转化与成本数据来评估。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟踪推广数据并输出复盘与优化建议'}
+      - {source_id: source_mkt_std_002, requirement_type: required, context: qualification,
+         note: '公开材料整理：掌握营销效果指标与数据复盘方法'}
+
+  - skill: 用户增长
+    importance: 3
+    level: 初级
+    reason: 推广最终服务于获客与留存，需要理解增长链路。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与拉新与转化链路优化者优先'}
+
+  - skill: 活动策划
+    importance: 4
+    level: 中级
+    reason: 节点活动与联合活动是市场推广的常用形式。
+    evidence:
+      - {source_id: source_mkt_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：策划并执行节点营销与推广活动'}

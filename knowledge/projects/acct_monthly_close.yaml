@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：月度账务处理与报表编制（入门项目）
+name: 月度账务处理与报表编制
+domain: accounting
+difficulty: beginner
+covers_skills: [会计准则, 财务软件, Excel, 出纳实务]
+prerequisites: [会计准则, Excel]
+tech_stack: [Excel, 用友/金蝶财务软件, 记账凭证与会计账簿]
+stage_hint: 会计学习早期，用一个月度核算闭环把准则、软件与表格串起来
+deliverable: 一套完整月度核算资料：记账凭证、科目余额表、资产负债表与利润表，附对账说明
+acceptance_criteria:
+  - 能按业务单据编制记账凭证，借贷平衡且科目使用正确
+  - 能完成银行与往来对账，未达账项有说明
+  - 能由账簿数据生成资产负债表与利润表，数字能勾稽
+  - 交付资料有目录与索引，便于他人复核
+estimated_weeks: 2

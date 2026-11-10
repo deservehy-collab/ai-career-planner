@@ -26,6 +26,19 @@ export function hasMatchRate(rate) {
   return rate !== null && rate !== undefined && rate !== '' && !Number.isNaN(Number(rate))
 }
 
+/**
+ * 清单里的证据有时存成一段结构（kind + summary），不能直接 {{ }}，
+ * 否则界面会原样打印 JSON；这里只取给人看的那一句。
+ */
+export function formatEvidence(value) {
+  if (value == null) return ''
+  if (typeof value === 'string') return value.trim()
+  if (typeof value === 'object') {
+    return String(value.summary || value.text || value.note || '').trim()
+  }
+  return String(value).trim()
+}
+
 /** 秒 → "3 分 12 秒" / "45 秒" */
 export function formatDuration(seconds) {
   const total = Math.max(0, Math.floor(Number(seconds) || 0))
@@ -65,4 +78,18 @@ export function formatBytes(bytes) {
     index += 1
   }
   return `${index === 0 ? value : value.toFixed(1)} ${units[index]}`
+}
+
+// 后端把失败原因存成 "ValueError: 具体原因"（backend/jobs.py 的 TaskRecord.error）
+const ERROR_CLASS_PREFIX = /^[A-Za-z_][A-Za-z0-9_.]*(?:Error|Exception|Warning|Timeout):\s*/
+
+/**
+ * 后台任务的失败原因 → 给人看的一句话。
+ *
+ * 异常类名（`ValueError`、`RuntimeError`）对使用者毫无意义，只会让人以为看到了
+ * 别人的调试输出，所以削掉前缀只留后面那句中文原因；整条为空才用兜底文案。
+ */
+export function formatRunError(raw, fallback = '任务没有完成，这次没拿到具体原因。') {
+  const text = String(raw ?? '').trim().replace(ERROR_CLASS_PREFIX, '')
+  return text || fallback
 }

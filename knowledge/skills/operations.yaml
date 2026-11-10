@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 新媒体运营技能（v1）
+# 说明：
+#   - 技能名必须与 knowledge/jobs/new-media-operator.yaml 完全一致。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 内容策划
+  category: operations
+  level_guides:
+    入门: 知道账号定位、目标用户与内容栏目分别指什么。
+    初级: 能围绕一个主题列出选题清单，并按周排出简单内容计划。
+    中级: 能结合用户需求与平台特性制定栏目结构、选题标准与发布节奏。
+    高级: 能搭建内容矩阵并用数据验证方向，持续迭代账号定位。
+  prerequisites: []
+  typical_usage: 账号起步、栏目建设与阶段性内容规划。
+  common_pitfalls:
+    - 选题凭感觉，今天追热点明天讲干货，账号标签混乱。
+    - 只规划内容形式，不定义目标用户与看完之后要做什么。
+    - 排期过满，没有留出数据复盘与调整的时间。
+  learning_resources:
+    - {title: '巨量引擎官网', url: 'https://www.oceanengine.com/'}
+  estimated_weeks: 2
+
+- skill: 文案写作
+  category: operations
+  level_guides:
+    入门: 能写出一段通顺、有明确主题的短文。
+    初级: 能写出带标题、开头钩子与行动指引的平台文案。
+    中级: 能按不同平台与用户场景调整语气，稳定产出可用的标题与正文。
+    高级: 能建立文案标准与模板，用数据持续优化点击与转化。
+  prerequisites: []
+  typical_usage: 笔记、短视频脚本、活动话术与私域消息的主要表达手段。
+  common_pitfalls:
+    - 标题夸张但正文没有兑现，用户点进来就划走。
+    - 自嗨式表达，通篇讲自己想说的，不回答用户关心什么。
+    - 一条文案塞多个目标，读者不知道下一步该做什么。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 2
+
+- skill: 短视频剪辑
+  category: operations
+  level_guides:
+    入门: 会用剪映等工具完成裁剪、拼接、加字幕和导出。
+    初级: 能按脚本完成一条口播或图文视频，节奏与字幕基本可看。
+    中级: 能独立完成素材整理、卡点、转场、字幕包装与封面制作。
+    高级: 能形成稳定的剪辑风格与模板，用数据优化完播与互动。
+  prerequisites: [文案写作]
+  typical_usage: 短视频内容的后期制作与账号视觉风格统一。
+  common_pitfalls:
+    - 前 3 秒没有信息点，完播率被开头拖垮。
+    - 字幕错别字多、字号过小，移动端看不清。
+    - 素材堆砌没有节奏，观众不知道重点在哪。
+  learning_resources:
+    - {title: '剪映官网', url: 'https://www.capcut.cn/'}
+  estimated_weeks: 2
+
+- skill: 运营数据分析
+  category: operations
+  level_guides:
+    入门: 能读懂播放量、点赞、评论、转发等基础指标。
+    初级: 会用表格记录每篇内容的曝光、互动与转化数据。
+    中级: 能按内容类型与发布时间对比数据，定位高低表现的原因。
+    高级: 能建立指标体系与复盘机制，用数据驱动选题和投放决策。
+  prerequisites: [Excel]
+  typical_usage: 内容复盘、活动评估与增长策略调整。
+  common_pitfalls:
+    - 只看播放量，不看互动与转化，把流量当成果。
+    - 样本太小就下结论，一条爆款被当成稳定规律。
+    - 数据口径频繁变化，前后对比没有意义。
+  learning_resources:
+    - {title: '巨量算数', url: 'https://trendinsight.oceanengine.com/'}
+  estimated_weeks: 3
+
+- skill: 用户增长
+  category: operations
+  level_guides:
+    入门: 知道拉新、激活、留存、转化这些基本环节。
+    初级: 能执行一次简单的拉新活动并统计新增与留存。
+    中级: 能设计内容、活动与渠道组合，按成本与转化评估效果。
+    高级: 能搭建增长模型，找到可复用的增长杠杆并控制获客成本。
+  prerequisites: [内容策划, 运营数据分析]
+  typical_usage: 账号涨粉、活动拉新与私域用户沉淀。
+  common_pitfalls:
+    - 只追求新增数量，不关注留存与真实转化。
+    - 活动奖励吸引来的用户与目标人群不匹配。
+    - 渠道同时铺开，无法判断哪个渠道真正有效。
+  learning_resources:
+    - {title: 'GrowingIO 增长知识库', url: 'https://www.growingio.com/'}
+  estimated_weeks: 3
+
+- skill: 社群运营
+  category: operations
+  level_guides:
+    入门: 知道社群需要规则、角色与日常互动。
+    初级: 能维护群秩序、发布通知并组织一次简单互动。
+    中级: 能设计入群欢迎、日常内容、活动与转化路径，控制退群率。
+    高级: 能搭建分层社群与运营 SOP，让社群持续产生留存与转化。
+  prerequisites: [文案写作]
+  typical_usage: 私域用户维护、活动组织与复购转化。
+  common_pitfalls:
+    - 群里只有广告没有互动，用户很快屏蔽。
+    - 规则不清、广告泛滥，核心用户流失。
+    - 只拉群不运营，群逐渐变成死群。
+  learning_resources:
+    - {title: '企业微信帮助中心', url: 'https://work.weixin.qq.com/help'}
+  estimated_weeks: 2
+
+- skill: 投放优化
+  category: operations
+  level_guides:
+    入门: 知道信息流投放按曝光或转化计费，理解基本投放流程。
+    初级: 能搭建简单投放计划并看懂消耗、点击与转化数据。
+    中级: 能根据成本与转化调整人群、素材与出价，做 A/B 测试。
+    高级: 能制定投放策略与预算分配，持续降低获客成本。
+  prerequisites: [运营数据分析, 内容策划]
+  typical_usage: 付费获客、素材测试与预算效率优化。
+  common_pitfalls:
+    - 素材没测够就放量，预算快速烧完。
+    - 只看点击率不看后端转化，买到的是无效流量。
+    - 频繁大改计划，数据无法归因。
+  learning_resources:
+    - {title: '巨量引擎学堂', url: 'https://school.oceanengine.com/'}
+  estimated_weeks: 3
+
+- skill: 竞品分析
+  category: operations
+  level_guides:
+    入门: 知道要观察同类账号的内容、数据与变现方式。
+    初级: 能整理 3~5 个竞品的选题、形式与更新频率。
+    中级: 能从竞品内容中提炼可复用做法，并结合自身账号做差异定位。
+    高级: 能建立持续跟踪机制，提前发现行业趋势与机会。
+  prerequisites: [运营数据分析]
+  typical_usage: 账号定位、选题参考与差异化策略制定。
+  common_pitfalls:
+    - 只抄形式不分析对方的目标用户与资源条件。
+    - 看几个爆款就下结论，忽略对方的长期积累。
+    - 分析完没有落到自己的行动清单。
+  learning_resources:
+    - {title: '新榜', url: 'https://www.newrank.cn/'}
+  estimated_weeks: 1
+
+- skill: 平台规则与合规
+  category: operations
+  level_guides:
+    入门: 知道不同平台有内容规范、版权与广告标识要求。
+    初级: 能识别常见违规词、搬运与侵权风险。
+    中级: 能在选题与脚本阶段规避限流、下架与广告违规风险。
+    高级: 能建立内容审核流程，处理申诉与突发合规问题。
+  prerequisites: []
+  typical_usage: 内容发布前的合规检查与账号风险管理。
+  common_pitfalls:
+    - 直接搬运他人视频或图片，触发版权投诉。
+    - 使用绝对化用语或未标注广告，被平台处罚。
+    - 不了解行业特殊限制，医疗、金融类内容踩红线。
+  learning_resources:
+    - {title: '抖音规则中心', url: 'https://www.douyin.com/rule'}
+  estimated_weeks: 1
+
+- skill: 图片设计
+  category: operations
+  level_guides:
+    入门: 会用 Canva/PS 等工具套模板做一张简单海报。
+    初级: 能完成封面、配图与活动海报的基础排版。
+    中级: 能根据账号风格统一字体、配色与版式，做出可用的封面体系。
+    高级: 能建立视觉规范与模板库，用设计提升点击与品牌识别。
+  prerequisites: []
+  typical_usage: 封面、海报、配图与活动物料制作。
+  common_pitfalls:
+    - 字体过多、配色杂乱，移动端看不清重点。
+    - 封面信息过载，缩略图状态下无法识别。
+    - 图片尺寸与平台要求不符，被裁切或压缩失真。
+  learning_resources:
+    - {title: 'Canva 设计学习', url: 'https://www.canva.cn/learn/'}
+  estimated_weeks: 2

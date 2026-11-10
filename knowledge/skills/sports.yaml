@@ -1,0 +1,248 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 体育与健身技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/sports-teacher.yaml 或
+#     knowledge/jobs/fitness-coach.yaml 里。
+#   - 急救与心肺复苏定义在 knowledge/skills/healthcare.yaml，此处复用不重复定义。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 体育教学法
+  category: sports
+  level_guides:
+    入门: 知道一节体育课的基本结构与教学环节。
+    初级: 能按教案组织讲解、示范与练习。
+    中级: 能按学段与体能差异调整教学方法。
+    高级: 能设计单元教学体系并指导青年教师。
+  prerequisites: []
+  typical_usage: 体育课不是放羊，教法是课堂质量的核心。
+  common_pitfalls:
+    - 只安排活动不讲要领，学生练错动作。
+    - 练习密度与强度失控，一半人闲着。
+  learning_resources:
+    - {title: '教育部（义务教育体育与健康课程标准）', url: 'http://www.moe.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 运动技能示范
+  category: sports
+  level_guides:
+    入门: 能完成常见项目的基础动作。
+    初级: 能标准示范并分解讲解关键环节。
+    中级: 能针对错误动作给出纠正手段。
+    高级: 能示范高难动作并设计递进训练。
+  prerequisites: [体育教学法]
+  typical_usage: 示范是体育教学最直观的语言，动作不标准学生就学歪。
+  common_pitfalls:
+    - 示范角度不对，学生看不清关键动作。
+    - 只示范不纠错，错误动作固化。
+  learning_resources:
+    - {title: '教育部（义务教育体育与健康课程标准）', url: 'http://www.moe.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 体育课堂组织与安全
+  category: sports
+  level_guides:
+    入门: 知道集合、分组与场地器材检查的基本要求。
+    初级: 能有序组织大班活动并控制风险。
+    中级: 能预判危险动作并调整队形与保护方式。
+    高级: 能制定课堂安全制度与应急预案。
+  prerequisites: [体育教学法]
+  typical_usage: 体育课是校园伤害事故高发场景，组织不到位就是隐患。
+  common_pitfalls:
+    - 器材不检查，出现破损器械伤人。
+    - 队形间距不足，投掷类项目相互干扰。
+  learning_resources:
+    - {title: '教育部（学校体育工作相关要求）', url: 'http://www.moe.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 体质测试与评价
+  category: sports
+  level_guides:
+    入门: 知道国家学生体质健康标准的测试项目。
+    初级: 能规范完成测试并录入数据。
+    中级: 能分析班级数据并提出干预建议。
+    高级: 能建立体质监测与改进方案。
+  prerequisites: []
+  typical_usage: 体测是学校硬指标，数据规范与分析能力直接影响改进措施。
+  common_pitfalls:
+    - 测试动作不规范，数据不可比。
+    - 只报数据不分析，问题年年重复。
+  learning_resources:
+    - {title: '教育部（国家学生体质健康标准）', url: 'http://www.moe.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 运动损伤预防
+  category: sports
+  level_guides:
+    入门: 知道热身、拉伸与保护的基本作用。
+    初级: 能识别常见运动损伤的早期信号。
+    中级: 能设计针对性热身与康复性练习。
+    高级: 能建立损伤预防体系与复训评估。
+  prerequisites: [运动生理学基础]
+  typical_usage: 一次处理不当的损伤可能影响学生整个学期甚至更久。
+  common_pitfalls:
+    - 热身走过场，直接进入高强度。
+    - 带伤继续训练，造成二次损伤。
+  learning_resources:
+    - {title: '国家体育总局（科学健身指导）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 体育竞赛组织
+  category: sports
+  level_guides:
+    入门: 知道赛程编排与规则的基本要求。
+    初级: 能组织校内单项比赛并完成裁判工作。
+    中级: 能编制竞赛规程并处理现场争议。
+    高级: 能统筹大型赛事与多方协调。
+  prerequisites: [体育教学法]
+  typical_usage: 竞赛是体育教学成果的展示，组织混乱会很显眼。
+  common_pitfalls:
+    - 规程不清，报名与资格争议不断。
+    - 赛程过密，运动员受伤风险上升。
+  learning_resources:
+    - {title: '国家体育总局（体育竞赛管理相关规范）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 体育课程标准解读
+  category: sports
+  level_guides:
+    入门: 知道课程标准的核心理念与目标领域。
+    初级: 能把课程目标转化为课时目标。
+    中级: 能依据标准设计单元与评价方案。
+    高级: 能开展校本课程开发与教研。
+  prerequisites: []
+  typical_usage: 教学与评价都要对齐课标，否则做得再多也不算达标。
+  common_pitfalls:
+    - 只教技术不落实核心素养目标。
+    - 评价只看成绩，不看过程与进步。
+  learning_resources:
+    - {title: '教育部（义务教育体育与健康课程标准）', url: 'http://www.moe.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 运动生理学基础
+  category: sports
+  level_guides:
+    入门: 知道能量供应、心率与疲劳的基本概念。
+    初级: 能解释运动强度与身体反应的关系。
+    中级: 能按生理指标调整训练负荷。
+    高级: 能结合生理数据制定周期化方案。
+  prerequisites: []
+  typical_usage: 不懂生理就只能凭感觉加量，容易练伤或练不出效果。
+  common_pitfalls:
+    - 只加量不恢复，过度训练。
+    - 忽略个体差异，一套方案给所有人。
+  learning_resources:
+    - {title: '国家体育总局（科学健身指导）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 运动解剖学
+  category: sports
+  level_guides:
+    入门: 知道主要肌群与关节的基本位置和功能。
+    初级: 能把动作对应到主要发力肌群。
+    中级: 能分析动作代偿与肌肉失衡。
+    高级: 能结合解剖原理设计针对性训练。
+  prerequisites: []
+  typical_usage: 教练看不懂动作背后的肌肉，就无法真正纠正问题。
+  common_pitfalls:
+    - 只记肌肉名称，不会对应到动作。
+    - 忽略关节活动度限制，硬加负荷。
+  learning_resources:
+    - {title: '国家体育总局（健身教练职业标准）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 体能训练方法
+  category: sports
+  level_guides:
+    入门: 知道力量、耐力、柔韧等基本素质的训练手段。
+    初级: 能教授标准动作并控制训练安全。
+    中级: 能按目标组合训练手段并安排负荷。
+    高级: 能做周期化训练设计与效果评估。
+  prerequisites: [运动解剖学]
+  typical_usage: 训练方法是健身教练的核心产品，动作质量决定效果与安全。
+  common_pitfalls:
+    - 动作代偿不纠正，越练越伤。
+    - 负荷长期不变，进入平台期。
+  learning_resources:
+    - {title: '国家体育总局（健身教练职业标准）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 训练计划设计
+  category: sports
+  level_guides:
+    入门: 知道计划要包含频率、强度、时间与动作安排。
+    初级: 能为一般健身目标设计 4 周计划。
+    中级: 能按评估结果做个性化与进阶安排。
+    高级: 能做赛季或长期周期规划并动态调整。
+  prerequisites: [体能训练方法]
+  typical_usage: 没有计划的训练只是消耗时间，会员也看不到进步。
+  common_pitfalls:
+    - 计划不写强度与组数，执行全靠临场。
+    - 不设复评节点，计划一成不变。
+  learning_resources:
+    - {title: '国家体育总局（健身教练职业标准）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 营养与体重管理
+  category: sports
+  level_guides:
+    入门: 知道三大营养素与能量平衡的基本概念。
+    初级: 能给出一般性的饮食建议与记录方法。
+    中级: 能结合训练目标调整能量与蛋白摄入。
+    高级: 能处理特殊人群需求并协同专业人员。
+  prerequisites: [运动生理学基础]
+  typical_usage: 减脂与增肌效果一半来自吃，乱给建议会带来风险。
+  common_pitfalls:
+    - 推荐极端节食，反弹且伤身体。
+    - 越界做医疗或疾病饮食建议。
+  learning_resources:
+    - {title: '国家体育总局（科学健身指导）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 体态评估
+  category: sports
+  level_guides:
+    入门: 知道正面、侧面观察的基本要点。
+    初级: 能完成静态体态观察并记录异常。
+    中级: 能结合动作筛查判断代偿来源。
+    高级: 能制定矫正性训练方案并复评。
+  prerequisites: [运动解剖学]
+  typical_usage: 体态问题不评估就上强度，等于在错误基础上加负荷。
+  common_pitfalls:
+    - 只看照片不做动态筛查。
+    - 把体态问题当成疾病下结论。
+  learning_resources:
+    - {title: '国家体育总局（健身教练职业标准）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 器械使用与保护
+  category: sports
+  level_guides:
+    入门: 知道常用器械的名称与基本用法。
+    初级: 能正确调节器械并做保护辅助。
+    中级: 能处理器械异常与训练中的突发情况。
+    高级: 能制定器械区安全管理规范。
+  prerequisites: [体能训练方法]
+  typical_usage: 器械区是健身房事故高发区，保护不到位后果严重。
+  common_pitfalls:
+    - 不调座椅与配重，动作轨迹错误。
+    - 大重量不做保护，脱手受伤。
+  learning_resources:
+    - {title: '国家体育总局（健身场所管理相关规范）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 会员沟通与课程销售
+  category: sports
+  level_guides:
+    入门: 知道会员需求分析与基本沟通礼仪。
+    初级: 能完成体验课讲解与课程推荐。
+    中级: 能处理异议并做续课跟进。
+    高级: 能建立会员服务体系与转介绍机制。
+  prerequisites: []
+  typical_usage: 教练的收入与留存都取决于沟通，专业不等于会表达。
+  common_pitfalls:
+    - 只讲专业术语，会员听不懂。
+    - 过度推销，损伤信任。
+  learning_resources:
+    - {title: '国家体育总局（健身教练职业标准）', url: 'https://www.sport.gov.cn/'}
+  estimated_weeks: 3

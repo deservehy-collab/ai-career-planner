@@ -1,0 +1,143 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 审计与财务分析技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/ 下的岗位画像里（审计助理 / 财务分析）。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 审计程序
+  category: accounting
+  level_guides:
+    入门: 知道审计程序是为获取审计证据而执行的一系列步骤，能看懂审计程序表。
+    初级: 能按程序表完成检查、观察、询问、函证等基础程序的资料准备与记录。
+    中级: 能针对具体报表认定选择并执行审计程序，说明样本选择与程序覆盖的理由。
+    高级: 能根据风险评估结果设计组合程序，处理复杂交易与舞弊迹象。
+  prerequisites: [审计基础]
+  typical_usage: 审计项目从计划到报告的核心执行链路，决定证据是否充分适当。
+  common_pitfalls:
+    - 只按模板走程序，不说明该程序对应哪个认定。
+    - 样本选择随意，无法解释为什么抽查这几笔。
+    - 程序执行了但记录不完整，复核时无法还原过程。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 审计证据与底稿
+  category: accounting
+  level_guides:
+    入门: 知道审计证据要可靠、相关，底稿是审计过程的书面记录。
+    初级: 能按索引整理凭证、合同、对账单等证据，底稿要素齐全。
+    中级: 能判断证据的充分性与适当性，编制有索引、有结论的抽查底稿。
+    高级: 能设计底稿体系与复核机制，让结论可追溯、可复核、可归档。
+  prerequisites: [审计程序, 会计准则]
+  typical_usage: 支撑审计结论的证明材料与工作记录，也是项目质量复核的依据。
+  common_pitfalls:
+    - 底稿只有复印件，没有执行人、日期与结论。
+    - 证据与结论对不上，抽查记录支撑不了写的意见。
+    - 索引混乱，交叉引用断链，复核时找不到原始资料。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 风险评估
+  category: accounting
+  level_guides:
+    入门: 知道审计需要先了解被审计单位及其环境，识别可能的错报风险。
+    初级: 能通过访谈和资料阅读列出主要业务循环与常见风险点。
+    中级: 能结合行业、业务模式与内控识别重大错报风险，并对应到报表科目。
+    高级: 能评估舞弊风险与特别风险，制定整体应对方案并动态调整。
+  prerequisites: [审计基础, 内部控制]
+  typical_usage: 审计计划的起点，决定后续程序的重点、范围与资源投入。
+  common_pitfalls:
+    - 风险评估写成通用套话，和后面的程序没有对应关系。
+    - 只看报表数字，不了解业务模式与行业变化。
+    - 识别了风险却不调整程序，风险清单停留在文档里。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 审计沟通
+  category: accounting
+  level_guides:
+    入门: 知道审计需要与客户、项目组和治理层沟通，沟通要有记录。
+    初级: 能礼貌、清楚地索取资料，复述并确认对方提供的信息。
+    中级: 能就差异、调整事项与客户沟通，推动问题闭环并留下书面记录。
+    高级: 能处理分歧与敏感事项，向治理层清晰传达审计发现与影响。
+  prerequisites: [审计基础]
+  typical_usage: 审计现场的资料协调、问题确认与结论沟通。
+  common_pitfalls:
+    - 只在口头上要资料，没有清单和确认记录。
+    - 遇到客户拖延就放弃，问题被带到报告阶段。
+    - 沟通语气生硬或越权承诺，影响独立性与合作关系。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 2
+
+- skill: 财务建模
+  category: accounting
+  level_guides:
+    入门: 知道财务模型是用表格把收入、成本、利润与现金流连起来测算。
+    初级: 能在 Excel 中搭建简单的收入成本预测表，公式引用清晰。
+    中级: 能搭建三表联动模型，设置假设区并做敏感性分析。
+    高级: 能构建多情景、可复用的模型体系，支撑投资与经营决策。
+  prerequisites: [财务报表分析, Excel]
+  typical_usage: 预算预测、投资测算、融资方案与经营情景分析。
+  common_pitfalls:
+    - 假设与公式混在一起，改一个数全表崩。
+    - 三张表不联动，利润好看但现金流对不上。
+    - 只做单一情景，不给区间和敏感性。
+  learning_resources:
+    - {title: 'Microsoft Excel 帮助与学习', url: 'https://support.microsoft.com/zh-cn/excel'}
+  estimated_weeks: 3
+
+- skill: 经营分析
+  category: accounting
+  level_guides:
+    入门: 知道经营分析是看收入、成本、费用与利润的变化及原因。
+    初级: 能按月度对比预算与实际，列出主要差异项。
+    中级: 能拆解量、价、结构对利润的影响，定位到业务动作。
+    高级: 能建立经营分析框架，把财务指标与业务驱动因素连起来并提出改进建议。
+  prerequisites: [财务报表分析, 业务分析]
+  typical_usage: 月度经营会、预算跟踪与管理层决策支持。
+  common_pitfalls:
+    - 只报数字不做归因，会议开完没有行动项。
+    - 口径频繁变化，同比环比不可比。
+    - 分析停留在财务视角，不结合业务实际。
+  learning_resources:
+    - {title: '财政部管理会计应用指引', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 业务分析
+  category: accounting
+  level_guides:
+    入门: 知道业务分析要先把业务流程和关键环节说清楚。
+    初级: 能画出简单业务流程，列出关键输入、输出与指标。
+    中级: 能从业务问题出发拆解指标，定位问题环节并提出验证方法。
+    高级: 能建立业务与数据的映射关系，推动跨部门用数据做决策。
+  prerequisites: [Excel]
+  typical_usage: 财务与数据岗位理解业务、定义指标与定位问题的共同基础。
+  common_pitfalls:
+    - 上来就做表，不先确认业务问题和口径。
+    - 指标定义含糊，不同部门各算各的。
+    - 结论没有落到可执行动作。
+  learning_resources:
+    - {title: '财政部管理会计应用指引', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 数据可视化
+  category: accounting
+  level_guides:
+    入门: 知道柱状图、折线图、饼图各自适合表达什么。
+    初级: 能在 Excel 中做出清晰的图表，标注单位与口径。
+    中级: 能按读者和结论选择图表，设计一页纸经营看板。
+    高级: 能建立可视化规范与看板体系，让指标可追踪、异常可定位。
+  prerequisites: [Excel, 业务分析]
+  typical_usage: 经营看板、财务分析报告与汇报材料的呈现。
+  common_pitfalls:
+    - 图表堆满信息，读者找不到结论。
+    - 截断坐标轴或口径不一致，图表误导。
+    - 只做漂亮图，不说明数据来源与更新时间。
+  learning_resources:
+    - {title: 'Microsoft Excel 图表帮助', url: 'https://support.microsoft.com/zh-cn/excel'}
+  estimated_weeks: 2

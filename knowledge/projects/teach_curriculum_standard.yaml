@@ -1,0 +1,15 @@
+# Project 知识库 —— 教学：课程标准解读与校本教研（高级）
+name: 课程标准解读与校本教研
+domain: teaching
+difficulty: advanced
+covers_skills: [课程标准解读, 教材分析, 课程研发, 校本研修设计, 教学反思与研究]
+prerequisites: [教学设计, 学科专业知识]
+tech_stack: [课程标准文本, 教材, 教研活动模板]
+stage_hint: 学习路线后期，从课标到校本研修方案做一次完整设计
+deliverable: 一份单元级课程方案与校本研修设计：课标对应、教材处理、活动安排与评价方式
+acceptance_criteria:
+  - 课标要求能逐条对应到单元目标与评价任务
+  - 教材分析说明取舍理由，不是照搬目录
+  - 研修活动有主题、流程、产出与后续跟进
+  - 教学反思引用课堂证据，指出下一次的具体调整
+estimated_weeks: 4

@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import AppBadge from '../components/AppBadge.vue'
 
-import { HISTORY_LIMIT, INPUT_MAX_CHARS, useChatSession } from '../composables/useChatSession'
+import { INPUT_MAX_CHARS, useChatSession } from '../composables/useChatSession'
 import { useHealthStore } from '../stores/health'
 import { renderMarkdown } from '../utils/markdown'
 
@@ -18,7 +18,8 @@ import { renderMarkdown } from '../utils/markdown'
  *      上游连接、模型停止推理，所以这个按钮才有资格显示出来。
  *   3. **不碰业务状态**：聊天与七节点规划工作流隔离，不写画像、不写 runs/。
  *
- * 顶部的模型状态来自 `GET /api/health` 的真实探测结果，不是装饰。
+ * 顶部的模型状态来自 `GET /api/health` 的真实探测结果，并按当前通道
+ * （本地 Ollama / 云端 API）分别判断，不是装饰。
  *
  * 注意：composable 返回的是 ref，这里**必须解构**成本页的顶层绑定 ——
  * 模板只会自动解构顶层 ref，`chat.messages` 这种嵌套写法拿到的是 Ref 本身，
@@ -42,16 +43,27 @@ const quickQuestions = [
   '如何准备一个有竞争力的 AI 项目？',
 ]
 
-const modelLabel = computed(() => health.data?.config?.chat_model || 'qwen2.5:3b')
+const channelInfo = computed(() => health.data?.llm_channel || null)
+const isCloud = computed(() => channelInfo.value?.channel === 'cloud')
+const cloudKeyMissing = computed(() => isCloud.value && !channelInfo.value?.cloud_configured)
 
+// 状态徽章只说"能不能聊"，模型名与端口属于排查读数，留在「系统状态」页。
 const modelState = computed(() => {
   const data = health.data
-  if (health.loading && !data) return { tone: 'warn', text: '正在检测模型服务…' }
-  if (health.unreachable) return { tone: 'danger', text: '后端未连接，无法对话' }
-  const ollama = data?.ollama
-  if (!ollama?.ok) return { tone: 'danger', text: 'Ollama 未启动' }
-  if (!ollama.chat_model_ready) return { tone: 'danger', text: `本地缺少模型 ${modelLabel.value}` }
-  return { tone: 'ok', text: `本地模型 ${modelLabel.value} 就绪` }
+  if (!data) {
+    if (health.unreachable) return { tone: 'danger', text: '连不上服务，无法对话' }
+    return { tone: 'warn', text: health.loading ? '正在检查…' : '尚未检查' }
+  }
+  const info = data.llm_channel
+  if (info?.channel === 'cloud') {
+    if (!info.cloud_configured) return { tone: 'danger', text: '云端 AI 还没配置好' }
+    if (info.cloud_auth_failed) return { tone: 'danger', text: '云端 AI 登录失败' }
+    return { tone: 'ok', text: '云端 AI 就绪' }
+  }
+  const ollama = data.ollama
+  if (!ollama?.ok) return { tone: 'danger', text: '本机 AI 没启动' }
+  if (!ollama.chat_model_ready) return { tone: 'danger', text: '本机 AI 还没装好' }
+  return { tone: 'ok', text: '本机 AI 就绪' }
 })
 
 const canSend = computed(() => !sending.value && input.value.trim().length > 0)
@@ -78,7 +90,8 @@ watch(
 
 onMounted(async () => {
   if (!health.data && !health.loading) await health.refresh()
-  scrollToBottom()
+  // 空态要停在顶部：窄屏上一滚到底会把主张和起点卡顶出视野。
+  if (messages.value.length) scrollToBottom()
 })
 
 async function handleSubmit() {
@@ -106,11 +119,9 @@ function handleClear() {
   <div class="chat-page">
     <div class="page-head chat-head">
       <div>
-        <h1>AI 助手</h1>
-        <p>
-          问任何关于岗位方向、技能学习顺序、项目准备与面试的问题。回答由本机 Ollama 模型
-          逐字生成，<strong>不会</strong>改动你的画像、规划任务或成长记录。
-        </p>
+        <p class="chat-eyebrow">AI 职业助手</p>
+        <h1>把问题直接问出来</h1>
+        <p class="chat-sub">学习路线、项目选择、简历措辞、面试准备，都可以从一句话开始。</p>
       </div>
       <div class="chat-head-side">
         <AppBadge :text="modelState.text" :tone="modelState.tone" />
@@ -126,42 +137,47 @@ function handleClear() {
     </div>
 
     <p v-if="health.unreachable" class="notice notice-danger">
-      后端没连上，聊天请求发不出去。请先启动 FastAPI（127.0.0.1:8000），
-      或到<router-link to="/status">系统状态</router-link>页查看具体原因。
+      连不上服务，消息发不出去。请确认服务已经启动，
+      或到<router-link to="/status">系统状态</router-link>页看看具体原因。
+    </p>
+    <p v-else-if="cloudKeyMissing" class="notice notice-danger">
+      当前用的是云端 AI，但没读到云端密钥。请到
+      <router-link to="/status">系统状态</router-link>页检查配置，或改用本机 AI。
     </p>
     <p v-else-if="requestError" class="notice notice-danger">{{ requestError }}</p>
 
-    <section class="chat-shell card">
+    <section class="chat-shell card" :class="{ 'is-empty': !hasConversation }">
       <div ref="listRef" class="chat-scroll" @scroll="onListScroll">
         <!-- 初始状态：欢迎 + 快捷提问（不放假历史、不放假统计） -->
         <div v-if="!hasConversation" class="chat-empty">
-          <div class="empty-mark" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M11.4 3.6 13.2 8.6 18.2 10.4 13.2 12.2 11.4 17.2 9.6 12.2 4.6 10.4 9.6 8.6Z" />
-              <path d="M18.3 15.6 19.1 17.7 21.2 18.5 19.1 19.3 18.3 21.4 17.5 19.3 15.4 18.5 17.5 17.7Z" />
-            </svg>
+          <div class="chat-hero">
+            <span class="chat-hero-mark" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M11.4 3.6 13.2 8.6 18.2 10.4 13.2 12.2 11.4 17.2 9.6 12.2 4.6 10.4 9.6 8.6Z" />
+                <path d="M18.3 15.6 19.1 17.7 21.2 18.5 19.1 19.3 18.3 21.4 17.5 19.3 15.4 18.5 17.5 17.7Z" />
+              </svg>
+            </span>
+            <h2>先说清楚你要去哪儿</h2>
+            <p>描述目标岗位或眼下的卡点，我会顺着你的情况往下聊。回答只用于这次对话，不会改动你的档案和成长记录。</p>
           </div>
-          <h2>想问什么都可以直接说</h2>
-          <p class="muted">
-            我在本机运行，回答质量取决于本地模型 <code>{{ modelLabel }}</code>。
-            下面是几个常见起点，点一下就直接提问。
-          </p>
+
           <div class="quick-grid">
             <button
-              v-for="question in quickQuestions"
+              v-for="(question, i) in quickQuestions"
               :key="question"
               class="quick-item"
               type="button"
               :disabled="sending"
               @click="handleQuick(question)"
             >
+              <span class="quick-no">{{ String(i + 1).padStart(2, '0') }}</span>
               <span class="quick-text">{{ question }}</span>
               <svg
                 class="quick-go"
@@ -177,6 +193,8 @@ function handleClear() {
               </svg>
             </button>
           </div>
+
+          <p class="chat-empty-foot">Enter 发送 · Shift + Enter 换行</p>
         </div>
 
         <div v-else class="chat-list">
@@ -207,7 +225,7 @@ function handleClear() {
             />
 
             <p v-if="message.state === 'streaming' && !message.text" class="msg-waiting">
-              模型正在准备，第一个字出来后会逐字显示…
+              AI 正在准备，第一个字出来后会逐字显示…
             </p>
             <span v-if="message.state === 'streaming'" class="msg-caret" aria-hidden="true" />
 
@@ -239,7 +257,7 @@ function handleClear() {
         <div class="composer-row">
           <p v-if="inputError" class="composer-error">{{ inputError }}</p>
           <p v-else class="chat-count">
-            {{ input.length }} / {{ INPUT_MAX_CHARS }} 字 · 每次最多带最近 {{ HISTORY_LIMIT }} 条上下文
+            {{ input.length }} / {{ INPUT_MAX_CHARS }} 字
           </p>
 
           <div class="composer-actions">
@@ -266,10 +284,5 @@ function handleClear() {
         </div>
       </footer>
     </section>
-
-    <p class="chat-hint faint">
-      会话只保存在这台浏览器的 localStorage（后端没有聊天表），刷新后仍在，清空即删除。
-      需要完整的岗位要求对照、技能差距与学习路线，请用<router-link to="/analyze">岗位分析</router-link>。
-    </p>
   </div>
 </template>

@@ -1,0 +1,141 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 临床检验技师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_med_lab_001    国家卫生健康委员会发布的医疗机构临床检验项目与
+#                         质量控制相关公开规范要点
+#                         https://www.nhc.gov.cn/ （访问日期 2026-11-10）
+#   source_med_ethic_001  医疗卫生与检验相关法律法规公开条文要点
+#                         https://flk.npc.gov.cn/ （访问日期 2026-11-10）
+#   source_med_jd_001     公开招聘信息中临床检验技师/医学检验岗位的通用
+#                         职责与要求汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: clinical_lab_technician
+job_name: 临床检验技师
+
+aliases:
+  - 临床检验技师
+  - 医学检验技师
+  - 检验技师
+  - 医学检验技术员
+  - 检验员
+
+category: healthcare
+domain: healthcare
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 临床检验技师在检验科完成标本接收、检测与结果审核，操作生化、免疫、血液等分析仪器并执行室内质控，保证检验结果准确可追溯。
+  core_tasks:
+    - {name: 接收与处理标本, detail: 核对申请信息与标本状态，按项目要求离心、分装与保存}
+    - {name: 上机检测, detail: 按标准操作规程运行仪器，处理报警与异常结果}
+    - {name: 执行室内质控, detail: 每日做质控并判读，失控时按流程排查与记录}
+    - {name: 审核与发布结果, detail: 结合临床信息判断异常值，必要时复检或联系临床}
+    - {name: 维护仪器与试剂, detail: 按周期保养、校准，管理试剂效期与库存}
+    - {name: 落实生物安全, detail: 按规范处理标本、废弃物与职业暴露事件}
+  tools: [生化分析仪, 血细胞分析仪, 免疫分析仪, LIS 系统, 离心机, 生物安全柜]
+  deliverables: [检验报告, 室内质控记录, 仪器保养记录, 试剂出入库台账, 危急值登记]
+  entry_requirements: [医学检验技术等相关专业, 了解检验项目原理与临床意义, 能按 SOP 规范操作, 细致耐心、重视记录, 有检验科实习经验优先]
+  career_path:
+    - {name: 检验技师, detail: 能独立完成常规项目检测与结果审核}
+    - {name: 主管技师, detail: 能负责专业组质控与仪器管理}
+    - {name: 检验科副主任, detail: 能统筹科室质量体系与人员培训}
+    - {name: 检验科主任, detail: 能对科室质量、安全与学科建设负责}
+
+skills:
+
+  - skill: 临床检验基础
+    importance: 5
+    level: 中级
+    reason: 项目原理与参考区间决定了结果怎么判读，是最底层的能力。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: qualification,
+         note: '检验规范整理：掌握临床血液、生化、免疫等常规项目原理与参考区间'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：医学检验相关专业，熟悉常规检验项目'}
+
+  - skill: 标本采集与处理
+    importance: 5
+    level: 中级
+    reason: 标本不合格是最常见的误差来源，接收环节必须能识别并处理。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: responsibility,
+         note: '检验规范整理：标本采集、运送、接收与拒收的标准要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责标本接收、核对与前处理'}
+
+  - skill: 检验仪器操作与维护
+    importance: 5
+    level: 中级
+    reason: 结果稳定性依赖仪器状态，报警与保养不到位会成批出错。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: responsibility,
+         note: '检验规范整理：分析仪器的操作、校准与日常维护要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练操作生化、免疫等检验仪器'}
+
+  - skill: 实验室质量控制
+    importance: 5
+    level: 中级
+    reason: 没有质控的结果不能用于临床决策，失控处理是岗位核心动作。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: responsibility,
+         note: '检验规范整理：室内质控规则、失控处理与室间质评要求'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：执行室内质控并记录质控结果'}
+
+  - skill: 检验结果审核
+    importance: 4
+    level: 中级
+    reason: 审核是把关环节，要能识别异常值、危急值与标本问题。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: responsibility,
+         note: '检验规范整理：结果审核、复检与危急值报告流程'}
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责检验结果审核与报告发布'}
+
+  - skill: 实验室安全与生物安全
+    importance: 4
+    level: 中级
+    reason: 每天接触血液与病原标本，防护与废弃物处置不合规会危及自身与他人。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: qualification,
+         note: '检验规范整理：生物安全防护分级、废弃物处置与职业暴露处理'}
+      - {source_id: source_med_ethic_001, requirement_type: required, context: qualification,
+         note: '法规整理：医疗机构实验室生物安全管理相关要求'}
+
+  - skill: 检验信息系统
+    importance: 4
+    level: 初级
+    reason: 申请、结果与报告全在 LIS 里流转，操作不熟会拖慢报告发布。
+    evidence:
+      - {source_id: source_med_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：使用 LIS 系统录入、审核与发布检验结果'}
+
+  - skill: 临床沟通基础
+    importance: 3
+    level: 初级
+    reason: 危急值与可疑结果需要及时联系临床，沟通不清会延误处置。
+    evidence:
+      - {source_id: source_med_lab_001, requirement_type: required, context: responsibility,
+         note: '检验规范整理：危急值应立即通知临床并登记反馈'}
+      - {source_id: source_med_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：能与临床科室沟通异常结果'}
+
+  - skill: 医疗法规与伦理
+    importance: 3
+    level: 初级
+    reason: 患者信息与检验数据属敏感信息，泄露或违规使用会有法律后果。
+    evidence:
+      - {source_id: source_med_ethic_001, requirement_type: required, context: qualification,
+         note: '法规整理：患者隐私保护与医疗质量安全相关要求'}
+      - {source_id: source_med_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解医疗相关法规与职业规范'}

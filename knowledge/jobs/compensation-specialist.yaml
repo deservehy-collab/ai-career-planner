@@ -1,0 +1,134 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 薪酬绩效专员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_hr_law_001    国家法律法规数据库中劳动合同、工资支付与社保相关公开条文要点
+#                        https://flk.npc.gov.cn/ （访问日期 2026-11-10）
+#   source_hr_std_001    人社部企业人力资源管理师国家职业技能标准要点整理
+#                        https://www.mohrss.gov.cn/ （访问日期 2026-11-10）
+#   source_hr_jd_001     公开招聘信息中薪酬绩效/薪酬福利岗位的通用职责与要求
+#                        汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: compensation_specialist
+job_name: 薪酬绩效专员
+
+aliases:
+  - 薪酬绩效专员
+  - 薪酬专员
+  - 绩效专员
+  - 薪酬福利专员
+  - 薪酬绩效主管
+
+category: human-resources
+domain: human-resources
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 薪酬绩效专员负责月度薪酬核算与个税社保扣缴，维护绩效考核流程与结果数据，开展薪酬调研并参与激励方案测算，保证发薪准确、考核可追溯、方案在预算内可执行。
+  core_tasks:
+    - {name: 核算月度薪酬, detail: 汇总考勤、绩效与异动数据，计算应发实发并核对差异}
+    - {name: 办理个税与社保扣缴, detail: 按累计预扣法计算个税，核对社保公积金缴费基数}
+    - {name: 组织绩效考核, detail: 下发考核表、跟踪进度、汇总评分并组织绩效面谈}
+    - {name: 开展薪酬调研, detail: 收集同岗位市场薪资，按岗位与城市分层比较}
+    - {name: 测算激励方案, detail: 按提成、奖金规则测算金额并评估预算影响}
+    - {name: 输出薪酬报表, detail: 制作人工成本与薪酬结构分析，支撑调薪决策}
+  tools: [薪酬系统, Excel, 考勤系统, 绩效管理表, 个税申报工具]
+  deliverables: [月度工资表, 个税与社保申报记录, 绩效汇总表, 薪酬调研报告, 激励方案测算表]
+  entry_requirements: [人力资源管理/财务管理/统计学等相关专业, 熟悉薪酬核算与个税规则, Excel 函数与透视表熟练, 数据敏感且细致, 有人力资源或财务相关证书者优先]
+  career_path:
+    - {name: 薪酬绩效专员, detail: 能独立完成月度薪酬核算与绩效数据汇总}
+    - {name: 薪酬绩效主管, detail: 能设计考核表与激励规则并控制预算}
+    - {name: 薪酬绩效经理, detail: 能搭建薪酬体系与绩效管理制度}
+    - {name: 人力资源总监/薪酬总监, detail: 能制定整体薪酬策略与长期激励方案}
+
+skills:
+
+  - skill: 薪酬核算
+    importance: 5
+    level: 中级
+    reason: 这是岗位的核心交付，每月一次、错一处就会影响全员信任。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：掌握工资构成、核算流程与工资表复核方法'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：独立完成月度薪酬核算与异常核对'}
+
+  - skill: 绩效考核
+    importance: 5
+    level: 中级
+    reason: 考核数据直接决定绩效工资，指标与口径不清会引发大量申诉。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：绩效指标设计、过程跟踪与考核结果应用'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：组织绩效考核、汇总结果并跟进面谈'}
+
+  - skill: 薪酬调研
+    importance: 4
+    level: 中级
+    reason: 招聘定价与年度调薪都需要外部参照，否则容易高于或低于市场。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：开展薪酬调研并输出分岗位对比分析'}
+
+  - skill: 个税计算
+    importance: 4
+    level: 中级
+    reason: 个税算错会导致员工年度汇算异常，也会带来申报风险。
+    evidence:
+      - {source_id: source_hr_law_001, requirement_type: required, context: qualification,
+         note: '公开条文整理：工资薪金所得按累计预扣法预扣预缴'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责个税计算与申报数据核对'}
+
+  - skill: 社保公积金实操
+    importance: 4
+    level: 中级
+    reason: 缴费基数与比例决定实发金额，跨城市差异需要逐项核对。
+    evidence:
+      - {source_id: source_hr_law_001, requirement_type: required, context: responsibility,
+         note: '公开条文整理：社会保险缴费基数与用人单位缴费义务'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉社保公积金缴纳规则与基数调整'}
+
+  - skill: 激励方案设计
+    importance: 4
+    level: 中级
+    reason: 提成与奖金规则决定员工行为，设计不当会造成成本失控或动作变形。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：奖金、提成与长期激励的设计原则'}
+      - {source_id: source_hr_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与激励方案测算与效果复盘'}
+
+  - skill: 劳动法与用工合规
+    importance: 4
+    level: 中级
+    reason: 发薪、调薪、扣款都要有依据，程序不合规会直接产生争议。
+    evidence:
+      - {source_id: source_hr_law_001, requirement_type: required, context: qualification,
+         note: '公开条文整理：工资支付、加班费与扣除项目的法定要求'}
+
+  - skill: 人力资源数据分析
+    importance: 4
+    level: 中级
+    reason: 人工成本、薪酬结构与绩效分布要用数据说话，不能只报总额。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：输出人工成本与薪酬结构分析报表'}
+
+  - skill: Excel
+    importance: 5
+    level: 中级
+    reason: 薪酬表依赖 VLOOKUP、透视表与条件判断，函数写错会算错全员工资。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：Excel 函数与数据处理能力熟练'}

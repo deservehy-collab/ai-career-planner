@@ -1,0 +1,15 @@
+# Project 知识库 —— 电子电气：嵌入式数据采集终端（高阶）
+name: 嵌入式数据采集终端
+domain: electronics
+difficulty: advanced
+covers_skills: [嵌入式 Linux, 实时操作系统, 通信协议, 单片机与外设, 嵌入式软件测试, 工程文档与技术交底, 硬件调试与仪器使用]
+prerequisites: [C语言, 单片机与外设, 通信协议]
+tech_stack: [嵌入式 Linux 开发板, 交叉编译工具链, 传感器与串口设备, Git, 示波器]
+stage_hint: 把采集、缓存与上报做成可长期运行的终端，并为量产做准备
+deliverable: 一份终端软件包、协议说明、测试用例与部署文档
+acceptance_criteria:
+  - 采集任务与上报任务相互解耦，掉网时不丢数据
+  - 驱动或应用与设备树、硬件接口对应，换板可迁移
+  - 测试覆盖断电、断网、长时间运行与数据异常场景并留有结果
+  - 文档写清部署步骤、接口参数与已知限制
+estimated_weeks: 6

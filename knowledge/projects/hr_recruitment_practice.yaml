@@ -1,0 +1,15 @@
+# Project 知识库 —— 人力资源：招聘全流程实操（入门）
+name: 招聘全流程实操
+domain: human-resources
+difficulty: beginner
+covers_skills: [招聘与面试, 劳动法与用工合规, 人事系统操作, Excel]
+prerequisites: []
+tech_stack: [招聘平台, 简历筛选表, Excel, 劳动合同模板]
+stage_hint: 学习路线起点，围绕一个真实岗位走完从发布到入职的全流程
+deliverable: 一份岗位招聘方案、候选人筛选记录与入职材料清单
+acceptance_criteria:
+  - 岗位说明书包含职责、硬性要求与考核重点
+  - 筛选记录写明每位候选人的匹配点与淘汰理由
+  - 面试问题结构化，同一岗位对候选人标准一致
+  - 入职材料清单覆盖劳动合同、社保登记与档案收集
+estimated_weeks: 2

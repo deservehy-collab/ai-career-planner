@@ -1,0 +1,264 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 电子电气技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/embedded-engineer.yaml 或
+#     knowledge/jobs/electrical-engineer.yaml 里。
+#   - 复用技能（操作系统、软件测试基础、工程文档与技术交底）定义在各自原文件。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: C语言
+  category: electronics
+  level_guides:
+    入门: 能读懂变量、分支、循环与函数的基本写法。
+    初级: 能用数组、结构体与指针完成小型程序，理解内存布局。
+    中级: 能按模块拆分代码，处理位运算、指针与中断上下文。
+    高级: 能设计可移植的底层接口，控制资源占用与实时性。
+  prerequisites: []
+  typical_usage: 单片机与嵌入式开发的主力语言，直接操作寄存器与外设都靠它。
+  common_pitfalls:
+    - 指针越界与野指针，运行一段时间才崩。
+    - 忽略整数溢出与类型转换，在嵌入式上表现更明显。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（程序员/嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 单片机与外设
+  category: electronics
+  level_guides:
+    入门: 知道 GPIO、定时器与中断的作用，能点亮并控制外设。
+    初级: 能用串口、ADC、PWM 完成采集与控制，会看数据手册。
+    中级: 能整合多外设并处理中断优先级、时序与功耗。
+    高级: 能规划板级资源分配，定位软硬件耦合问题。
+  prerequisites: [C语言]
+  typical_usage: 嵌入式产品的最小系统，几乎所有设备控制逻辑都从这里开始。
+  common_pitfalls:
+    - 不看数据手册凭经验配寄存器，时序对不上。
+    - 在中断里做耗时操作，导致丢中断或卡死。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 6
+
+- skill: 嵌入式 Linux
+  category: electronics
+  level_guides:
+    入门: 知道 Linux 文件系统、进程与常用命令的基本用法。
+    初级: 能交叉编译程序并在开发板上运行，看懂启动日志。
+    中级: 能裁剪内核、配置设备树，编写字符设备驱动。
+    高级: 能构建完整 BSP，处理启动优化与稳定性问题。
+  prerequisites: [C语言, 操作系统]
+  typical_usage: 中高端嵌入式设备普遍跑 Linux，驱动与应用开发都依赖它。
+  common_pitfalls:
+    - 混淆宿主机与目标机的路径和库。
+    - 设备树与驱动不匹配，硬件识别不到。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 8
+
+- skill: 实时操作系统
+  category: electronics
+  level_guides:
+    入门: 知道任务、优先级与调度的基本概念。
+    初级: 能创建任务并用信号量、消息队列做同步。
+    中级: 能分析优先级反转、栈溢出与中断延迟。
+    高级: 能为产品选择调度策略并给出实时性验证方案。
+  prerequisites: [单片机与外设]
+  typical_usage: 需要确定性响应的设备（电机控制、汽车电子）都依赖 RTOS。
+  common_pitfalls:
+    - 任务优先级反了，关键任务被饿死。
+    - 在中断与任务间共享数据不加保护。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 5
+
+- skill: 通信协议
+  category: electronics
+  level_guides:
+    入门: 知道串口、I2C、SPI 的接线与基本收发。
+    初级: 能按协议帧格式解析与组包，处理校验。
+    中级: 能排查丢包、粘包与时序问题，完成多设备联调。
+    高级: 能设计通信协议与容错机制，评估带宽与实时性。
+  prerequisites: [单片机与外设]
+  typical_usage: 板内器件通信与设备联网都靠协议，联调问题多半出在这里。
+  common_pitfalls:
+    - 只调通不校验，偶发错误被当成玄学。
+    - 忽略电气特性，线长或速率一变就不稳定。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 硬件调试与仪器使用
+  category: electronics
+  level_guides:
+    入门: 会用万用表测电压、通断与电阻。
+    初级: 能用示波器看波形、抓时序，定位明显异常。
+    中级: 能结合原理图与波形判断电源、时钟与通信问题。
+    高级: 能建立调试流程与常见故障库，指导团队排障。
+  prerequisites: []
+  typical_usage: 硬件问题无法靠读代码解决，仪器与原理图是唯一证据。
+  common_pitfalls:
+    - 探头接地不良，测出来的波形全是噪声。
+    - 不看原理图就直接换器件，问题反复出现。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（嵌入式系统设计师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 电路基础
+  category: electronics
+  level_guides:
+    入门: 知道电压、电流、电阻与基尔霍夫定律。
+    初级: 能计算串并联、分压与简单滤波器参数。
+    中级: 能读懂原理图并分析常见功能电路。
+    高级: 能从信号完整性角度评估电路设计取舍。
+  prerequisites: []
+  typical_usage: 电气与嵌入式的共同底座，看不懂电路就无法定位故障。
+  common_pitfalls:
+    - 只记公式不理解回路，换个数就不会。
+    - 忽略器件额定值，设计余量不足。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师基础）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 嵌入式软件测试
+  category: electronics
+  level_guides:
+    入门: 知道单元测试与硬件在环测试的基本思路。
+    初级: 能为主要函数写测试并在目标板上验证。
+    中级: 能设计边界、异常与长时间运行测试用例。
+    高级: 能搭建自动化测试台架并接入持续集成。
+  prerequisites: [C语言, 软件测试基础]
+  typical_usage: 嵌入式缺陷复现成本高，测试必须前置且可重复。
+  common_pitfalls:
+    - 只在仿真环境测，上板就出问题。
+    - 不测异常与掉电场景，现场故障无法复现。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（软件评测师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 电机与拖动
+  category: electronics
+  level_guides:
+    入门: 知道常见电机类型与启动方式。
+    初级: 能按负载选择电机并计算基本参数。
+    中级: 能分析启动、制动与调速特性，匹配保护元件。
+    高级: 能完成传动方案选型并评估能效与可靠性。
+  prerequisites: [电路基础]
+  typical_usage: 工业设备的动力来源，选型与保护直接决定设备寿命。
+  common_pitfalls:
+    - 只按功率选型，忽略启动电流与负载特性。
+    - 保护配置缺失，堵转时烧毁电机。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 5
+
+- skill: PLC 编程
+  category: electronics
+  level_guides:
+    入门: 知道梯形图基本元件与扫描周期。
+    初级: 能编写启停、互锁与简单顺序控制程序。
+    中级: 能用定时器、计数器与功能块完成工艺流程控制。
+    高级: 能规划程序结构并做故障诊断与安全联锁设计。
+  prerequisites: [电路基础]
+  typical_usage: 产线与设备自动化的控制核心，现场调试主要改这里。
+  common_pitfalls:
+    - 双线圈输出与自锁逻辑写错，动作抖动。
+    - 不做安全联锁，急停后仍有输出。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 5
+
+- skill: 电气制图
+  category: electronics
+  level_guides:
+    入门: 认识电气符号与图纸基本构成。
+    初级: 能绘制主电路与控制电路原理图。
+    中级: 能完成端子排、线号与柜内布局图。
+    高级: 能建立图纸标准与版本管理规范。
+  prerequisites: [电路基础]
+  typical_usage: 图纸是施工、接线与后期维护的唯一依据。
+  common_pitfalls:
+    - 图号与实物不对应，现场接线靠猜。
+    - 图纸不更新，改完设备还是旧版。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 配电系统设计
+  category: electronics
+  level_guides:
+    入门: 知道低压配电的基本组成与常用器件。
+    初级: 能按负荷计算电流并选择断路器与线径。
+    中级: 能完成配电柜方案、回路划分与保护配合。
+    高级: 能评估短路电流、选择性保护与供电可靠性。
+  prerequisites: [电路基础, 电气制图]
+  typical_usage: 设备与厂房的供电方案，选小了跳闸、选大了不保护。
+  common_pitfalls:
+    - 线径按经验选，长距离压降超标。
+    - 上下级保护不配合，一处故障全停。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 6
+
+- skill: 电气安全规范
+  category: electronics
+  level_guides:
+    入门: 知道接地、绝缘与安全电压的基本要求。
+    初级: 能识别常见触电与电气火灾风险。
+    中级: 能按规范完成接地、漏电保护与检修挂牌。
+    高级: 能组织安全检查并制定作业安全方案。
+  prerequisites: []
+  typical_usage: 电气作业的第一道红线，违规操作可能直接致命。
+  common_pitfalls:
+    - 带电作业不验电、不挂牌。
+    - 接地形同虚设，漏电保护失效无人发现。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 变频器与传动
+  category: electronics
+  level_guides:
+    入门: 知道变频器的基本功能与接线端子。
+    初级: 能完成参数设置与点动、多段速调试。
+    中级: 能按负载调整加减速与转矩提升，处理过流报警。
+    高级: 能设计多电机协调与能量回馈方案。
+  prerequisites: [电机与拖动]
+  typical_usage: 调速与节能的主流方案，参数调不好会频繁报警。
+  common_pitfalls:
+    - 加减速时间设置不当，频繁过流跳闸。
+    - 不设载波与屏蔽，干扰周边信号。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 现场调试
+  category: electronics
+  level_guides:
+    入门: 知道调试前要做的检查与安全确认。
+    初级: 能按步骤完成单机点动与联锁验证。
+    中级: 能定位现场干扰、接地与动作不一致问题。
+    高级: 能组织多设备联调与验收，处理工期与变更冲突。
+  prerequisites: [硬件调试与仪器使用]
+  typical_usage: 图纸与程序是否正确，只有到现场通电才知道。
+  common_pitfalls:
+    - 不按顺序上电，短路即烧器件。
+    - 只调好当前工况，换工况又出问题。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（电气工程师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 工程文档与技术交底
+  category: electronics
+  level_guides:
+    入门: 知道方案、图纸与交底记录各自的作用。
+    初级: 能整理设备清单、接线说明与调试记录。
+    中级: 能编写技术方案与验收资料，口径与图纸一致。
+    高级: 能建立文档体系并组织技术交底与培训。
+  prerequisites: []
+  typical_usage: 交付与运维的依据，文档缺失会让后期维护完全依赖个人。
+  common_pitfalls:
+    - 文档与实物不一致，交接后无人能维护。
+    - 只写结果不写参数与依据，问题无法复现。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（工程技术人员职业标准）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3

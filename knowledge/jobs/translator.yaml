@@ -1,0 +1,137 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 翻译 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_lang_std_001   翻译服务相关国家标准与全国翻译专业资格考试大纲的
+#                         公开要点整理
+#                         http://www.catticenter.com/ （访问日期 2026-11-10）
+#   source_media_jd_001   公开招聘信息中翻译/本地化岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: translator
+job_name: 翻译
+
+aliases:
+  - 翻译
+  - 译员
+  - 英语翻译
+  - 笔译
+  - 本地化翻译
+
+category: media-language
+domain: media-language
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 翻译负责英汉或汉英文本的笔译与审校，按项目要求统一术语与文体，使用 CAT 工具完成交付，并保证译文准确、通顺、可追溯。
+  core_tasks:
+    - {name: 理解原文, detail: 通读全文并确认文体、术语与使用场景}
+    - {name: 完成翻译, detail: 按项目要求翻译并保持术语与风格一致}
+    - {name: 维护术语, detail: 整理术语表并同步到团队术语库}
+    - {name: 使用工具交付, detail: 用 CAT 工具处理记忆库、标签与格式}
+    - {name: 自检与审校, detail: 按清单核对漏译、错译与数字单位}
+    - {name: 处理反馈, detail: 回应客户或审校意见并修订交付}
+  tools: [Trados / memoQ, 术语库, 翻译记忆库, 在线词典, Office 套件]
+  deliverables: [译文文件, 术语表, 审校记录, 交付说明, 质量自检表]
+  entry_requirements: [英语或翻译相关专业, 英汉双语功底扎实, 了解 CAT 工具, 细致耐心能承受交期压力, 有 CATTI 等证书或翻译实习经历优先]
+  career_path:
+    - {name: 初级译员, detail: 能完成一般文本翻译并自检}
+    - {name: 译员, detail: 能独立负责专业领域项目并保证质量}
+    - {name: 审校/项目经理, detail: 能负责质量把关或项目交付}
+    - {name: 语言服务负责人, detail: 能统筹团队、流程与客户质量体系}
+
+skills:
+
+  - skill: 英汉互译
+    importance: 5
+    level: 高级
+    reason: 这是岗位的立身之本，准确与通顺任何一头缺失都交不了稿。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：具备英汉互译的实务能力'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：英汉双语功底扎实，能独立完成笔译'}
+
+  - skill: 翻译策略与文体
+    importance: 5
+    level: 中级
+    reason: 法律、技术、营销文本的译法完全不同，策略错整体就走偏。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: qualification,
+         note: '考试大纲整理：掌握不同文体的翻译策略'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：能按文本类型调整译法与表达'}
+
+  - skill: 术语管理
+    importance: 5
+    level: 中级
+    reason: 术语不一致是客户投诉最多的问题，也是团队协作的基础。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：翻译项目应建立并统一术语'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：维护术语库并保证译法统一'}
+
+  - skill: 计算机辅助翻译
+    importance: 4
+    level: 中级
+    reason: 商业项目几乎都在 CAT 工具里完成，不会用就进不了项目流程。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：翻译服务应使用翻译记忆与术语工具保证一致性'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Trados/memoQ 等 CAT 工具'}
+
+  - skill: 审校与质量检查
+    importance: 4
+    level: 中级
+    reason: 交付前的自检与审校是质量的最后保障。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：翻译服务应执行审校与质量检查流程'}
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：能承担审校工作者优先'}
+
+  - skill: 行业知识
+    importance: 4
+    level: 中级
+    reason: 专业领域的译文是否可信，取决于译者是否理解业务。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：有法律、技术或医药等领域翻译经验'}
+
+  - skill: 查证与资料检索
+    importance: 4
+    level: 初级
+    reason: 术语与背景信息必须查证，凭猜测翻译迟早出事。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：译员应核查专业术语与背景资料'}
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：具备较强的资料检索与查证能力'}
+
+  - skill: 本地化基础
+    importance: 3
+    level: 初级
+    reason: 出海项目要求的不只是翻译，还有格式与文化适配。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: recommended, context: qualification,
+         note: '标准整理：本地化服务涉及格式、界面与文化适配'}
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：有软件或网站本地化经验者优先'}
+
+  - skill: 内容合规与版权
+    importance: 3
+    level: 初级
+    reason: 客户资料多为未公开内容，保密与授权是职业底线。
+    evidence:
+      - {source_id: source_lang_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：翻译服务应遵守保密与知识产权要求'}

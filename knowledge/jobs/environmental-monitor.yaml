@@ -1,0 +1,135 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 环境检测员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_env_std_001    生态环境部发布的监测分析方法、排放标准与监测技术规范
+#                         公开要点整理
+#                         https://www.mee.gov.cn/ （访问日期 2026-11-10）
+#   source_agri_jd_001    公开招聘信息中环境检测/监测岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: environmental_monitor
+job_name: 环境检测员
+
+aliases:
+  - 环境检测员
+  - 环境监测员
+  - 检测工程师
+  - 环境采样员
+  - 环保检测
+
+category: agriculture-environment
+domain: agriculture-environment
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 环境检测员按标准方法完成水、气、土壤等样品的采集与检测，执行质控并编制检测报告，做好危废与实验室安全管理，保证数据可追溯。
+  core_tasks:
+    - {name: 现场采样, detail: 按方案布点采样，记录点位、时间与现场条件}
+    - {name: 样品前处理, detail: 按方法要求保存、消解、萃取与定容}
+    - {name: 仪器测定, detail: 运行分光光度、色谱等仪器并做标准曲线}
+    - {name: 质量控制, detail: 做空白、平行、加标回收并记录质控结果}
+    - {name: 编制报告, detail: 汇总数据，对照标准判定并说明偏离}
+    - {name: 安全与危废管理, detail: 分类收集废液并登记转移}
+  tools: [分光光度计, 气相/液相色谱, pH 计, 采样器, 实验室信息管理系统]
+  deliverables: [采样记录, 原始检测记录, 检测报告, 质控记录, 危废转移台账]
+  entry_requirements: [环境工程/化学/分析检测等相关专业, 了解常规监测方法, 能按 SOP 规范操作, 细心且能适应外业, 有检测机构实习经验优先]
+  career_path:
+    - {name: 检测员, detail: 能独立完成常规项目采样与检测}
+    - {name: 检测工程师, detail: 能负责方法验证与报告审核}
+    - {name: 技术负责人, detail: 能统筹实验室质量体系}
+    - {name: 实验室主任, detail: 能对检测机构资质与质量负责}
+
+skills:
+
+  - skill: 采样与现场记录
+    importance: 5
+    level: 高级
+    reason: 样品不具代表性，后面的检测再精确也是无效数据。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：水、气、土壤样品的采集、保存与运输要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责现场采样与原始记录填写'}
+
+  - skill: 环境监测方法
+    importance: 5
+    level: 中级
+    reason: 方法选择与操作规范决定数据是否被监管认可。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：监测项目的方法选择与质量控制要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：按标准方法完成水气等项目检测'}
+
+  - skill: 仪器分析
+    importance: 5
+    level: 中级
+    reason: 痕量指标全靠仪器，曲线与状态异常会静默污染整批数据。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：分光光度、色谱等仪器的使用与校准要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练操作常规分析仪器'}
+
+  - skill: 水质与大气检测
+    importance: 5
+    level: 中级
+    reason: 这是岗位交付量最大的两类项目，也是最常见的超标判定场景。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：水和废水、环境空气监测项目与分析要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责水质与废气检测'}
+
+  - skill: 实验室质量控制
+    importance: 5
+    level: 中级
+    reason: 没有质控的数据不能作为报告依据，这是资质评审的硬要求。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：空白、平行、加标回收与质控样要求'}
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：执行质控并记录质控数据'}
+
+  - skill: 环保法规与标准
+    importance: 4
+    level: 中级
+    reason: 报告结论要依据标准判定，标准用错等于结论错误。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：排放标准与监测技术规范的适用关系'}
+      - {source_id: source_agri_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉环保标准与判定依据者优先'}
+
+  - skill: 检测报告编制
+    importance: 4
+    level: 初级
+    reason: 报告是最终交付物，也是执法与纠纷中的证据材料。
+    evidence:
+      - {source_id: source_agri_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责检测数据整理与报告编制'}
+
+  - skill: 危废与安全管理
+    importance: 4
+    level: 初级
+    reason: 检测产生大量废液，管理不合规会被处罚甚至停业。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：实验室废液分类收集与危险废物管理要求'}
+
+  - skill: 实验室安全与生物安全
+    importance: 3
+    level: 初级
+    reason: 接触酸碱、有机溶剂与高压气体，基本防护不能省。
+    evidence:
+      - {source_id: source_env_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：实验室安全操作与应急处理要求'}

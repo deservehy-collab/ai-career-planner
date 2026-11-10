@@ -1,242 +1,225 @@
 <script setup>
 import { computed } from 'vue'
 
-import { AGENTS, AGENT_GROUP } from '../utils/agents'
+import PageShell from '../components/PageShell.vue'
+
+import { usePlansStore } from '../stores/plans'
+import { AGENTS, agentColor } from '../utils/agents'
 
 /**
- * 概览首页：产品的「导览页」，不是数据统计后台。
+ * 概览：登录后落地的第一屏。它是一条**四站路线**，不是工作台 ——
+ * 一眼看完「怎么用」，每一站都能点进去。
  *
- * 这页只回答使用者真正关心的三件事 —— 有什么能用、用来干什么、怎么用 ——
- * 然后把人送到对应页面去。因此：
+ * 版面顺序就是阅读顺序：
+ *   ① 路线图——四张站牌高低错落挂在一条主线上，当前站压在线上并盖章；
+ *   ② 第 2 站的站牌里塞着七个步骤——这条链路真正跑的东西。
  *
- * 1. **不展示任何运维数据**：不读 Ollama 状态、不数 JD / 向量 / 技能条数，
- *    也不放「我的当前进度」这类读数。那些属于「系统状态」页，不在这。
- *    整页纯静态、不发任何请求。
- * 2. **只链真实路由**：AI 助手 /assistant、岗位分析 /analyze、
- *    学习与项目 /tasks、成长记录 /growth、系统状态 /status —— 都是确实存在的页面。
- * 3. **不编造事实**：文案来自 graph/workflow.py 的七节点与 utils/agents.js，
- *    流程与产出可追溯到真实节点。
+ * 这一页走 `.pg--overview` 变体：不套 .pg-main 的玻璃卡，整页直接摊在
+ * 极光底上，只有「现在」这一站是实色。
+ *
+ * 三条口径：
+ * 1. 「现在在哪一站」只看**当前求职档案**（plans store，App 启动时已拉取）：
+ *    没有档案 → 新建；有档案没分析 → 首次分析；已有轮次 → 去执行。
+ *    不再拿本机缓存的"最近一次分析"冒充当前进度。
+ * 2. 运维读数（模型通道、后端是否连得上）不进这页，那是「系统状态」的职责。
+ * 3. 完整档案留在「我的档案」；页脚只给一行摘要和去处，不把同一张表摆两遍。
  */
 
-// ── 有什么能用：五个真实页面，各配一句「用来干什么」和一个去处 ──────────
-const features = [
-  {
-    key: 'assistant',
-    title: 'AI 助手',
-    desc: '有问题先问它。岗位方向、技能学习顺序、简历与项目包装、面试准备，本机模型逐字作答，只聊天、不动你的任何数据。',
-    to: '/assistant',
-    cta: '去提问',
-    icon: 'M4 5h16v10H9l-5 4z M8 9h8 M8 12h5',
-  },
-  {
-    key: 'plan',
-    title: '求职规划（岗位分析）',
-    desc: '填一份画像、选一个真实 JD 或一家公司，七个专职 Agent 顺序跑完，给出岗位要求、能力差距、学习路线与项目建议。',
-    to: '/analyze',
-    cta: '发起规划',
-    icon: 'M12 3v4 M12 17v4 M5 12h4 M15 12h4 M8 8l8 8 M16 8l-8 8',
-  },
-  {
-    key: 'tasks',
-    title: '学习与项目任务',
-    desc: '把规划落成可执行清单：逐条学习阶段与实战项目，做完提交证据，让系统知道你已经推进到哪。',
+const plans = usePlansStore()
+
+/** 当前状态 → 「现在该做哪一件事」。全页只有这一个主行动。 */
+const nextStep = computed(() => {
+  if (!plans.hasPlans) {
+    return {
+      step: 2,
+      desc: '还没有求职档案。填好基础资料、粘一段任职要求，就能建立第一份档案并开始分析。',
+      to: '/analyze',
+      cta: '新建档案',
+      alt: { to: '/assistant', label: '方向还没定？先问两句' },
+    }
+  }
+  if (!plans.activeId) {
+    return {
+      step: 2,
+      desc: `账号下已有 ${plans.total} 份档案，先在「我的档案」里选一份，再继续它自己的任务与成长记录。`,
+      to: '/home',
+      cta: '选择档案',
+      alt: { to: '/analyze', label: '或者新建一份' },
+    }
+  }
+  if (!plans.active?.latest_round) {
+    return {
+      step: 2,
+      desc: `档案「${plans.activeTitle}」还没有分析结果。粘一段任职要求进来，就能跑出这份档案的第一轮计划。`,
+      to: '/analyze',
+      cta: '开始分析',
+      alt: { to: '/home', label: '先看看档案' },
+    }
+  }
+  return {
+    step: 3,
+    desc: `档案「${plans.activeTitle}」已有计划与能力表。照着清单推进，做完交证据。`,
     to: '/tasks',
     cta: '去执行',
-    icon: 'M9 6h11 M9 12h11 M9 18h11 M4 6l1.4 1.4L8 4.8 M4 12l1.4 1.4L8 10.8 M4 18l1.4 1.4L8 16.8',
+    alt: { to: '/growth', label: '看这份档案的成长记录' },
+  }
+})
+
+const ROUTE = [
+  {
+    step: 1,
+    phase: '提问',
+    title: '先问 AI 助手',
+    line: '方向、顺序、简历和项目怎么讲，先聊两句。它只说话，不动数据。',
+    to: '/assistant',
+    cta: '去提问',
   },
   {
-    key: 'growth',
-    title: '成长记录',
-    desc: '记下你完成的事，据此升级技能等级、生成下一轮计划，看见自己一点点靠近目标岗位。',
+    step: 2,
+    phase: '发起',
+    title: '发起一次求职规划',
+    line: '填画像，把招聘要求整段粘进来；什么岗位都能分析。',
+    to: '/analyze',
+    cta: '去分析',
+  },
+  {
+    step: 3,
+    phase: '执行',
+    title: '照着清单推进',
+    line: '规划落成可执行清单：学习阶段与实战项目，做完一条交证据。',
+    to: '/tasks',
+    cta: '去执行',
+  },
+  {
+    step: 4,
+    phase: '复盘',
+    title: '记账，进下一轮',
+    line: '完成后升级技能等级，再生成下一轮计划。历史只增不删。',
     to: '/growth',
-    cta: '看成长',
-    icon: 'M3 17l6-6 4 4 8-9 M21 6h-5 M21 6v5',
-  },
-  {
-    key: 'status',
-    title: '系统状态',
-    desc: '想知道本机模型和岗位知识库是否就绪、或后端连不上时，来这里排查 —— 运维读数都在这一页。',
-    to: '/status',
-    cta: '查状态',
-    icon: 'M12 3a9 9 0 100 18 9 9 0 000-18z M8 12h2l1.5 3.5L14 8.5 15.5 12H17',
+    cta: '去记账',
   },
 ]
 
-// ── 怎么用：一条真实的上手顺序（编号即顺序，不是装饰）──────────────────
-const startSteps = [
-  { step: 1, title: '先问 AI 助手', desc: '方向不明时先聊两句', to: '/assistant' },
-  { step: 2, title: '发起一次求职规划', desc: '填画像、选真实 JD，跑七节点', to: '/analyze' },
-  { step: 3, title: '认领学习与项目任务', desc: '照着清单一条条推进', to: '/tasks' },
-  { step: 4, title: '提交完成、推进下一轮', desc: '在成长记录里看等级变化', to: '/growth' },
-]
-
-// ── 上手须知：真实约束与演示入口，纯说明、可点的地方给去处 ──────────────
-const notes = [
-  { text: '全程离线：推理与检索都走本机 Ollama，不连云端、不使用云端密钥。', link: { to: '/status', label: '查看本机状态' } },
-  { text: '一次求职规划要跑 7 次本机模型推理，通常几十秒到几分钟；期间可以切走，跑完再回来看结果。' },
-  { text: '个人画像只保存在这台浏览器、随请求提交，后端没有画像表 —— 换浏览器需要重填。', link: { to: '/analyze', label: '去填画像' } },
-  { text: '分析结果只在当前浏览器会话里保留，刷新即清空；真正长期保存的是「成长记录」里的历史。', link: { to: '/growth', label: '去成长记录' } },
-  { text: '想先零成本体验：用演示账号 demo / demo1234 登录即可（只读浏览这些页面够用）。' },
-]
-
-/**
- * 一条工作流的产出落点。岗位要求 / 差距 / 学习路线 / 项目推荐不是独立页面，
- * 而是同一条七节点工作流里的节点，所以写成结果页内的区块锚点，不伪装成入口。
- */
-const outputs = [
-  { key: 'req', label: '岗位要求与 RAG 证据', to: '/analyze', hash: '#card-requirements', where: '分析结果页' },
-  { key: 'gap', label: '能力差距', to: '/analyze', hash: '#card-gaps', where: '分析结果页' },
-  { key: 'learning', label: '学习路线', to: '/analyze', hash: '#card-learning', where: '分析结果页' },
-  { key: 'project', label: '项目推荐', to: '/analyze', hash: '#card-projects', where: '分析结果页' },
-]
-
-// ── 七节点脊柱：节点名与顺序与 graph/workflow.py 的 ORDER 一致 ────────────
-const flow = computed(() =>
-  AGENTS.map((agent) => ({ ...agent, group: AGENT_GROUP[agent.group] })),
-)
-
-/** 色族 → 节点数，全部由 AGENTS 现算，不写死。 */
-const legend = computed(() =>
-  Object.entries(AGENT_GROUP).map(([key, group]) => ({
-    key,
-    label: group.label,
-    color: group.color,
-    count: AGENTS.filter((agent) => agent.group === key).length,
+/** 站牌状态只由本地画像推断：走过的填实线，当前站实色，没到的虚线。 */
+const stops = computed(() =>
+  ROUTE.map((stop) => ({
+    ...stop,
+    status:
+      stop.step < nextStep.value.step
+        ? 'done'
+        : stop.step === nextStep.value.step
+          ? 'current'
+          : 'todo',
   })),
 )
+
+const routeState = computed(
+  () => `第 ${nextStep.value.step - 1} 站已完成 · 第 ${nextStep.value.step} 站进行中`,
+)
+
+/** 第 2 站背后那条链：静态结构来自代码，不给单个节点编假进度。 */
+// 短名是给 300px 宽的站牌算过的：六个字以上一颗 chip 就换行，完整名与职责仍在 :title。
+const TICK_OVERRIDE = { retrieval: '资料整理' }
+
+const flow = computed(() =>
+  AGENTS.map((agent) => ({
+    ...agent,
+    short: TICK_OVERRIDE[agent.node] || agent.displayName.replace(' Agent', ''),
+    color: agentColor(agent.node),
+  })),
+)
+
+const outputs = [
+  { key: 'req', label: '岗位要求', hash: '#card-requirements' },
+  { key: 'gap', label: '能力差距', hash: '#card-gaps' },
+  { key: 'learning', label: '学习路线', hash: '#card-learning' },
+  { key: 'project', label: '项目推荐', hash: '#card-projects' },
+]
 </script>
 
 <template>
-  <div class="ov-page">
-    <!-- A. 欢迎 + 怎么用：左主张、右四步上手，不套框、不放读数 -->
-    <section class="ov-hero">
-      <div>
-        <p class="ov-eyebrow">本地化 AI 求职规划 · 面向大学生与应届生</p>
-        <h1>让 AI 帮你规划下一步职业成长</h1>
-        <div class="ov-hero-actions">
-          <router-link class="btn btn-primary" to="/assistant">开始 AI 咨询 →</router-link>
-          <router-link class="ov-hero-alt" to="/analyze">或者发起一次求职规划</router-link>
+  <PageShell title="概览" variant="overview">
+    <section class="ov-map" aria-labelledby="ov-map-title">
+      <div class="ov-map-head">
+        <h2 id="ov-map-title" class="ov-kicker">路线 <span>/ Route</span></h2>
+        <div class="ov-legend" aria-hidden="true">
+          <span class="ov-legend-item">
+            <span class="ov-legend-line ov-legend-line--done" />已走过
+          </span>
+          <span class="ov-legend-item">
+            <span class="ov-legend-line" />还没到
+          </span>
         </div>
+        <p class="ov-route-state">{{ routeState }}</p>
       </div>
 
-      <!-- 签名件：一条四步上手序列（编号是真顺序），兼作最省事的跳转入口 -->
-      <aside class="ov-rail ov-start" aria-label="四步上手">
-        <p class="ov-rail-title">怎么用 · 四步上手</p>
-        <div class="ov-start-list">
-          <RouterLink
-            v-for="item in startSteps"
-            :key="item.step"
-            class="ov-start-item"
-            :to="item.to"
+      <div class="ov-map-plane" :class="`is-step${nextStep.step}`">
+        <div class="ov-line ov-line--done" aria-hidden="true">
+          <span class="ov-track-start">START</span>
+        </div>
+        <div class="ov-line ov-line--todo" aria-hidden="true" />
+
+        <ol class="ov-route">
+          <li
+            v-for="stop in stops"
+            :key="stop.step"
+            class="ov-stop"
+            :class="[`ov-stop--${stop.step}`, `is-${stop.status}`]"
           >
-            <span class="ov-start-num">{{ item.step }}</span>
-            <span class="ov-start-text">
-              <strong>{{ item.title }}</strong>
-              <span>{{ item.desc }}</span>
-            </span>
-            <span class="ov-start-arrow" aria-hidden="true">→</span>
-          </RouterLink>
-        </div>
-      </aside>
+            <p class="ov-stop-kicker">
+              <span class="ov-stop-mark">{{ stop.step }}</span>
+              <span class="ov-stop-phase">{{ stop.phase }}</span>
+            </p>
+            <h3 class="ov-stop-title">
+              <RouterLink
+                class="ov-stop-head"
+                :to="stop.to"
+                :aria-current="stop.status === 'current' ? 'step' : undefined"
+              >{{ stop.title }}</RouterLink>
+              <span v-if="stop.status === 'current'" class="ov-stop-flag">你在这</span>
+            </h3>
+            <p class="ov-stop-line">
+              {{ stop.status === 'current' ? nextStep.desc : stop.line }}
+            </p>
+
+            <!-- 第 2 站里真正跑的七步：静态结构，不标单节点进度 -->
+            <div v-if="stop.step === 2" class="ov-steps">
+              <p class="ov-steps-head">
+                <span>这一站会跑七步</span>
+                <span class="ov-steps-count">7 STEPS</span>
+              </p>
+              <ol class="ov-chips">
+                <li
+                  v-for="agent in flow"
+                  :key="agent.node"
+                  class="ov-tick"
+                  :style="{ '--agent-color': agent.color }"
+                  :title="`${agent.displayName}：${agent.duty}`"
+                >
+                  <span class="ov-tick-no">{{ agent.order }}</span>
+                  <span class="ov-tick-name">{{ agent.short }}</span>
+                </li>
+              </ol>
+              <p class="ov-stop-outs">
+                <span class="ov-stop-outs-label">跑完出</span>
+                <RouterLink
+                  v-for="item in outputs"
+                  :key="item.key"
+                  class="ov-chain-out"
+                  :to="`/analyze${item.hash}`"
+                >{{ item.label }}</RouterLink>
+              </p>
+            </div>
+
+            <div v-if="stop.status === 'current'" class="ov-stop-act">
+              <RouterLink class="btn ov-now-btn" :to="nextStep.to">{{ nextStep.cta }} →</RouterLink>
+              <RouterLink class="ov-now-alt" :to="nextStep.alt.to">{{ nextStep.alt.label }}</RouterLink>
+            </div>
+            <RouterLink v-else class="ov-stop-go" :to="stop.to">{{ stop.cta }} →</RouterLink>
+          </li>
+        </ol>
+      </div>
     </section>
 
-    <!-- B. 有什么能用：五个真实页面，各说清用来干什么、去哪 -->
-    <div class="page-head">
-      <h2>有什么能用</h2>
-      <p>五个入口对应五个真实页面，先看清楚各自用来干什么，再决定点哪个。</p>
-    </div>
-
-    <div class="ov-entries">
-      <RouterLink v-for="item in features" :key="item.key" class="ov-entry" :to="item.to">
-        <span class="ov-entry-icon" :aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path :d="item.icon" />
-          </svg>
-        </span>
-        <div>
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.desc }}</p>
-        </div>
-        <span class="ov-entry-go">
-          {{ item.cta }}
-          <span class="ov-entry-arrow" aria-hidden="true">→</span>
-        </span>
-      </RouterLink>
-    </div>
-
-    <!-- C. 怎么工作：一条七节点脊柱 + 色族图例 + 产出落点跳转 -->
-    <section class="panel">
-      <div class="panel-head">
-        <h2>一条工作流，七个 Agent</h2>
-        <span class="panel-src">graph/workflow.py · ORDER</span>
-      </div>
-
-      <p class="loose-note muted">
-        「求职规划」背后是七个各司其职的 Agent 顺序跑一遍：先认识你、再查真实岗位要求、
-        然后对齐差距、最后排出学习路线和项目。它们不是七个页面，是同一条链上的七步。
-      </p>
-
-      <div class="ov-spine">
-        <article
-          v-for="agent in flow"
-          :key="agent.node"
-          class="ov-station"
-          :style="{ '--agent-color': agent.group.color }"
-        >
-          <div class="ov-station-no">
-            <span>{{ agent.order }}</span>
-            <code>{{ agent.node }}</code>
-          </div>
-          <h3>{{ agent.displayName }}</h3>
-        </article>
-      </div>
-
-      <div class="ov-legend">
-        <span v-for="item in legend" :key="item.key" class="ov-legend-item">
-          <span class="ov-swatch" :style="{ background: item.color }" :aria-hidden="true" />
-          {{ item.label }} · {{ item.count }} 个节点
-        </span>
-      </div>
-
-      <div class="ov-outputs">
-        <RouterLink
-          v-for="item in outputs"
-          :key="item.key"
-          class="ov-output"
-          :to="`${item.to}${item.hash}`"
-        >
-          {{ item.label }}
-          <small>{{ item.where }}</small>
-        </RouterLink>
-      </div>
-
-      <p class="faint block-note">
-        跑完后这些产出会出现在岗位分析结果页的对应区块；后端只提供整条链路的四个状态
-        （排队 / 运行中 / 成功 / 失败），所以过程中不做逐节点假进度。
-      </p>
-    </section>
-
-    <!-- D. 上手须知：真实约束与演示入口，把该给去处都给了 -->
-    <section class="panel">
-      <div class="panel-head">
-        <h2>上手须知</h2>
-        <span class="panel-src">开始之前值得知道的事</span>
-      </div>
-      <ul class="plain-list muted">
-        <li v-for="(item, i) in notes" :key="i">
-          {{ item.text }}
-          <RouterLink v-if="item.link" :to="item.link.to" class="ov-inline-link">
-            {{ item.link.label }} →
-          </RouterLink>
-        </li>
-      </ul>
-    </section>
-  </div>
+  </PageShell>
 </template>

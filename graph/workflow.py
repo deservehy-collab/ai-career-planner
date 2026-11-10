@@ -1,11 +1,18 @@
-"""LangGraph 工作流：把各 Agent 串成一条顺序流水线。
+"""LangGraph 工作流：把各 Agent 串成一条分析流水线。
 
-START → profile → growth → retrieval → job → assessment → learning → project → END
+START ──┬─→ profile → growth ──┐
+        └─→ retrieval ─────────┴─→ job → assessment ─┬─→ learning → project → END
+                                                      └─→ END
 
-- retrieval 节点只做岗位知识库检索，失败会降级为空证据，不影响后续节点。
-- growth 节点紧跟 profile：能力必须先按本轮成长事件更新完，后面的检索、岗位匹配、
-  能力评估、学习与项目规划才会按**新能力**重算。没有成长事件时它不升级任何等级，
+- retrieval 只依赖用户粘贴的招聘原文（没有原文时交出空证据并如实说明），
+  不依赖学生能力，所以和 profile 同时从 START 扇出：岗位依据整理不必排在对
+  学生画像的模型调用后面。两条分支在 job 前汇合，job 看到的仍是"新能力 +
+  完整依据"。
+- growth 节点必须紧跟 profile：能力必须先按本轮成长事件更新完，后面的能力评估、
+  学习与项目规划才会按**新能力**重算。没有成长事件时它不升级任何等级，
   能力表等于"合并历史后的基线"（历史为空时就是 profile 的原样输出）。
+- assessment 之后的条件分支保持原样：所有岗位要求都已有直接证据时提前收尾，
+  不再生成没有缺口可挂的任务。
 """
 
 from types import SimpleNamespace
@@ -13,14 +20,20 @@ from types import SimpleNamespace
 from langgraph.graph import END, START, StateGraph
 
 from agents.assessment_agent import assessment_node
+from agents.goal import (
+    GOAL_ACHIEVED,
+    GOAL_BASIS_INSUFFICIENT,
+    evaluate_goal,
+    is_goal_closed,
+)
 from agents.growth_agent import compare_growth_gaps, growth_node
-from agents.jd_match import compute_jd_match, resolve_target
+from agents.jd_match import compute_jd_match
 from agents.job_agent import job_node
 from agents.learning_agent import learning_node
 from agents.profile_agent import profile_node
 from agents.project_agent import project_node
 from agents.retrieval_agent import retrieval_node
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
 from graph.state import CareerState
 
 # 节点名 → 处理函数
@@ -34,23 +47,53 @@ NODES = {
     "project": project_node,
 }
 
-# 顺序执行的节点顺序，add_edge 也按这个顺序连
+#: 节点名的展示/汇报顺序（不是执行顺序 —— retrieval 与 profile 并行）。
+#: 进度回报按这个集合过滤事件、给没走到的节点补 ``skipped``。
 ORDER = ["profile", "growth", "retrieval", "job", "assessment", "learning", "project"]
 
 
 def build_workflow():
-    """构建并编译顺序工作流。"""
+    """构建并编译流水线。
+
+    唯一的分叉是 START 同时启动 profile 与 retrieval；唯一的条件分支在
+    assessment 之后：所有岗位要求都已有直接证据时，再往下跑 learning/project
+    只会产出空计划（或直接报错）。此时提前收尾，把"目标已达成 / 依据不足无法
+    确认"如实带回汇总层。
+    """
     builder = StateGraph(CareerState)
 
     for name, node in NODES.items():
         builder.add_node(name, node)
 
-    builder.add_edge(START, ORDER[0])
-    for current, following in zip(ORDER, ORDER[1:]):
-        builder.add_edge(current, following)
-    builder.add_edge(ORDER[-1], END)
+    # 两条起点分支：能力画像（含成长更新）与岗位依据整理互不依赖。
+    builder.add_edge(START, "profile")
+    builder.add_edge(START, "retrieval")
+    builder.add_edge("profile", "growth")
+    # job 需要"新能力"和"完整依据"两样都到齐。必须用列表形式一次汇合：
+    # 两个单独的 add_edge("growth","job") / add_edge("retrieval","job") 会让
+    # LangGraph 每条边各触发一次，job 及其下游会跑两遍（第一遍还看不到另一条分支）。
+    builder.add_edge(["growth", "retrieval"], "job")
+    builder.add_edge("job", "assessment")
+    builder.add_conditional_edges(
+        "assessment",
+        _route_after_assessment,
+        {"learning": "learning", "done": END},
+    )
+    builder.add_edge("learning", "project")
+    builder.add_edge("project", END)
 
     return builder.compile()
+
+
+def _route_after_assessment(state: dict) -> str:
+    """assessment → learning，或直接收尾。
+
+    依据不足但确实已全部达标也走 ``done``：不是宣布达成，而是**不再生成
+    没有缺口可挂的任务**，由 ``build_final_plan`` 明确回报"无法确认"。
+    """
+    if is_goal_closed(evaluate_goal(state)):
+        return "done"
+    return "learning"
 
 
 # 模块级编译一次，main.py 直接 import 使用
@@ -126,38 +169,40 @@ def build_final_plan(state: dict) -> dict:
     gaps = state.get("skill_gaps") or []
     stages = state.get("learning_plan") or []
     projects = state.get("project_plan") or []
+    goal = evaluate_goal(state)
 
-    # 阶段四：真实 JD 定向匹配（确定性汇总，复用 job_evidence / skill_gaps）
-    jd_target = None
-    jd_meta = None
-    company_slug = None
-    try:
-        target = resolve_target(state.get("jd_source_id"), state.get("target_company"))
-        jd_target = target["source_id"]
-        jd_meta = target["jd_meta"]
-        company_slug = target["company_slug"]
-    except Exception as exc:  # 入口参数异常已在 retrieval_node 暴露；这里兜底不中断汇总
-        print(f"[Final Plan] 警告：真实 JD 匹配目标解析失败，按跨公司概览处理（{type(exc).__name__}: {exc}）", flush=True)
+    def shown_status(gap: dict) -> str:
+        return str(gap.get("display_status") or gap.get("status") or "")
+
+    # 岗位匹配结论（确定性汇总，复用 job_evidence / skill_gaps）
     jd_match = compute_jd_match(
         skill_gaps=gaps,
         job_requirements=state.get("job_requirements") or [],
         evidence=state.get("job_evidence") or [],
-        jd_meta=jd_meta,
-        jd_target=jd_target,
-        company_slug=company_slug,
     )
+
+    if goal["status"] == GOAL_ACHIEVED:
+        next_action = "目标已达成，可以收尾；如需继续，换一个目标岗位或重新粘贴招聘要求再分析。"
+    elif goal["status"] == GOAL_BASIS_INSUFFICIENT:
+        next_action = "能力已达标，但岗位要求依据不足；请粘贴真实招聘要求后重新分析，才能确认达成。"
+    elif stages:
+        next_action = f"从「{stages[0]['topic']}」开始，完成后按完成标准自测"
+    else:
+        next_action = "先补齐岗位要求中最关键的技能"
 
     plan = {
         "target_job": state.get("target_job", ""),
-        "already_satisfied": [g["skill"] for g in gaps if g["status"] == "已满足"],
+        # 只有带项目/成长证据的才算已满足；等级达标但证据不足的单独列出
+        "already_satisfied": [g["skill"] for g in gaps if shown_status(g) == "已满足"],
+        "needs_verification": [
+            g["skill"] for g in gaps if shown_status(g) in ("疑似具备", "未验证")
+        ],
         "top_gaps": [g["skill"] for g in gaps if g["priority"] == "高"][:3],
         "learning_stage_count": len(stages),
         "recommended_projects": [p["name"] for p in projects],
-        "next_action": (
-            f"从「{stages[0]['topic']}」开始，完成后按完成标准自测"
-            if stages
-            else "先补齐岗位要求中最关键的技能"
-        ),
+        "goal_status": goal["status"],
+        "goal": goal,
+        "next_action": next_action,
         "jd_match": jd_match,
     }
 

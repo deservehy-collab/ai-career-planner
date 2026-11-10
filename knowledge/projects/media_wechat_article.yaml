@@ -1,0 +1,15 @@
+# Project 知识库 —— 传媒：公众号选题与成稿（入门）
+name: 公众号选题与成稿
+domain: media-language
+difficulty: beginner
+covers_skills: [内容策划, 文案写作, 稿件编辑与校对, 标题与版式设计, 内容合规与版权]
+prerequisites: []
+tech_stack: [公众号后台, 排版工具, 图片处理软件, 选题表]
+stage_hint: 学习路线起点，从选题到发布完整走一遍
+deliverable: 一篇可发布的成稿，附选题说明与素材来源登记
+acceptance_criteria:
+  - 选题写明目标读者与要解决的问题
+  - 文章结构清楚，标题与正文一致，无标题党
+  - 引用数据均有来源，图片素材标注授权情况
+  - 发布前完成错别字与体例校对，并留有校对记录
+estimated_weeks: 2

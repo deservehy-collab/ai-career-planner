@@ -1,4 +1,4 @@
-"""Project 知识库查询模块（结构化 YAML，非向量）。
+"""Project 知识库查询模块（结构化 YAML）。
 
 设计要点
 --------
@@ -103,6 +103,9 @@ class ProjectKnowledgeBase:
                 raise ProjectKnowledgeError(
                     f"项目 {name!r} 的 {key} 应为列表，当前为 {type(value).__name__}"
                 )
+        domain = item.get("domain")
+        if domain is not None and not str(domain).strip():
+            raise ProjectKnowledgeError(f"项目 {name!r} 的 domain 不能为空字符串")
 
     # ── 查询 ────────────────────────────────────────────────────────────────
     @property
@@ -137,8 +140,13 @@ class ProjectKnowledgeBase:
         skills: list[str],
         student_levels: dict | None = None,
         max_difficulty: str = MAX_EXECUTABLE_DIFFICULTY,
+        domain: str | None = None,
     ) -> tuple[list[dict], list[dict]]:
         """按"可立即执行 / 暂不推荐"分组返回项目候选。
+
+        ``domain`` 用于跨职业领域过滤：给了领域时只保留同领域项目（以及没有
+        ``domain`` 字段的历史项目）。会计岗不会被推荐去做 RAG 问答系统，AI 岗
+        也不会看到会计实训模板。传 None 表示不按领域过滤，保持旧行为。
 
         返回 `(executable, blocked)`：
 
@@ -154,11 +162,14 @@ class ProjectKnowledgeBase:
         """
         capacity = DIFFICULTY_RANK.get(max_difficulty, DIFFICULTY_RANK[MAX_EXECUTABLE_DIFFICULTY])
         skill_set = {str(s).strip() for s in (skills or []) if str(s).strip()}
+        wanted_domain = str(domain or "").strip()
 
         executable: list[dict] = []
         blocked: list[dict] = []
 
         for p in self._projects:
+            if wanted_domain and p.get("domain") not in (None, wanted_domain):
+                continue
             difficulty_value = DIFFICULTY_RANK[p["difficulty"]]
             covers = {str(c).strip() for c in p.get("covers_skills", [])}
             prereqs = [str(s).strip() for s in p.get("prerequisites", [])]
@@ -207,7 +218,8 @@ class ProjectKnowledgeBase:
             item["blocked_reason"] = blocked_reason
         return item
 
-    def recommend(self, skills: list[str], max_difficulty: str = MAX_DIFFICULTY) -> list[dict]:
+    def recommend(self, skills: list[str], max_difficulty: str = MAX_DIFFICULTY,
+                  domain: str | None = None) -> list[dict]:
         """按技能覆盖排序的候选项目（不检查前置技能，保持既有语义）。
 
         评分 = 覆盖技能数 * 100 + 已具备前置数 * 10 - 难度 * 5。
@@ -220,7 +232,7 @@ class ProjectKnowledgeBase:
             只想要"当前就能上手"的项目时，请改用 :meth:`recommend_for_user`。
         """
         executable, _ = self.recommend_for_user(
-            skills, student_levels=None, max_difficulty=max_difficulty
+            skills, student_levels=None, max_difficulty=max_difficulty, domain=domain
         )
         ordered = sorted(
             executable,

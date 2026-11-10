@@ -1,0 +1,265 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 生物医药与化学检验技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/biomedical-lab-technician.yaml 或
+#     knowledge/jobs/qc-chemist.yaml 里。
+#   - 实验室质量控制、实验室安全与生物安全定义在 knowledge/skills/healthcare.yaml，
+#     此处复用不重复定义。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 分子生物学实验
+  category: bio-chemical
+  level_guides:
+    入门: 知道核酸提取与 PCR 的基本原理。
+    初级: 能按 SOP 完成核酸提取与常规 PCR 操作。
+    中级: 能优化反应条件并分析失败原因。
+    高级: 能设计复杂实验方案并解决体系性问题。
+  prerequisites: []
+  typical_usage: 生物医药研发与检测的基础手段，污染与操作失误会让结果全废。
+  common_pitfalls:
+    - 分区与耗材管理不严，出现气溶胶污染。
+    - 只跑一次不设对照，结果无法判断。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（技术规范与指导原则）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 6
+
+- skill: 细胞培养
+  category: bio-chemical
+  level_guides:
+    入门: 知道无菌台操作与细胞传代的基本流程。
+    初级: 能完成常规细胞复苏、传代与冻存。
+    中级: 能判断污染与状态异常并处理。
+    高级: 能建立细胞库与质量控制体系。
+  prerequisites: [无菌操作技术]
+  typical_usage: 细胞是很多实验的材料，状态不好后面数据全部作废。
+  common_pitfalls:
+    - 传代密度与时机把控不好，细胞老化。
+    - 污染早期未发现，整批细胞报废。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（细胞治疗相关指导原则）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 6
+
+- skill: 无菌操作技术
+  category: bio-chemical
+  level_guides:
+    入门: 知道无菌区、消毒与紫外灭菌的基本要求。
+    初级: 能在超净台内规范完成操作。
+    中级: 能排查污染来源并改进操作习惯。
+    高级: 能制定无菌操作规范并培训他人。
+  prerequisites: []
+  typical_usage: 细胞与微生物操作的前提，一次污染可能损失数周工作。
+  common_pitfalls:
+    - 手部与台面消毒不到位。
+    - 操作中频繁离开无菌区又返回。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（无菌检验相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 试剂配制与标定
+  category: bio-chemical
+  level_guides:
+    入门: 知道摩尔浓度、质量分数与配制基本步骤。
+    初级: 能准确配制常用溶液并完成标定。
+    中级: 能处理缓冲体系与稳定性问题。
+    高级: 能建立试剂管理制度与期间核查。
+  prerequisites: [分析化学基础]
+  typical_usage: 试剂配错浓度，所有结果都会系统性偏移。
+  common_pitfalls:
+    - 定容与移液不规范，浓度偏差。
+    - 试剂过期或不按要求保存仍继续使用。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（试剂与标准物质相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 实验记录与数据管理
+  category: bio-chemical
+  level_guides:
+    入门: 知道记录要及时、原始、可追溯。
+    初级: 能规范填写实验记录并归档。
+    中级: 能保证数据与结论对应，处理异常数据。
+    高级: 能建立数据完整性管理规范。
+  prerequisites: []
+  typical_usage: 记录不规范，数据就无法复核，也过不了审计。
+  common_pitfalls:
+    - 事后补记或涂改不留痕。
+    - 只记结果不记条件，无法复现。
+  learning_resources:
+    - {title: '国家药品监督管理局（药品记录与数据管理规范）', url: 'https://www.nmpa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 分析仪器操作
+  category: bio-chemical
+  level_guides:
+    入门: 知道分光光度计、色谱等仪器的基本用途。
+    初级: 能按规程完成常规测定与数据处理。
+    中级: 能排查常见故障并处理异常峰形。
+    高级: 能做方法开发与仪器期间核查。
+  prerequisites: []
+  typical_usage: 检验数据几乎都出自仪器，操作与判读能力决定结果可信度。
+  common_pitfalls:
+    - 不预热不排气泡，基线不稳。
+    - 系统适用性不合格仍继续进样。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（分析仪器与检验方法规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 5
+
+- skill: 文献检索与实验设计
+  category: bio-chemical
+  level_guides:
+    入门: 会检索中英文文献并读懂方法部分。
+    初级: 能按文献方法复现实验。
+    中级: 能设计对照与重复，判断结果可信度。
+    高级: 能提出假设并设计完整研究方案。
+  prerequisites: [实验记录与数据管理]
+  typical_usage: 实验做不出来，多半是设计没想清楚而不是手不熟练。
+  common_pitfalls:
+    - 无对照无重复，结论无法成立。
+    - 变量同时改多个，失败也无法归因。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（技术规范与指导原则）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 4
+
+- skill: GLP 与实验室规范
+  category: bio-chemical
+  level_guides:
+    入门: 知道 GLP 对人员、设备、记录的基本要求。
+    初级: 能按规范执行操作并填写记录。
+    中级: 能参与方法验证与偏差调查。
+    高级: 能主导体系文件与内审工作。
+  prerequisites: [实验记录与数据管理]
+  typical_usage: 没有规范的实验室数据不能用于申报与放行。
+  common_pitfalls:
+    - 设备不做校准，数据缺乏溯源。
+    - 偏差不调查，问题重复发生。
+  learning_resources:
+    - {title: '国家药品监督管理局（药物非临床研究质量管理规范）', url: 'https://www.nmpa.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 分析化学基础
+  category: bio-chemical
+  level_guides:
+    入门: 知道酸碱、沉淀、氧化还原等基本反应类型。
+    初级: 能计算浓度、摩尔与稀释关系。
+    中级: 能根据样品性质选择分析方法。
+    高级: 能评估方法适用性与不确定度。
+  prerequisites: []
+  typical_usage: 检验方法的底层逻辑，算错浓度后面全错。
+  common_pitfalls:
+    - 单位换算出错，结果相差数量级。
+    - 忽略基质效应，回收率异常。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（分析检验相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 5
+
+- skill: 滴定与容量分析
+  category: bio-chemical
+  level_guides:
+    入门: 知道滴定终点判断与常用指示剂。
+    初级: 能完成酸碱、络合等常规滴定并计算含量。
+    中级: 能处理浑浊、颜色干扰与终点不明显问题。
+    高级: 能建立方法并做对比验证。
+  prerequisites: [分析化学基础]
+  typical_usage: 药品含量测定与试剂标定的经典方法，成本低但对操作要求高。
+  common_pitfalls:
+    - 终点判读过早，结果偏低。
+    - 滴定管未润洗或未排气泡。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（分析检验相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 色谱分析
+  category: bio-chemical
+  level_guides:
+    入门: 知道色谱分离的基本原理与常见检测器。
+    初级: 能按方法完成进样、采集与积分。
+    中级: 能处理方法转移与系统适用性问题。
+    高级: 能做方法验证与杂质谱分析。
+  prerequisites: [分析化学基础, 分析仪器操作]
+  typical_usage: 药品纯度与含量测定的主流手段，方法不稳数据就不可用。
+  common_pitfalls:
+    - 系统适用性不达标就开始检测。
+    - 积分参数乱调，把杂质峰抹掉。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（色谱方法相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 6
+
+- skill: 样品前处理
+  category: bio-chemical
+  level_guides:
+    入门: 知道取样、称量、溶解与过滤的基本操作。
+    初级: 能按方法完成常规样品制备。
+    中级: 能处理提取效率低与基质干扰问题。
+    高级: 能优化前处理方案并做回收率验证。
+  prerequisites: []
+  typical_usage: 前处理占检验工作量的大头，也最容易引入误差。
+  common_pitfalls:
+    - 取样不具代表性，结果无法代表整批。
+    - 定容与转移损失，回收率偏低。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（分析检验相关规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 4
+
+- skill: 分析仪器维护
+  category: bio-chemical
+  level_guides:
+    入门: 知道日常清洁与耗材更换的基本要求。
+    初级: 能完成常规保养与简单故障处理。
+    中级: 能判断柱效下降、压力异常等原因。
+    高级: 能制定维护计划与备件管理。
+  prerequisites: [分析仪器操作]
+  typical_usage: 仪器带病工作会悄悄拉低整批数据质量。
+  common_pitfalls:
+    - 长期不做保养，柱效骤降才发现。
+    - 故障自行拆修，造成更大损坏。
+  learning_resources:
+    - {title: '中国食品药品检定研究院（分析仪器与检验方法规范）', url: 'https://www.nifdc.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 检验记录与报告
+  category: bio-chemical
+  level_guides:
+    入门: 知道检验报告要含样品、方法、结果与结论。
+    初级: 能按模板出具完整报告并核对数据。
+    中级: 能处理 OOS 结果与复检判断。
+    高级: 能审核报告并对结论负责。
+  prerequisites: []
+  typical_usage: 报告是放行与监管的依据，写错就是质量事故。
+  common_pitfalls:
+    - 报告数值与原始记录不一致。
+    - 出现异常值不复核直接出具。
+  learning_resources:
+    - {title: '国家药品监督管理局（药品检验与报告相关规范）', url: 'https://www.nmpa.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 化学品安全与危化品管理
+  category: bio-chemical
+  level_guides:
+    入门: 知道化学品分类、标签与安全数据表的作用。
+    初级: 能按规范领用、存放与处置化学品。
+    中级: 能识别反应风险并落实防护措施。
+    高级: 能建立危化品管理制度与应急处置方案。
+  prerequisites: []
+  typical_usage: 实验室事故多来自化学品管理松懈，后果可能不可逆。
+  common_pitfalls:
+    - 试剂无标签或标签模糊。
+    - 不相容化学品混放，发生反应。
+  learning_resources:
+    - {title: '应急管理部（危险化学品安全管理相关规范）', url: 'https://www.mem.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 药品与产品标准法规
+  category: bio-chemical
+  level_guides:
+    入门: 知道药典与产品标准的地位和作用。
+    初级: 能查找到品种项下的检验项目与限度。
+    中级: 能按标准判断结果并处理边缘情况。
+    高级: 能参与标准起草与合规策略制定。
+  prerequisites: []
+  typical_usage: 检验结论必须依据标准，标准用错等于结论无效。
+  common_pitfalls:
+    - 用旧版标准判定。
+    - 混淆不同剂型或用途的限度要求。
+  learning_resources:
+    - {title: '国家药品监督管理局（药品标准相关规范）', url: 'https://www.nmpa.gov.cn/'}
+  estimated_weeks: 4

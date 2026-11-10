@@ -2,33 +2,72 @@
 import { computed } from 'vue'
 
 import AppBadge from './AppBadge.vue'
-import { AGENTS, AGENT_GROUP } from '../utils/agents'
+import { AGENTS, AGENT_GROUP, getAgent, runningAgents } from '../utils/agents'
 
 /**
  * Agent 工作流流程轨。
  *
- * 关于"执行状态"的硬约束（后端能力决定，不能凭想象画）
- * --------------------------------------------------
- * - 工作流是**纯顺序图、无条件边**（graph/workflow.py 全是 add_edge），7 个节点每次都会执行；
- * - 后端 run 记录只有四态，**没有任何节点级信息**（backend/jobs.py 的 TaskRecord）。
- *
- * 因此：
- *   · 运行中 → 只在**整条轨**上显示不确定态，**不给任何单个节点标"正在执行"**；
- *   · 成功后 → 用 summarizeWorkflow(result) 的**真实产出计数**回填到各节点；
- *   · 失败   → 只标"执行中断"，**不把错误归因到某个节点**（后端只回一个错误字符串）；
- *   · 字段缺失 → 中性说明，不推测该节点失败或降级。
+ * 状态来源分两层
+ * --------------
+ * - **执行中 / 失败**：读后端 run 记录的 ``progress``/``current_node``（backend/jobs.py）。
+ *   这是图执行时自己回报的节点状态（running/done/failed/skipped/canceled），
+ *   所以可以点名"正在跑哪一步、断在哪一步"；字段缺失（旧记录）时退回整条轨的说法，
+ *   不按时间猜单节点状态。
+ * - **成功之后**：再用 summarizeWorkflow(result) 的真实产出计数回填各节点。
  */
 const props = defineProps({
   /** summarizeWorkflow(result) 的结果；null 表示还没有结果 */
   summary: { type: Object, default: null },
   /** 运行状态：idle / queued / running / succeeded / failed */
   status: { type: String, default: 'idle' },
+  /** 后端回报的节点进度（TaskRecord.progress） */
+  progress: { type: Array, default: () => [] },
+  /** 当前正在执行的节点名 */
+  currentNode: { type: String, default: null },
 })
 
 const emit = defineEmits(['navigate'])
 
+const PROGRESS_BADGE = {
+  running: { text: '进行中', tone: 'primary' },
+  done: { text: '已完成', tone: 'ok' },
+  failed: { text: '失败', tone: 'danger' },
+  canceled: { text: '已停止', tone: 'warn' },
+  skipped: { text: '已跳过', tone: 'muted' },
+}
+
 const isRunning = computed(() => props.status === 'queued' || props.status === 'running')
 const isInterrupted = computed(() => props.status === 'failed')
+
+const progressByNode = computed(() => {
+  const map = {}
+  for (const item of props.progress) {
+    if (item?.node) map[item.node] = item
+  }
+  return map
+})
+
+function stateOf(agent) {
+  const item = progressByNode.value[agent.node]
+  return item ? PROGRESS_BADGE[item.status] ?? null : null
+}
+
+const currentAgents = computed(() => runningAgents(props.progress, props.currentNode))
+const runningNames = computed(() =>
+  currentAgents.value.map((agent) => `「${agent.displayName}」`).join(''),
+)
+const stalledAgent = computed(() => {
+  const stalled = [...props.progress]
+    .reverse()
+    .find((item) => item.status === 'failed' || item.status === 'canceled')
+  return stalled ? getAgent(stalled.node) : null
+})
+const stalledStatus = computed(() => {
+  const stalled = [...props.progress]
+    .reverse()
+    .find((item) => item.status === 'failed' || item.status === 'canceled')
+  return stalled?.status ?? null
+})
 
 /**
  * 单个节点的产出摘要；没有结果时返回 null（节点整体呈中性，不显示任何产出）。
@@ -39,7 +78,7 @@ function outputOf(agent) {
   if (!item) return null
 
   if (item.present === false) {
-    return { text: '无该节点数据', tone: 'muted', note: item.note || '' }
+    return { text: '暂无结果', tone: 'muted', note: item.note || '' }
   }
 
   return {
@@ -57,7 +96,8 @@ const nodes = computed(() =>
       ...agent,
       colorStyle: { '--agent-color': group.color, '--agent-soft': group.soft },
       output: outputOf(agent),
-      tip: `${agent.source}\n\n${agent.duty}`,
+      state: stateOf(agent),
+      tip: agent.duty,
     }
   }),
 )
@@ -72,9 +112,9 @@ function goTo(agent) {
 </script>
 
 <template>
-  <section class="rail" aria-label="Agent 工作流">
+  <section class="rail" aria-label="规划步骤">
     <div class="rail-head">
-      <h2>Agent 工作流</h2>
+      <h2>规划步骤</h2>
       <AppBadge v-if="isRunning" text="执行中" tone="primary" />
       <AppBadge v-else-if="isInterrupted" text="执行中断" tone="danger" />
       <AppBadge v-else-if="summary" text="已完成" tone="ok" />
@@ -100,6 +140,10 @@ function goTo(agent) {
 
         <span class="agent-node-duty">{{ node.duty }}</span>
 
+        <span v-if="node.state" class="agent-node-state">
+          <AppBadge :text="node.state.text" :tone="node.state.tone" />
+        </span>
+
         <template v-if="node.output">
           <span class="agent-node-out">
             <AppBadge :text="node.output.text" :tone="node.output.tone" />
@@ -110,19 +154,30 @@ function goTo(agent) {
     </div>
 
     <div v-if="isRunning" class="notice notice-info">
-      后台正按顺序执行全部 7 个节点。后端只提供「排队 / 执行中 / 完成 / 失败」四种<strong>整体</strong>状态，
-      没有单节点进度信息，因此这里不标记任何节点为"正在执行"。
+      <template v-if="status === 'queued'">
+        任务已排队，前面跑完就轮到你，请稍候…
+      </template>
+      <template v-else-if="currentAgents.length === 1">
+        正在执行「{{ currentAgents[0].displayName }}」 · 第 {{ currentAgents[0].order }}/7 步
+      </template>
+      <template v-else-if="currentAgents.length > 1">
+        正在并行执行{{ runningNames }}
+      </template>
+      <template v-else>
+        七个步骤正在依次进行，全部跑完才会给出结果。
+      </template>
     </div>
 
     <div v-else-if="isInterrupted" class="notice notice-danger">
-      执行中断。后端只返回一条错误信息，<strong>无法定位是哪个节点失败的</strong>，
-      因此这里不指向任何具体节点。错误详情见右侧进度卡。
+      <template v-if="stalledAgent && stalledStatus === 'canceled'">
+        「{{ stalledAgent.displayName }}」这一步被停止，档案和已完成的结果都保留。
+      </template>
+      <template v-else-if="stalledAgent">
+        「{{ stalledAgent.displayName }}」这一步中断了，具体原因见右侧进度卡。
+      </template>
+      <template v-else>
+        执行中断了。暂时看不出是哪一步出的问题，具体原因见右侧进度卡。
+      </template>
     </div>
-
-    <p v-else-if="summary" class="faint block-note">
-      点击任一节点可跳转到它在结果区对应的卡片。
-    </p>
-
-    <p class="faint block-note">graph/workflow.py · ORDER</p>
   </section>
 </template>

@@ -1,0 +1,15 @@
+# Project 知识库 —— 数据分析：业务指标体系与可视化看板（进阶）
+name: 业务指标体系与可视化看板
+domain: data-analysis
+difficulty: intermediate
+covers_skills: [指标体系, 数据可视化, 业务分析, 运营数据分析]
+prerequisites: [Excel]
+tech_stack: [Excel, BI 工具, SQL]
+stage_hint: 学习路线中期，为一个模拟业务设计指标并做成看板
+deliverable: 一份指标字典与一个可更新的可视化看板
+acceptance_criteria:
+  - 指标定义含口径、分子分母与数据来源
+  - 指标体系能区分结果指标与过程指标
+  - 看板按使用场景组织，重点指标在首屏可见
+  - 图表选择与要回答的问题匹配，不堆砌图形
+estimated_weeks: 3

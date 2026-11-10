@@ -64,12 +64,13 @@ export async function pollRun(runId, options = {}) {
     timeoutMs = DEFAULT_TIMEOUT_MS,
     onTick,
     signal,
+    planId = null,
   } = options
 
   const deadline = Date.now() + timeoutMs
 
   for (;;) {
-    const record = await getRun(runId, { signal })
+    const record = await getRun(runId, { signal }, planId)
     onTick?.(record)
 
     if (isTerminal(record.status)) return record

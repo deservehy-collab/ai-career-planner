@@ -7,6 +7,7 @@
 # ═══════════════════════════════════════════════════════════════════════════
 
 name: AI Agent 服务
+domain: ai-application
 difficulty: intermediate
 covers_skills: [Python, LLM API, Function Calling, Agent, 后端 API 开发]
 prerequisites: [Python, Prompt Engineering, LLM API]

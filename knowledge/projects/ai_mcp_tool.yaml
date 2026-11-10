@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：MCP 工具封装实践（进阶）
+name: MCP 工具封装实践
+domain: ai-application
+difficulty: intermediate
+covers_skills: [Agent Skill / MCP 工具封装, Function Calling, 后端 API 开发]
+prerequisites: [Python, Function Calling]
+tech_stack: [Python, MCP, FastAPI]
+stage_hint: 学习路线中后期，把一个真实能力包成模型可调用的工具
+deliverable: 一个可被客户端发现的工具服务，含参数校验、错误返回与调用示例
+acceptance_criteria:
+  - 工具描述清楚说明用途、参数与边界，模型能据此正确选择
+  - 参数非法时返回可读错误，而不是让调用方解析堆栈
+  - 至少接入一个真实数据源或本地能力，不是回显假数据
+  - 附一份从客户端发起调用的完整示例与运行说明
+estimated_weeks: 2

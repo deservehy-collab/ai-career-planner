@@ -1,0 +1,128 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 内容编辑 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_media_std_001  新闻出版行业标准与互联网内容管理相关公开规定要点整理
+#                         https://www.nppa.gov.cn/ （访问日期 2026-11-10）
+#   source_media_jd_001   公开招聘信息中内容编辑/新媒体编辑岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: content_editor
+job_name: 内容编辑
+
+aliases:
+  - 内容编辑
+  - 新媒体编辑
+  - 编辑
+  - 文案编辑
+  - 内容运营编辑
+
+category: media-language
+domain: media-language
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 内容编辑负责选题策划、稿件采写与编辑加工，按平台规范完成发布与维护，并对内容合规、版权与数据表现负责。
+  core_tasks:
+    - {name: 选题策划, detail: 结合受众与平台特点确定选题与呈现形式}
+    - {name: 采写与整理, detail: 做采访或资料搜集，核实事实与数据来源}
+    - {name: 编辑加工, detail: 修改结构、语句与体例，统一表述口径}
+    - {name: 制作与发布, detail: 配图排版并按平台规则发布}
+    - {name: 合规与版权审核, detail: 检查表述与素材授权，规避侵权风险}
+    - {name: 数据复盘, detail: 汇总阅读与转化数据，调整后续选题}
+  tools: [微信公众号后台, 排版工具, 图片处理软件, 内容管理系统, 数据后台]
+  deliverables: [选题表, 成稿与配图, 发布记录, 数据周报, 素材授权登记]
+  entry_requirements: [新闻传播/中文/外语等相关专业, 文字功底扎实, 了解平台内容规则, 会基础图片处理, 有校园媒体或自媒体经历优先]
+  career_path:
+    - {name: 助理编辑, detail: 能完成约稿整理与基础校对}
+    - {name: 内容编辑, detail: 能独立完成选题到发布的全流程}
+    - {name: 主编, detail: 能负责栏目规划与内容质量把关}
+    - {name: 内容负责人, detail: 能统筹内容矩阵与团队目标}
+
+skills:
+
+  - skill: 稿件编辑与校对
+    importance: 5
+    level: 高级
+    reason: 编辑的核心交付就是改稿，结构、事实与表述都要过关。
+    evidence:
+      - {source_id: source_media_std_001, requirement_type: required, context: responsibility,
+         note: '行业规范整理：稿件编辑加工与校对的质量要求'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责稿件撰写、编辑与校对'}
+
+  - skill: 内容策划
+    importance: 5
+    level: 中级
+    reason: 选题决定内容上限，策划能力比单篇写作更稀缺。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责选题策划与内容栏目规划'}
+
+  - skill: 文案写作
+    importance: 5
+    level: 中级
+    reason: 标题、导语与正文都靠写作完成，写不好其他环节无从谈起。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：文字功底扎实，能独立撰写稿件'}
+
+  - skill: 采访与信息核实
+    importance: 4
+    level: 中级
+    reason: 一手采访与交叉核实决定内容是否可信，也决定是否踩到失实风险。
+    evidence:
+      - {source_id: source_media_std_001, requirement_type: required, context: responsibility,
+         note: '行业规范整理：新闻采编应核实信息来源与事实'}
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：有采访与选题落地经验者优先'}
+
+  - skill: 标题与版式设计
+    importance: 4
+    level: 初级
+    reason: 标题与版式直接影响打开率与阅读体验。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责标题制作与内容排版'}
+
+  - skill: 内容合规与版权
+    importance: 4
+    level: 中级
+    reason: 违规与侵权成本高，编辑是内容发布前的最后一道审核。
+    evidence:
+      - {source_id: source_media_std_001, requirement_type: required, context: qualification,
+         note: '行业规范整理：互联网内容发布与著作权使用要求'}
+      - {source_id: source_media_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉平台规则与内容合规要求'}
+
+  - skill: 新媒体内容运营
+    importance: 4
+    level: 中级
+    reason: 内容要按平台分发与维护，只写不发等于没有产出。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责公众号等平台的内容运营与维护'}
+
+  - skill: 摄影与素材处理
+    importance: 3
+    level: 初级
+    reason: 配图是内容的一部分，缺图或图不对文会明显拉低质量。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：会基础摄影与图片处理者优先'}
+
+  - skill: 内容数据复盘
+    importance: 3
+    level: 初级
+    reason: 用数据判断选题好坏，才能持续稳定地产出有效内容。
+    evidence:
+      - {source_id: source_media_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：定期输出内容数据复盘'}

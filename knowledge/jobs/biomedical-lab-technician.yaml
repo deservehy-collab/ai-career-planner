@@ -1,0 +1,137 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 生物医药实验员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_biolab_std_001 中国食品药品检定研究院发布的技术规范与指导原则
+#                         公开要点整理
+#                         https://www.nifdc.org.cn/ （访问日期 2026-11-10）
+#   source_lab_jd_001     公开招聘信息中生物医药实验员/研发助理岗位的通用职责与
+#                         要求汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: biomedical_lab_technician
+job_name: 生物医药实验员
+
+aliases:
+  - 生物医药实验员
+  - 生物实验员
+  - 研发实验员
+  - 细胞培养技术员
+  - 生物技术员
+
+category: bio-chemical
+domain: bio-chemical
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 生物医药实验员按方案完成细胞培养、分子生物学与常规检测实验，规范记录数据并维护实验室运行，为研发或质量控制提供可靠的实验支撑。
+  core_tasks:
+    - {name: 执行实验方案, detail: 按 SOP 完成细胞、分子与生化实验操作}
+    - {name: 培养与维护细胞, detail: 复苏、传代、冻存并观察细胞状态}
+    - {name: 配制试剂, detail: 按配方配制溶液并做必要标定}
+    - {name: 记录与整理数据, detail: 及时填写记录，整理结果并汇报}
+    - {name: 维护仪器与耗材, detail: 日常保养、校准与库存管理}
+    - {name: 落实安全规范, detail: 按生物安全与危化品要求处置废弃物}
+  tools: [超净工作台, 培养箱, PCR 仪, 酶标仪, 离心机, 电子天平]
+  deliverables: [实验记录, 实验报告, 细胞培养记录, 试剂配制记录, 仪器使用记录]
+  entry_requirements: [生物技术/生物工程/药学等相关专业, 掌握无菌操作与基础实验技能, 能按 SOP 规范执行, 细致耐心, 有实验室实习经历优先]
+  career_path:
+    - {name: 实验员, detail: 能独立完成常规实验操作与记录}
+    - {name: 高级实验员, detail: 能负责方法优化与新人带教}
+    - {name: 研发工程师, detail: 能设计实验方案并解决技术问题}
+    - {name: 项目负责人, detail: 能统筹项目进度与质量}
+
+skills:
+
+  - skill: 无菌操作技术
+    importance: 5
+    level: 高级
+    reason: 一次污染可能让数周培养与实验全部作废。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：无菌操作与微生物污染控制要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练掌握无菌操作技术'}
+
+  - skill: 细胞培养
+    importance: 5
+    level: 高级
+    reason: 细胞状态直接决定后续实验结果是否可用。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：细胞培养、传代与质量控制要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责细胞培养与日常维护'}
+
+  - skill: 分子生物学实验
+    importance: 5
+    level: 中级
+    reason: 核酸提取与 PCR 是研发与检测的高频操作。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：核酸提取、扩增与结果判读要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成分子生物学常规实验'}
+
+  - skill: 实验记录与数据管理
+    importance: 5
+    level: 中级
+    reason: 记录不规范，数据无法复核也无法用于申报。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: responsibility,
+         note: '技术规范整理：实验记录应及时、原始、可追溯'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：规范填写实验记录并整理数据'}
+
+  - skill: 试剂配制与标定
+    importance: 4
+    level: 中级
+    reason: 试剂浓度错一点，整批数据就会系统性偏移。
+    evidence:
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责试剂配制与溶液标定'}
+
+  - skill: 分析仪器操作
+    importance: 4
+    level: 中级
+    reason: 酶标仪、PCR 仪等设备操作与判读决定数据质量。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：实验仪器的操作与校准要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练使用常规实验仪器'}
+
+  - skill: 文献检索与实验设计
+    importance: 3
+    level: 初级
+    reason: 复现文献方法是研发的日常，设计意识决定能不能得出可信结论。
+    evidence:
+      - {source_id: source_lab_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能查阅文献并协助优化实验方案'}
+
+  - skill: GLP 与实验室规范
+    importance: 4
+    level: 初级
+    reason: 研发数据要能经得起核查，规范意识必须从实验员开始。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：实验室质量管理与数据完整性要求'}
+      - {source_id: source_lab_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解 GLP 或质量体系者优先'}
+
+  - skill: 实验室安全与生物安全
+    importance: 4
+    level: 初级
+    reason: 接触生物样本与危险试剂，防护与废弃物处置不能省。
+    evidence:
+      - {source_id: source_biolab_std_001, requirement_type: required, context: qualification,
+         note: '技术规范整理：生物安全防护与废弃物处置要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：遵守实验室安全管理规定'}

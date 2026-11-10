@@ -1,0 +1,132 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 机械设计工程师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_mech_std_001   机械制图、极限与配合等国家标准公开要点整理
+#                         https://openstd.samr.gov.cn/ （访问日期 2026-11-10）
+#   source_eng_jd_001     公开招聘信息中机械设计/结构设计岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: mechanical_design_engineer
+job_name: 机械设计工程师
+
+aliases:
+  - 机械设计工程师
+  - 机械工程师
+  - 结构设计工程师
+  - 机械结构工程师
+  - 产品结构工程师
+
+category: mechanical-civil
+domain: mechanical-civil
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 机械设计工程师负责设备与产品的结构方案、三维建模与工程出图，完成材料与标准件选型、公差配合与强度校核，并跟到装配调试与量产落地。
+  core_tasks:
+    - {name: 设计结构方案, detail: 按功能与工况确定机构形式、传动方式与支撑结构}
+    - {name: 建模与出图, detail: 完成三维模型、装配图与零件图，标注尺寸与技术要求}
+    - {name: 选型与校核, detail: 选材料、标准件与轴承，做强度刚度校核}
+    - {name: 编制 BOM, detail: 按装配层级整理物料清单并维护版本}
+    - {name: 跟进试制装配, detail: 处理加工与装配问题，修改图纸}
+    - {name: 编写技术文档, detail: 输出设计说明、装配工艺与验收要求}
+  tools: [SolidWorks / Creo / UG, AutoCAD, ANSYS, 三坐标测量机, 卡尺与千分尺]
+  deliverables: [三维模型, 零件图与装配图, BOM 清单, 校核报告, 装配工艺文件]
+  entry_requirements: [机械设计制造及其自动化等相关专业, 掌握机械制图与三维软件, 了解材料与加工工艺, 有课程设计或实习项目, 能下沉车间跟样机]
+  career_path:
+    - {name: 助理机械工程师, detail: 能完成零件建模与图纸修改}
+    - {name: 机械设计工程师, detail: 能独立负责部件方案与出图}
+    - {name: 高级机械工程师, detail: 能主导整机方案与关键技术攻关}
+    - {name: 研发经理, detail: 能统筹产品线设计、成本与团队}
+
+skills:
+
+  - skill: 机械制图
+    importance: 5
+    level: 高级
+    reason: 图纸是与加工、装配沟通的唯一正式语言，标错就整批返工。
+    evidence:
+      - {source_id: source_mech_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：零件图与装配图的画法、尺寸标注与技术要求'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责工程图纸绘制与审核'}
+
+  - skill: 三维建模
+    importance: 5
+    level: 高级
+    reason: 三维模型是设计、仿真与出图的共同源头，建模习惯决定后期改动成本。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练使用 SolidWorks/Creo 等三维软件完成结构设计'}
+      - {source_id: source_mech_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：机械产品三维建模与工程图表达要求'}
+
+  - skill: 机械原理与结构设计
+    importance: 5
+    level: 中级
+    reason: 结构与机构决定设备能不能实现功能，是岗位的核心交付。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责机械结构方案设计与优化'}
+      - {source_id: source_mech_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：机械结构与传动设计的基本要求'}
+
+  - skill: 公差与配合
+    importance: 5
+    level: 中级
+    reason: 配合与公差决定装配能否成功，选得过松过紧都要付代价。
+    evidence:
+      - {source_id: source_mech_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：极限与配合、形位公差的选用规则'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉公差配合与形位公差标注'}
+
+  - skill: 材料与加工工艺
+    importance: 4
+    level: 中级
+    reason: 设计的可行性取决于工艺，不懂加工就会画出做不出来的结构。
+    evidence:
+      - {source_id: source_mech_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：常用工程材料的性能与选用要求'}
+      - {source_id: source_eng_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解机加工、钣金等工艺者优先'}
+
+  - skill: 装配与调试
+    importance: 4
+    level: 中级
+    reason: 样机阶段必须到现场确认装配与动作，纸面正确不等于装得上。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟进样机装配调试并处理结构问题'}
+
+  - skill: BOM 与图纸管理
+    importance: 4
+    level: 初级
+    reason: 采购与生产按 BOM 执行，版本混乱会直接造成错料与停线。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：维护物料清单与图纸版本'}
+
+  - skill: 有限元分析基础
+    importance: 3
+    level: 初级
+    reason: 关键件需要仿真支撑，能看懂结果才能判断设计余量。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：会使用有限元分析软件者优先'}
+
+  - skill: 工程文档与技术交底
+    importance: 3
+    level: 初级
+    reason: 设计意图、装配要求与验收口径要靠文档传承，否则全压在个人身上。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：编写设计说明与装配工艺文件'}

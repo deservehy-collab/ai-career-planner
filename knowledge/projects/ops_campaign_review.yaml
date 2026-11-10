@@ -1,0 +1,15 @@
+# Project 知识库 —— 运营：促销活动策划与复盘（入门）
+name: 促销活动策划与复盘
+domain: operations
+difficulty: beginner
+covers_skills: [活动策划, 内容策划, 运营数据分析]
+prerequisites: []
+tech_stack: [活动方案模板, Excel, 内容平台后台]
+stage_hint: 学习路线前期，完整跑一次小活动并如实复盘
+deliverable: 一份活动方案与复盘报告：目标、玩法、内容排期、数据结果与改进项
+acceptance_criteria:
+  - 活动目标可量化，并与玩法设计对应
+  - 内容排期写明时间、渠道与素材形式
+  - 复盘区分目标未达成的原因中哪些可控、哪些不可控
+  - 改进项具体到下一次要改的动作
+estimated_weeks: 2

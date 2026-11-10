@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import AppBadge from './AppBadge.vue'
+import GoalCard from './GoalCard.vue'
 import { growthOutcomeText, growthOutcomeTone } from '../utils/enums'
 
 /**
@@ -28,16 +29,37 @@ const r = computed(() => props.result || {})
 const isShortCircuit = computed(
   () => r.value.target_job === undefined && r.value.learning_plan === undefined,
 )
+
+/** 结局卡：达成 / 依据不足。进行中不渲染。 */
+const goal = computed(() => r.value.goal || r.value.final_plan?.goal || null)
+const isClosure = computed(
+  () => goal.value?.status === 'achieved' || goal.value?.status === 'basis_insufficient',
+)
+
+/** 请求本身被拒（目标岗位 / 招聘原文与当前计划不一致）：什么都没有改。 */
+const isBlocked = computed(
+  () =>
+    r.value.ok === false
+    || r.value.growth_outcome === 'target_mismatch'
+    || r.value.growth_outcome === 'jd_mismatch',
+)
 </script>
 
 <template>
   <div>
     <h3 class="mini-title">本次生成结果</h3>
 
+    <GoalCard
+      v-if="isClosure"
+      :goal="goal"
+      :target-job="r.target_job || ''"
+      class="sub-block"
+    />
+
     <!-- 三个独立状态，互不替代 -->
     <div class="metric-strip result-note">
       <div class="metric">
-        <div class="metric-label">新轮次（runs/loop.json）</div>
+        <div class="metric-label">新任务清单</div>
         <div class="metric-value">
           <AppBadge
             :text="r.round_created ? `第 ${r.round_no} 轮已创建` : '未创建'"
@@ -46,10 +68,10 @@ const isShortCircuit = computed(
         </div>
       </div>
       <div class="metric">
-        <div class="metric-label">成长历史（runs/growth.json）</div>
+        <div class="metric-label">成长记录</div>
         <div class="metric-value">
           <AppBadge
-            :text="r.history_written ? '已写入' : '未写入'"
+            :text="r.history_written ? '已保存' : '未保存'"
             :tone="r.history_written ? 'ok' : 'muted'"
           />
         </div>
@@ -77,8 +99,6 @@ const isShortCircuit = computed(
           :tone="growthOutcomeTone(r.growth_outcome)"
         />
       </dd>
-      <dt>写入状态</dt>
-      <dd class="mono">{{ r.history_write_status || '（无需写入）' }}</dd>
       <template v-if="r.target_job">
         <dt>目标岗位</dt>
         <dd>{{ r.target_job }}</dd>
@@ -89,13 +109,27 @@ const isShortCircuit = computed(
       </template>
     </dl>
 
-    <div v-if="r.warning" class="notice notice-warn sub-block">{{ r.warning }}</div>
+    <div v-if="r.recovered" class="notice notice-info sub-block">
+      这次直接<strong>补存</strong>了上次算好的计划，没有重新跑 AI，也没有重复记一遍成长记录。
+    </div>
+
+    <div
+      v-if="r.warning"
+      class="notice sub-block"
+      :class="isBlocked ? 'notice-danger' : 'notice-warn'"
+    >
+      {{ r.warning }}
+    </div>
     <div v-for="(warn, i) in r.warnings || []" :key="i" class="notice notice-warn">{{ warn }}</div>
 
-    <div v-if="isShortCircuit" class="notice notice-info sub-block flush-last">
-      本次没有待处理成果，后端直接返回，<strong>未重跑流水线</strong>，因此没有新的学习 / 项目计划。
+    <p v-if="isBlocked" class="faint flush-last">
+      这次操作没有执行，<strong>任务清单和成长记录都没有改动</strong>。
+      要换目标岗位或招聘要求，请先去「岗位分析」页「开始新计划」。
+    </p>
+    <div v-else-if="isShortCircuit" class="notice notice-info sub-block flush-last">
+      这次没有待处理的成果，所以没有重新分析，也<strong>没有新的学习或项目计划</strong>。
     </div>
-    <p v-else class="faint flush-last">
+    <p v-else-if="!isClosure" class="faint flush-last">
       三项互相独立：轮次建了但成长没写、或成长写了但轮次没存，都是可能出现的<strong>部分成功</strong>，
       上方的提示会如实说明。
     </p>

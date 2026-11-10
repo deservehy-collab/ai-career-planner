@@ -1,0 +1,138 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 人力资源专员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_hr_law_001    国家法律法规数据库中劳动合同、工时与社保相关公开条文要点
+#                        https://flk.npc.gov.cn/ （访问日期 2026-11-10）
+#   source_hr_std_001    人社部企业人力资源管理师国家职业技能标准要点整理
+#                        https://www.mohrss.gov.cn/ （访问日期 2026-11-10）
+#   source_hr_jd_001     公开招聘信息中人力资源专员/人事专员岗位的通用职责与要求
+#                        汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: hr_specialist
+job_name: 人力资源专员
+
+aliases:
+  - 人力资源专员
+  - 人事专员
+  - HR专员
+  - 招聘专员
+  - 人事助理
+  - 人力资源助理
+  - HRBP
+
+category: human-resources
+domain: human-resources
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 人力资源专员负责招聘执行、员工入离职与基础人事事务，维护员工档案与人事系统数据，并协助处理劳动关系与培训组织，保证用工流程合规、记录可查。
+  core_tasks:
+    - {name: 执行招聘流程, detail: 发布岗位、筛选简历、安排并参与面试，跟进录用与入职}
+    - {name: 办理入离职手续, detail: 准备劳动合同与入职材料，办理离职交接与减员}
+    - {name: 维护人事数据, detail: 更新员工信息、组织架构与考勤记录，保证系统与台账一致}
+    - {name: 办理社保公积金, detail: 按城市政策完成增员、减员与基数申报}
+    - {name: 协助员工关系, detail: 回应员工咨询，跟踪试用期与转正流程}
+    - {name: 组织基础培训, detail: 安排入职培训与制度宣导，收集反馈}
+  tools: [人事系统, 招聘平台, Excel, 考勤系统, 劳动合同模板]
+  deliverables: [招聘进度表, 员工档案, 月度人事报表, 入离职清单, 社保申报记录]
+  entry_requirements: [人力资源管理/工商管理/心理学等相关专业, 了解劳动合同与社保基本规则, 熟练使用 Excel, 沟通耐心细致, 有招聘或人事实习经验优先]
+  career_path:
+    - {name: 人力资源专员, detail: 能独立完成招聘执行与入离职办理}
+    - {name: 人力资源主管, detail: 能负责单一模块流程设计与异常处理}
+    - {name: 人力资源经理, detail: 能统筹招聘、薪酬、员工关系并支撑业务目标}
+    - {name: 人力资源总监, detail: 能制定人力战略与组织发展方案}
+
+skills:
+
+  - skill: 招聘与面试
+    importance: 5
+    level: 中级
+    reason: 补人速度和候选人质量直接影响业务，是人力资源岗最日常的交付。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：掌握招聘需求分析、渠道选择、筛选与面试组织'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责简历筛选、面试安排与录用跟进'}
+
+  - skill: 劳动法与用工合规
+    importance: 5
+    level: 中级
+    reason: 合同、试用期、工时与解除都受法定规则约束，程序不合规会直接产生争议成本。
+    evidence:
+      - {source_id: source_hr_law_001, requirement_type: required, context: qualification,
+         note: '公开条文整理：劳动合同订立、试用期期限与解除程序的要求'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉劳动法及本地用工政策'}
+
+  - skill: 员工关系管理
+    importance: 4
+    level: 中级
+    reason: 入离职、转正与员工诉求都需按流程留痕，否则容易变成口头承诺。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：员工关系维护、离职面谈与劳动争议预防'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责员工入离职、转正与档案管理'}
+
+  - skill: 薪酬核算
+    importance: 4
+    level: 初级
+    reason: 人事专员常需提供考勤与绩效数据，能核对工资表才能发现口径错误。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：了解薪酬构成与工资核算流程'}
+      - {source_id: source_hr_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：协助核算工资与考勤数据者优先'}
+
+  - skill: 社保公积金实操
+    importance: 4
+    level: 初级
+    reason: 增员减员与基数申报有明确时限，办错或漏办会直接影响员工待遇。
+    evidence:
+      - {source_id: source_hr_law_001, requirement_type: required, context: responsibility,
+         note: '公开条文整理：用人单位应依法为员工办理社会保险登记与缴费'}
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责社保公积金增减员与月度申报'}
+
+  - skill: 人力资源数据分析
+    importance: 4
+    level: 初级
+    reason: 编制、招聘完成率与流失率要用同一口径持续统计，才能支撑决策。
+    evidence:
+      - {source_id: source_hr_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：能统计招聘、培训与人员流动相关指标'}
+      - {source_id: source_hr_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能输出月度人事报表与人力数据分析'}
+
+  - skill: 人事系统操作
+    importance: 3
+    level: 初级
+    reason: 员工信息与审批流以系统为准，数据不准会连带影响薪酬与考勤。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：维护人事系统员工信息与组织架构'}
+
+  - skill: 培训组织与实施
+    importance: 3
+    level: 初级
+    reason: 入职培训与制度宣导是人事专员的固定动作，需要能独立组织并留档。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：协助组织新员工入职培训'}
+
+  - skill: Excel
+    importance: 4
+    level: 中级
+    reason: 花名册、考勤汇总与报表都靠表格函数与透视表完成。
+    evidence:
+      - {source_id: source_hr_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Excel 进行数据统计与报表制作'}

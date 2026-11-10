@@ -19,5 +19,6 @@
     - 只会套模板，不理解状态与调用链，出问题无从排查。
     - 为了用框架而用，把简单的调用过度封装。
     - 依赖框架内部细节，版本升级后接口变化导致代码失效。
-  learning_resources: []
+  learning_resources:
+    - {title: 'LangGraph 官方文档', url: 'https://langchain-ai.github.io/langgraph/'}
   estimated_weeks: 3

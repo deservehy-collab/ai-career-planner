@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：审计程序与底稿实训（进阶）
+name: 审计程序与底稿实训
+domain: accounting
+difficulty: intermediate
+covers_skills: [审计程序, 审计证据与底稿, 风险评估, 审计沟通]
+prerequisites: [审计基础, 会计准则]
+tech_stack: [Excel, 审计底稿模板]
+stage_hint: 学习路线中期，用一套模拟账完成从风险评估到沟通记录的闭环
+deliverable: 一套审计练习资料：风险评估表、程序表、抽查底稿与沟通记录
+acceptance_criteria:
+  - 风险评估结论能对应到具体报表科目与认定
+  - 每个审计程序写明目的、样本与预期证据
+  - 底稿中的证据能支撑结论，编号可追溯
+  - 沟通记录区分事实、管理层解释与待跟进事项
+estimated_weeks: 3

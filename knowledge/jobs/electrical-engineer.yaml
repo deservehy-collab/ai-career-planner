@@ -1,0 +1,145 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 电气工程师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_ee_std_001     全国计算机技术与软件专业技术资格（电气/嵌入式相关）
+#                         与工程技术职业标准的公开要点整理
+#                         https://www.ruankao.org.cn/ （访问日期 2026-11-10）
+#   source_ee_safety_001  电气安全与低压配电相关国家标准公开要点整理
+#                         https://openstd.samr.gov.cn/ （访问日期 2026-11-10）
+#   source_ee_jd_001      公开招聘信息中电气工程师/自动化电气岗位的通用职责与
+#                         要求汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: electrical_engineer
+job_name: 电气工程师
+
+aliases:
+  - 电气工程师
+  - 电气设计工程师
+  - 电气自动化工程师
+  - 自动化工程师
+  - 电气技术员
+
+category: electronics
+domain: electronics
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 电气工程师负责设备与厂房的电气方案设计、图纸绘制与控制程序编写，完成配电选型、现场调试与交付文档，保证用电安全与设备可靠运行。
+  core_tasks:
+    - {name: 设计电气方案, detail: 按工艺与负荷确定供电、控制与保护方案}
+    - {name: 绘制电气图纸, detail: 输出原理图、端子图与柜内布置图}
+    - {name: 完成选型计算, detail: 计算电流、线径与保护参数，编制设备清单}
+    - {name: 编写控制程序, detail: 用 PLC 实现顺序、联锁与故障诊断逻辑}
+    - {name: 现场调试, detail: 通电前检查、单机点动与联动验证}
+    - {name: 整理交付资料, detail: 汇编图纸、参数与调试记录并做技术交底}
+  tools: [AutoCAD Electrical / EPLAN, 西门子 / 三菱 PLC, 变频器, 万用表, 钳形表, 绝缘电阻表]
+  deliverables: [电气原理图, 设备材料清单, PLC 程序, 调试记录, 验收与技术交底资料]
+  entry_requirements: [电气工程/自动化等相关专业, 掌握电路与电机基础, 能绘制电气图纸, 了解 PLC 与变频器, 能适应现场出差]
+  career_path:
+    - {name: 电气技术员, detail: 能按图完成接线、调试与故障排查}
+    - {name: 电气工程师, detail: 能独立完成方案设计与现场调试}
+    - {name: 电气主管, detail: 能统筹多项目电气设计与交付}
+    - {name: 技术经理, detail: 能负责技术标准、成本与团队管理}
+
+skills:
+
+  - skill: 电路基础
+    importance: 5
+    level: 高级
+    reason: 方案计算与故障判断都建立在电路分析上，基础不牢只能照抄图纸。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：掌握电路分析、电机与拖动基础'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉电气原理与常用电气元件'}
+
+  - skill: 电气制图
+    importance: 5
+    level: 中级
+    reason: 图纸是施工与维护的依据，图物不符会直接造成接线错误。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：能绘制并审核电气原理图与接线图'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责电气图纸设计与输出'}
+
+  - skill: 配电系统设计
+    importance: 5
+    level: 中级
+    reason: 负荷计算与保护配合决定用电安全，选型失误会引发跳闸甚至火灾。
+    evidence:
+      - {source_id: source_ee_safety_001, requirement_type: required, context: responsibility,
+         note: '标准整理：低压配电回路划分、保护与接地要求'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责配电方案设计与元器件选型'}
+
+  - skill: PLC 编程
+    importance: 5
+    level: 中级
+    reason: 设备动作逻辑由 PLC 实现，程序结构差会让现场调试时间翻倍。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: responsibility,
+         note: '职业标准整理：能编写与调试 PLC 控制程序'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练使用主流 PLC 编程'}
+
+  - skill: 电机与拖动
+    importance: 4
+    level: 中级
+    reason: 电机选型与启动方式影响设备寿命，负载特性判断错会频繁烧电机。
+    evidence:
+      - {source_id: source_ee_std_001, requirement_type: required, context: qualification,
+         note: '职业标准整理：掌握电机选型、启动与制动方式'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉电机与传动控制'}
+
+  - skill: 变频器与传动
+    importance: 4
+    level: 中级
+    reason: 调速方案几乎都用变频器，参数整定不当会频繁报警停机。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责变频器参数设置与调试'}
+
+  - skill: 电气安全规范
+    importance: 4
+    level: 中级
+    reason: 电气作业风险高，接地、验电与挂牌是保命流程而非形式。
+    evidence:
+      - {source_id: source_ee_safety_001, requirement_type: required, context: qualification,
+         note: '标准整理：接地保护、漏电保护与检修作业安全要求'}
+      - {source_id: source_ee_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉电气安全规范与操作规程'}
+
+  - skill: 现场调试
+    importance: 4
+    level: 中级
+    reason: 设计与实际工况的差距只有在现场才暴露，调试能力决定交付速度。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责设备现场安装调试与验收'}
+
+  - skill: 硬件调试与仪器使用
+    importance: 3
+    level: 初级
+    reason: 排查故障要先量电压、测通断，仪器用不熟只能靠换件试错。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：能使用常用仪器进行故障排查'}
+
+  - skill: 工程文档与技术交底
+    importance: 3
+    level: 初级
+    reason: 交付资料不全，后期维护与改造都要重新摸一遍现场。
+    evidence:
+      - {source_id: source_ee_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：编制技术资料并对客户做交底'}

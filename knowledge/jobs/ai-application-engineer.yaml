@@ -55,9 +55,27 @@ aliases:                                # 仅收录本次三份 JD 中实际出�
   - AI 应用开发工程师                     # 含空格写法（用户输入容错）
 
 category: llm-application
+domain: ai-application
 origin: human
 version: 2
 updated_at: 2026-10-09
+
+profile:
+  summary: AI 应用开发工程师把大模型能力落地成可用产品：围绕提示词、检索增强、Agent 编排与后端服务搭建完整链路，并做测试评测与部署。
+  core_tasks:
+    - {name: 对接大模型 API 并设计提示词, detail: 封装模型调用、设计系统提示词与结构化输出，处理超时与失败重试}
+    - {name: 搭建 RAG 检索链路, detail: 文档切分、向量化、索引与召回重排，为回答提供可核验的依据}
+    - {name: 编排 Agent 与工具调用, detail: 设计多步骤工作流、工具 schema 与调用回填，处理异常分支}
+    - {name: 开发后端接口与服务, detail: 提供参数校验、统一错误返回、日志与鉴权的 HTTP 接口}
+    - {name: 测试、评测与部署, detail: 编写测试与效果评测，使用 Docker/Git 完成交付与上线}
+  tools: [Python, LangChain / LangGraph, 向量数据库, FastAPI, Docker, Git]
+  deliverables: [可运行的 AI 应用或服务, 提示词与评测报告, 接口文档, 部署配置]
+  entry_requirements: [计算机相关专业或同等编程能力, 掌握 Python, 有大模型/RAG/Agent 项目经历, 了解后端与工程化基础]
+  career_path:
+    - {name: 初级应用开发, detail: 能在指导下完成模型调用、提示词与简单接口}
+    - {name: 独立负责模块, detail: 能独立完成 RAG 或 Agent 模块并做评测}
+    - {name: 技术骨干, detail: 能设计完整链路并解决稳定性与效果问题}
+    - {name: 应用架构负责人, detail: 能负责多项目技术选型、标准与交付}
 
 skills:
 

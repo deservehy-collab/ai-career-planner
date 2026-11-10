@@ -1,0 +1,263 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 法务与公共事务技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/legal-assistant.yaml 或
+#     knowledge/jobs/administrative-specialist.yaml 里。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 合同法与公司法基础
+  category: legal-public
+  level_guides:
+    入门: 知道合同成立的基本要件与公司组织形式。
+    初级: 能识别合同主要条款与主体资格问题。
+    中级: 能分析常见条款的法律后果与履约风险。
+    高级: 能处理复杂交易结构与公司治理问题。
+  prerequisites: []
+  typical_usage: 法务与行政工作中判断一份文件是否有效、风险在哪的第一层依据。
+  common_pitfalls:
+    - 只看条款字面，不查主体是否具备签约资格。
+    - 混淆劳动合同与民事合同的规则。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 合同审查
+  category: legal-public
+  level_guides:
+    入门: 知道合同审查要看主体、标的、价款与违约责任。
+    初级: 能按清单逐条核对并提出修改意见。
+    中级: 能识别条款冲突、责任失衡与可执行性问题。
+    高级: 能主导合同模板体系与重大交易谈判。
+  prerequisites: [合同法与公司法基础]
+  typical_usage: 企业最日常的法务动作，漏掉一条就可能留下长期风险。
+  common_pitfalls:
+    - 只改文字不做风险判断，条款看着顺但责任全担。
+    - 不核对附件与主合同是否一致。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 法律检索
+  category: legal-public
+  level_guides:
+    入门: 会用官方法规库查找法律条文。
+    初级: 能按问题定位法条并区分效力层级。
+    中级: 能检索类案裁判观点并判断可参考性。
+    高级: 能建立检索报告并支撑复杂法律论证。
+  prerequisites: []
+  typical_usage: 任何法律意见都要有依据，检索能力决定结论是否站得住。
+  common_pitfalls:
+    - 引用已失效或被修订的条文。
+    - 把个案裁判当成普遍规则。
+  learning_resources:
+    - {title: '中国裁判文书网', url: 'https://wenshu.court.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 法律文书写作
+  category: legal-public
+  level_guides:
+    入门: 知道起诉状、合同、函件的常用格式。
+    初级: 能写出结构完整、事实清楚的常见法律文书。
+    中级: 能围绕争议焦点组织事实、证据与法律依据。
+    高级: 能处理复杂案件的文书体系与庭审材料。
+  prerequisites: [合同法与公司法基础]
+  typical_usage: 文书是与法院、对方与内部沟通的正式载体。
+  common_pitfalls:
+    - 事实与诉求混写，请求事项不明确。
+    - 只讲道理不引依据，说服力不足。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 诉讼与仲裁程序
+  category: legal-public
+  level_guides:
+    入门: 知道诉讼与仲裁的基本阶段。
+    初级: 能按流程准备立案材料与期限管理。
+    中级: 能配合律师完成举证、开庭与执行环节。
+    高级: 能制定争议解决策略并管理外部律师。
+  prerequisites: [法律文书写作]
+  typical_usage: 程序走错会直接丧失权利，期限管理是硬约束。
+  common_pitfalls:
+    - 错过举证期限或上诉期。
+    - 管辖约定与争议类型不匹配。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 证据整理与归档
+  category: legal-public
+  level_guides:
+    入门: 知道证据要真实、关联、合法。
+    初级: 能按争议点整理证据清单并编号。
+    中级: 能判断证据链是否闭环，缺什么补什么。
+    高级: 能建立企业证据留存制度。
+  prerequisites: []
+  typical_usage: 打官司就是打证据，整理不到位等于没有。
+  common_pitfalls:
+    - 只有复印件无原件，真实性被否。
+    - 电子证据不做固定，事后无法举证。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 企业合规基础
+  category: legal-public
+  level_guides:
+    入门: 知道合规与合法的区别及常见合规领域。
+    初级: 能识别业务中的基础合规风险点。
+    中级: 能参与制度制定与合规检查。
+    高级: 能搭建合规体系并处理监管应对。
+  prerequisites: [合同法与公司法基础]
+  typical_usage: 合规问题一旦爆发，代价远高于事前预防。
+  common_pitfalls:
+    - 把合规当成法务一个部门的事。
+    - 制度写了不执行，检查时无法证明。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 法律风险提示
+  category: legal-public
+  level_guides:
+    入门: 知道风险提示要说清事实、依据与后果。
+    初级: 能对常规业务出具简洁的风险提示。
+    中级: 能给出可选方案与利弊对比。
+    高级: 能把风险提示嵌入业务流程与决策节点。
+  prerequisites: [合同审查]
+  typical_usage: 法务的价值在于提前说清风险，而不是事后救火。
+  common_pitfalls:
+    - 只说"有风险"不给方案，业务无法推进。
+    - 过度保守，把所有业务都否掉。
+  learning_resources:
+    - {title: '国家法律法规数据库', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 公文写作
+  category: legal-public
+  level_guides:
+    入门: 知道通知、请示、报告等文种的区别。
+    初级: 能按格式写出要素齐全的常用公文。
+    中级: 能准确提炼事项，语言简洁规范。
+    高级: 能起草制度性文件并统稿把关。
+  prerequisites: []
+  typical_usage: 行政工作的主要输出形式，格式与口径错误会被退回。
+  common_pitfalls:
+    - 文种用错，请示写成通知。
+    - 表述含糊，责任与时限不清。
+  learning_resources:
+    - {title: '中国政府网（党政机关公文格式国家标准）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 会务与活动组织
+  category: legal-public
+  level_guides:
+    入门: 知道会务包含通知、场地、材料与签到。
+    初级: 能独立组织中小型会议并处理现场事务。
+    中级: 能编制会务方案与预算，协调多方资源。
+    高级: 能统筹大型活动并制定应急预案。
+  prerequisites: [公文写作]
+  typical_usage: 会议与活动是企业运转的固定动作，细节疏漏很显眼。
+  common_pitfalls:
+    - 只发通知不确认到场，现场人数失控。
+    - 无预案，设备或人员临时变动就乱套。
+  learning_resources:
+    - {title: '中国政府网（机关事务管理相关规定）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: Office 办公软件
+  category: legal-public
+  level_guides:
+    入门: 能用 Word、Excel 完成基础排版与表格。
+    初级: 能用样式、函数与透视表处理日常文档与数据。
+    中级: 能做规范模板与批量处理，提高团队效率。
+    高级: 能搭建文档与数据管理规范。
+  prerequisites: []
+  typical_usage: 行政与法务的日常工具，效率差距主要来自这里。
+  common_pitfalls:
+    - 手动排版，改一处全篇错位。
+    - 表格靠肉眼核对，数据错误难发现。
+  learning_resources:
+    - {title: '中国政府网（机关事务管理相关规定）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 档案与资料管理
+  category: legal-public
+  level_guides:
+    入门: 知道档案分类、编号与保管期限的概念。
+    初级: 能按规则完成归档、借阅与归还登记。
+    中级: 能设计分类体系与电子档案目录。
+    高级: 能建立档案管理制度并应对检查。
+  prerequisites: [Office 办公软件]
+  typical_usage: 合同、证照与审批资料的留存直接关系到举证与审计。
+  common_pitfalls:
+    - 归档不及时，需要时找不到原件。
+    - 电子与纸质两套目录对不上。
+  learning_resources:
+    - {title: '国家档案局（档案管理相关规定）', url: 'https://www.saac.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 采购与固定资产管理
+  category: legal-public
+  level_guides:
+    入门: 知道采购申请、比价与验收的基本流程。
+    初级: 能完成常规采购执行与资产登记。
+    中级: 能做供应商比选与资产盘点差异处理。
+    高级: 能建立采购与资产管理制度并控制成本。
+  prerequisites: []
+  typical_usage: 行政掌握公司采购与资产，流程不规范极易出现账实不符。
+  common_pitfalls:
+    - 先买后补流程，审计时无法说明。
+    - 资产台账不更新，盘点对不上。
+  learning_resources:
+    - {title: '中国政府网（政府采购相关法规）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 行政事务统筹
+  category: legal-public
+  level_guides:
+    入门: 知道行政要覆盖办公、后勤、证照与接待。
+    初级: 能并行处理多项日常事务并按时交付。
+    中级: 能梳理流程、明确责任与时限。
+    高级: 能推动行政数字化与跨部门协同。
+  prerequisites: [公文写作]
+  typical_usage: 行政是组织的支撑系统，事务失控会拖慢所有部门。
+  common_pitfalls:
+    - 只做救火不建流程，同类问题反复出现。
+    - 需求不确认就执行，返工频繁。
+  learning_resources:
+    - {title: '中国政府网（机关事务管理相关规定）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 预算与报销
+  category: legal-public
+  level_guides:
+    入门: 知道预算科目与报销单据的基本要求。
+    初级: 能按制度审核报销单据并登记台账。
+    中级: 能编制部门费用预算并做执行分析。
+    高级: 能建立费用管控制度并推动降本。
+  prerequisites: [Office 办公软件]
+  typical_usage: 费用合规是审计重点，票据与审批缺一项就报不了。
+  common_pitfalls:
+    - 票据不合规，退回重开耽误时间。
+    - 预算科目乱挂，分析时看不出真实花费。
+  learning_resources:
+    - {title: '中国政府网（财政与财务相关规定）', url: 'https://www.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 信息安全与保密
+  category: legal-public
+  level_guides:
+    入门: 知道涉密文件与个人信息的保护要求。
+    初级: 能按制度管理文件权限与对外提供。
+    中级: 能识别信息泄露风险并落实控制措施。
+    高级: 能建立保密制度并组织培训与检查。
+  prerequisites: []
+  typical_usage: 法务与行政接触大量敏感信息，泄露后果往往是不可逆的。
+  common_pitfalls:
+    - 用个人网盘或微信传输公司文件。
+    - 对外提供资料不做脱敏。
+  learning_resources:
+    - {title: '国家法律法规数据库（数据安全与个人信息保护）', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 3

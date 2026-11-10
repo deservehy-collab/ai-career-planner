@@ -1,0 +1,15 @@
+# Project 知识库 —— 数据分析：用户行为分析与报告（高级）
+name: 用户行为分析与报告
+domain: data-analysis
+difficulty: advanced
+covers_skills: [分析报告, 统计学基础, 数据清洗, Python]
+prerequisites: [数据清洗, Python]
+tech_stack: [Python, pandas, SQL, 可视化库]
+stage_hint: 学习路线后期，从行为数据走到可落地的结论与建议
+deliverable: 一份用户行为分析报告，含分析问题、方法、发现与建议
+acceptance_criteria:
+  - 分析问题明确，并能说明为什么值得回答
+  - 方法选择有依据，区分相关与因果
+  - 结论引用具体数据与图表，不凭印象下判断
+  - 建议对应到可执行动作，并说明验证方式
+estimated_weeks: 3

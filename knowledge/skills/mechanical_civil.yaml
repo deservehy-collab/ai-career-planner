@@ -1,0 +1,264 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 机械与土木造价技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/mechanical-design-engineer.yaml 或
+#     knowledge/jobs/cost-engineer.yaml 里。
+#   - 工程文档与技术交底定义在 knowledge/skills/electronics.yaml，此处复用不重复定义。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 机械制图
+  category: mechanical-civil
+  level_guides:
+    入门: 认识三视图、剖视图与常见标注符号。
+    初级: 能按国家标准绘制零件图与简单装配图。
+    中级: 能编制完整尺寸链与技术要求，图纸可直接投产。
+    高级: 能建立制图规范并审核设计图纸。
+  prerequisites: []
+  typical_usage: 机械设计的第一交付物，图纸错一处现场就废一批件。
+  common_pitfalls:
+    - 尺寸标注基准不统一，加工出来装不上。
+    - 缺表面粗糙度与技术要求，工艺无从下手。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械制图国家标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 三维建模
+  category: mechanical-civil
+  level_guides:
+    入门: 能用草图与拉伸、旋转等特征建简单零件。
+    初级: 能完成中等复杂度零件的实体建模与出图。
+    中级: 能做装配约束、干涉检查与参数化设计。
+    高级: 能规划自顶向下建模体系与设计库。
+  prerequisites: [机械制图]
+  typical_usage: 现代机械设计以三维模型为源，图纸与 BOM 都由它派生。
+  common_pitfalls:
+    - 特征顺序混乱，改一个尺寸整张模型崩。
+    - 装配不检查干涉，到现场才发现装不进。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械制图国家标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 材料与加工工艺
+  category: mechanical-civil
+  level_guides:
+    入门: 知道常用金属与非金属材料的用途区别。
+    初级: 能按受力与工况选材料，说明车铣钻等基本工艺。
+    中级: 能结合成本与性能选材，判断工艺可行性。
+    高级: 能主导材料替代与工艺优化，评估失效风险。
+  prerequisites: []
+  typical_usage: 设计能不能落地取决于材料和工艺，选错会导致成本翻倍或直接做不出来。
+  common_pitfalls:
+    - 只按强度选材，忽略加工与热处理成本。
+    - 设计出无法装夹或无法测量的结构。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械工程材料与工艺标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 公差与配合
+  category: mechanical-civil
+  level_guides:
+    入门: 知道尺寸公差、形位公差与配合的概念。
+    初级: 能按装配关系选择基孔制或基轴制配合。
+    中级: 能计算配合间隙与过盈，处理装配与检测冲突。
+    高级: 能建立公差分配方案并控制制造成本。
+  prerequisites: [机械制图]
+  typical_usage: 配合选不对，零件不是装不进就是松动，直接影响设备精度。
+  common_pitfalls:
+    - 全部标注高精度，成本上升但功能没必要。
+    - 只标尺寸公差，不标形位公差导致装配困难。
+  learning_resources:
+    - {title: '国家标准化管理委员会（极限与配合国家标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 机械原理与结构设计
+  category: mechanical-civil
+  level_guides:
+    入门: 知道常见机构类型与运动副的作用。
+    初级: 能完成简单传动与支撑结构的设计计算。
+    中级: 能设计完整机构并校核强度、刚度与寿命。
+    高级: 能主导整机结构方案并进行可靠性评估。
+  prerequisites: [机械制图, 材料与加工工艺]
+  typical_usage: 结构决定了设备的运动、承载与寿命，是机械设计的核心能力。
+  common_pitfalls:
+    - 只做静态校核，忽略振动与疲劳。
+    - 结构刚度和装配空间冲突，改到后期推倒重来。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械设计相关国家标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 8
+
+- skill: 装配与调试
+  category: mechanical-civil
+  level_guides:
+    入门: 知道装配顺序与常用工具的使用方法。
+    初级: 能按图纸完成部件装配并检查基本配合。
+    中级: 能调整间隙、预紧与对中，处理装配干涉。
+    高级: 能制定装配工艺与验收标准，指导现场整改。
+  prerequisites: [公差与配合]
+  typical_usage: 设计意图只有装出来才知道对不对，装配是最后一道验证。
+  common_pitfalls:
+    - 装配顺序颠倒，拆装反复损伤零件。
+    - 不做对中与预紧，设备运行后振动超标。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械装配相关标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: BOM 与图纸管理
+  category: mechanical-civil
+  level_guides:
+    入门: 知道 BOM 的层级与物料编码的作用。
+    初级: 能按装配关系整理 BOM 并核对数量。
+    中级: 能管理版本与变更，保证图纸与 BOM 同步。
+    高级: 能建立设计数据管理流程并支撑生产与采购。
+  prerequisites: [三维建模]
+  typical_usage: 采购与生产都按 BOM 走，漏一项就停线。
+  common_pitfalls:
+    - 改图不同步改 BOM，采购按旧版下单。
+    - 物料编码混乱，同一零件多个编号。
+  learning_resources:
+    - {title: '国家标准化管理委员会（产品数据管理相关标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 有限元分析基础
+  category: mechanical-civil
+  level_guides:
+    入门: 知道网格、约束与载荷的基本含义。
+    初级: 能对简单零件做静力分析并读懂应力云图。
+    中级: 能合理简化模型、判断结果是否可信。
+    高级: 能做模态与疲劳分析并指导结构优化。
+  prerequisites: [机械原理与结构设计]
+  typical_usage: 用仿真替代反复试制，前提是模型与边界条件设对。
+  common_pitfalls:
+    - 约束加错位置，算出来的应力毫无意义。
+    - 网格过粗，应力集中处结果失真。
+  learning_resources:
+    - {title: '国家标准化管理委员会（机械设计相关国家标准）', url: 'https://openstd.samr.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 工程识图
+  category: mechanical-civil
+  level_guides:
+    入门: 认识建筑与结构施工图的图例与标注。
+    初级: 能读懂平面、立面与剖面图的基本信息。
+    中级: 能结合图纸核对尺寸、标高与做法。
+    高级: 能从图纸中发现矛盾并提出图纸会审意见。
+  prerequisites: []
+  typical_usage: 造价与施工都从读图开始，看错图后面全错。
+  common_pitfalls:
+    - 只看平面不看剖面，漏掉标高变化。
+    - 不核对建筑与结构图，工程量重复或漏项。
+  learning_resources:
+    - {title: '住房和城乡建设部（建筑工程施工图设计深度规定）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 工程计量
+  category: mechanical-civil
+  level_guides:
+    入门: 知道工程量计算的基本规则与单位。
+    初级: 能按图纸计算土方、混凝土与砌体等常用工程量。
+    中级: 能处理扣减关系与复杂节点，计算口径一致。
+    高级: 能建立计量模型并复核他人成果。
+  prerequisites: [工程识图]
+  typical_usage: 工程量是计价的基础，算错一点金额就差很多。
+  common_pitfalls:
+    - 扣减规则记错，混凝土与模板量偏差大。
+    - 计算式不留过程，复核时无法追溯。
+  learning_resources:
+    - {title: '住房和城乡建设部（房屋建筑与装饰工程工程量计算规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 清单计价
+  category: mechanical-civil
+  level_guides:
+    入门: 知道清单计价的基本组成与费用结构。
+    初级: 能编制分部分项清单并套用定额。
+    中级: 能处理措施费、其他项目费与调价。
+    高级: 能完成投标报价策略与结算争议处理。
+  prerequisites: [工程计量]
+  typical_usage: 清单是招投标与结算的共同语言，编错会直接影响中标与回款。
+  common_pitfalls:
+    - 项目特征描述不全，结算时被压价。
+    - 漏计措施费，报价明显偏低。
+  learning_resources:
+    - {title: '住房和城乡建设部（建设工程工程量清单计价规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 造价软件
+  category: mechanical-civil
+  level_guides:
+    入门: 能安装并完成软件基本操作与新建工程。
+    初级: 能用软件建模算量并导出清单。
+    中级: 能用软件完成组价、调价与报表输出。
+    高级: 能建立企业定额库与模板，提高复用效率。
+  prerequisites: [工程计量]
+  typical_usage: 手算效率太低，实际工作基本都在造价软件里完成。
+  common_pitfalls:
+    - 建模与图纸不符，算量结果整体偏移。
+    - 只依赖软件不核对，规则设置错误无人发现。
+  learning_resources:
+    - {title: '住房和城乡建设部（工程造价相关规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 招投标与合同管理
+  category: mechanical-civil
+  level_guides:
+    入门: 知道招标、投标与合同的基本流程。
+    初级: 能读懂招标文件要求并整理投标资料。
+    中级: 能编制商务标并识别合同风险条款。
+    高级: 能主导投标策略与合同谈判，处理索赔。
+  prerequisites: [清单计价]
+  typical_usage: 造价成果最终服务于投标与合同履约，条款理解错会直接亏钱。
+  common_pitfalls:
+    - 不逐条响应招标文件，被判无效标。
+    - 忽略合同调价与索赔条款，施工中被动承担风险。
+  learning_resources:
+    - {title: '住房和城乡建设部（招标投标与合同管理相关规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 施工工艺基础
+  category: mechanical-civil
+  level_guides:
+    入门: 知道常见分部分项的施工顺序。
+    初级: 能说明主要工序的做法与验收要点。
+    中级: 能结合工艺判断造价构成与工期影响。
+    高级: 能优化施工方案并评估技术经济性。
+  prerequisites: [工程识图]
+  typical_usage: 不懂工艺就套不准定额，也算不准措施费。
+  common_pitfalls:
+    - 按图套定额但工序实际不同，单价失真。
+    - 忽略施工条件，措施费估算不足。
+  learning_resources:
+    - {title: '住房和城乡建设部（建筑工程施工质量验收规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 定额与取费
+  category: mechanical-civil
+  level_guides:
+    入门: 知道定额、人工材料机械消耗量的含义。
+    初级: 能正确套用定额子目并换算。
+    中级: 能处理定额缺项、换算与取费基数。
+    高级: 能编制企业定额并参与计价依据制定。
+  prerequisites: [清单计价]
+  typical_usage: 定额套错或取费基数错，报价就系统性偏高或偏低。
+  common_pitfalls:
+    - 定额子目不匹配，含量与实际差很多。
+    - 取费程序用错，规费税金计算偏差。
+  learning_resources:
+    - {title: '住房和城乡建设部（建设工程计价依据）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 成本控制
+  category: mechanical-civil
+  level_guides:
+    入门: 知道直接成本与间接成本的构成。
+    初级: 能做简单的成本测算与对比。
+    中级: 能做目标成本分解与偏差分析。
+    高级: 能建立成本管控体系并推动纠偏。
+  prerequisites: [清单计价]
+  typical_usage: 中标只是开始，能不能赚钱取决于过程中的成本控制。
+  common_pitfalls:
+    - 只算总价不做分解，超支了才发现。
+    - 变更与签证不及时确认，最后无法计价。
+  learning_resources:
+    - {title: '住房和城乡建设部（工程造价管理相关规范）', url: 'https://www.mohurd.gov.cn/'}
+  estimated_weeks: 4

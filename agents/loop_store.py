@@ -92,6 +92,19 @@ COMPLETE_UNKNOWN_TASK = "unknown_task"    # ID 格式合法但文件里没有
 COMPLETE_INVALID_TASK_ID = "invalid_task_id"   # ID 不是字符串或不符合格式
 COMPLETE_INVALID_EVIDENCE = "invalid_evidence"  # 证据不是字符串
 
+# 证据类型：默认空串表示旧记录；growth=附了凭证，self_report=自述完成。
+TASK_EVIDENCE_KIND_GROWTH = "growth"
+TASK_EVIDENCE_KIND_SELF_REPORT = "self_report"
+
+# ── attach_evidence（任务完成后补凭证）──────────────────────────────────
+ATTACH_OK = "attached"
+ATTACH_ALREADY = "already_attached"       # 同样的凭证已经记过，不写盘
+ATTACH_NOT_COMPLETED = "not_completed"    # 任务还没完成，不能补凭证
+
+# ── reopen（撤回一条尚未计入成长历史的完成记录）──────────────────────────
+REOPEN_OK = "reopened"
+REOPEN_NOT_COMPLETED = "not_completed"    # 本来就是待完成，不写盘
+
 # 任务 ID：r<轮次三位以上>-<类型字母><序号两位以上>，例如 r001-l01 / r012-p03。
 # 类型字母从 _KIND_PREFIX 派生，避免第二处定义同一件事。
 _KIND_LETTERS = "".join(sorted(set(_KIND_PREFIX.values())))
@@ -206,8 +219,21 @@ def build_tasks(
                 "created_at": created_at,
                 "completed_at": None,
                 "evidence": "",
+                "evidence_kind": "",
+                "note": "",
             })
     return tasks
+
+
+def _goal_record(goal: dict, round_no: int, target_job: str, stamp: str) -> dict:
+    """顶层 ``latest_goal`` 的唯一形状；轮次快照与单独记录结局共用。"""
+    return {
+        "round": round_no,
+        "status": goal.get("status"),
+        "goal": _deepcopy(goal),
+        "target_job": target_job,
+        "evaluated_at": stamp,
+    }
 
 
 class LoopStore:
@@ -315,6 +341,23 @@ class LoopStore:
                 return item
         return None
 
+    def latest_goal(self, data: dict | None = None) -> dict | None:
+        """最近一次持久化的结局快照；没有则 ``None``。
+
+        顶层 ``latest_goal`` 与轮次里的快照是**两份**：轮次快照回答"这一轮计划
+        当初基于什么"，``latest_goal`` 回答"当前计划最近一次判定成了什么"。
+        刷新页面后前端靠它继续显示结局，不必要求用户重跑一次分析。
+        """
+        payload = data if data is not None else self.load().data
+        goal = payload.get("latest_goal")
+        return _deepcopy(goal) if isinstance(goal, dict) else None
+
+    def pending_next_round(self, data: dict | None = None) -> dict | None:
+        """上一次「生成下一轮」没把计划存下来时留下的恢复标记。"""
+        payload = data if data is not None else self.load().data
+        pending = payload.get("pending_next_round")
+        return _deepcopy(pending) if isinstance(pending, dict) else None
+
     def tasks(
         self,
         round_no: int | None = None,
@@ -361,6 +404,84 @@ class LoopStore:
             return self._failed(exc)
         return {"status": WRITE_OK, "path": str(self.path), "data": data}
 
+    def clear(self, now: datetime | None = None) -> dict:
+        """把本用户的闭环记录**先备份、再重置为空**。
+
+        这是本模块唯一会丢掉既有轮次的操作，所以三条不退让：
+
+        1. 先把原文件完整复制成 ``loop.json.cleared-<时间戳>``，复制不成功就一个字节都不动；
+        2. 损坏 / 读不到 / 版本不符的文件**拒绝**清空 —— 那种情况该走
+           :meth:`backup_corrupt`，不能拿"清空"把问题掩盖掉；
+        3. 只动 ``loop.json``。成长历史在 ``growth.json``，本模块从不读写它，
+           所以清空不碰技能等级与已确认的成果。
+
+        返回 ``{status, path, backup, rounds_removed, tasks_removed, warning}``；
+        ``status`` 不是 :data:`WRITE_OK` 时磁盘未改动。
+        """
+        loaded = self.load()
+        if loaded.status not in _SAFE_TO_WRITE:
+            return {
+                "status": WRITE_REFUSED,
+                "warning": loaded.warning,
+                "path": str(self.path),
+                "backup": None,
+                "rounds_removed": 0,
+                "tasks_removed": 0,
+            }
+
+        rounds = loaded.data.get("rounds") or []
+        task_count = sum(len(entry.get("tasks") or []) for entry in rounds)
+        if not rounds:
+            # 本来就没有轮次：不制造一个"备份了个空文件"的假动作。
+            return {
+                "status": WRITE_OK,
+                "warning": None,
+                "path": str(self.path),
+                "backup": None,
+                "rounds_removed": 0,
+                "tasks_removed": 0,
+            }
+
+        moment = now or datetime.now()
+        target = self.path.with_name(
+            f"{self.path.name}.cleared-{moment.strftime('%Y%m%dT%H%M%S')}"
+        )
+        try:
+            shutil.copy2(self.path, target)
+        except OSError as exc:
+            return {
+                "status": WRITE_FAILED,
+                "warning": f"备份失败，任务清单一个字节都没动（{type(exc).__name__}: {exc}）",
+                "path": str(self.path),
+                "backup": None,
+                "rounds_removed": 0,
+                "tasks_removed": 0,
+            }
+
+        data = _empty_data(self.user_id)
+        data["created_at"] = _stamp(moment)
+        data["updated_at"] = _stamp(moment)
+        try:
+            self._write(data)
+        except OSError as exc:
+            return {
+                "status": WRITE_FAILED,
+                "warning": f"原清单已备份到 {target.name}，但重建空记录失败，原文件未改动：{exc}",
+                "path": str(self.path),
+                "backup": str(target),
+                "rounds_removed": 0,
+                "tasks_removed": 0,
+            }
+
+        return {
+            "status": WRITE_OK,
+            "warning": None,
+            "path": str(self.path),
+            "backup": str(target),
+            "rounds_removed": len(rounds),
+            "tasks_removed": task_count,
+        }
+
     def append_round(
         self,
         target_job: str,
@@ -368,6 +489,10 @@ class LoopStore:
         project_plan: list | None = None,
         round_no: int | None = None,
         now: datetime | None = None,
+        snapshot: dict | None = None,
+        source: str | None = None,
+        latest_goal: dict | None = None,
+        clear_pending: bool = False,
     ) -> dict:
         """追加一轮，并把两份计划展平成任务清单。
 
@@ -376,10 +501,21 @@ class LoopStore:
           轮次号会进入任务 ID，重复就会撞 ID，所以宁可拒绝也不允许复用。
         - 计划条目**原样**存进 ``learning_plan`` / ``project_plan``，任务只是索引其上的
           一行"可勾选事项"，不复制模型写的文字。
+        - ``snapshot`` 是这一轮计划的来源快照（目标、JD 原文、岗位要求与结局），
+          下一轮据此沿用同一份岗位依据，不再让模型重新推断。旧文件没有这个键，
+          读取方必须按"没有快照"处理。
+        - ``latest_goal`` 给了就同时更新顶层结局；``clear_pending`` 为真时清掉
+          「上一轮未保存」恢复标记（开始新计划会显式清掉它）。
         - 磁盘文件损坏/不可读/版本不符时**拒绝写入**，绝不覆盖；见 :meth:`backup_corrupt`。
         """
         if not isinstance(target_job, str):
             raise LoopStoreError(f"target_job 必须是字符串，收到 {type(target_job).__name__}")
+        if snapshot is not None and not isinstance(snapshot, dict):
+            raise LoopStoreError(f"snapshot 必须是字典，收到 {type(snapshot).__name__}")
+        if latest_goal is not None and (
+            not isinstance(latest_goal, dict) or not latest_goal.get("status")
+        ):
+            raise LoopStoreError("latest_goal 必须是一个带 status 的字典")
 
         # 计划结构不合法要**早于任何读盘/写盘**被发现，所以先做纯校验
         _check_plan(KIND_LEARNING, learning_plan)
@@ -423,7 +559,15 @@ class LoopStore:
             "project_plan": _deepcopy(project_plan or []),
             "tasks": tasks,
         }
+        if source:
+            entry["source"] = str(source)
+        if snapshot is not None:
+            entry["snapshot"] = _deepcopy(snapshot)
         rounds.append(entry)
+        if latest_goal is not None:
+            data["latest_goal"] = _goal_record(latest_goal, resolved, target_job, stamp)
+        if clear_pending:
+            data.pop("pending_next_round", None)
         data["updated_at"] = stamp
         if not data.get("created_at"):
             data["created_at"] = stamp
@@ -439,7 +583,113 @@ class LoopStore:
             "round": resolved,
             "round_count": len(rounds),
             "tasks": _deepcopy(tasks),
+            "latest_goal": _deepcopy(data.get("latest_goal")),
         }
+
+    def record_goal(
+        self,
+        goal: dict,
+        round_no: int | None = None,
+        target_job: str = "",
+        now: datetime | None = None,
+    ) -> dict:
+        """只更新顶层 ``latest_goal``，**不新增轮次、不改任务**。
+
+        用在"结局已判定但不需要新计划"的场合（目标达成 / 依据不足）。
+        ``round_no`` 省略时挂到当前最大轮次；没有轮次时拒绝写入 ——
+        没有计划可归属的结局不持久化，避免刷新后凭空冒出一条"已达成"。
+        """
+        if not isinstance(goal, dict) or not goal.get("status"):
+            raise LoopStoreError("goal 必须是一个带 status 的字典")
+
+        loaded = self.load()
+        if not loaded.writable:
+            return {"status": WRITE_REFUSED, "warning": loaded.warning or "闭环记录当前不可安全写入",
+                    "path": str(self.path)}
+
+        rounds = loaded.data.get("rounds") or []
+        if not rounds:
+            return {"status": WRITE_REFUSED, "warning": "还没有任何轮次，结局无处归属，未写入",
+                    "path": str(self.path)}
+
+        if round_no is None:
+            resolved = max(int(item.get("round") or 0) for item in rounds)
+        else:
+            problem = _round_no_error(round_no)
+            if problem:
+                return {"status": ROUND_INVALID, "warning": problem, "path": str(self.path)}
+            resolved = round_no
+            if not any(item.get("round") == resolved for item in rounds):
+                return {"status": ROUND_UNKNOWN, "warning": f"第 {resolved} 轮不存在",
+                        "path": str(self.path)}
+
+        target = str(target_job or "").strip()
+        if not target:
+            target = next(
+                (str(item.get("target_job") or "") for item in rounds
+                 if item.get("round") == resolved),
+                "",
+            )
+
+        data = _deepcopy(loaded.data)
+        stamp = _stamp(now)
+        data["latest_goal"] = _goal_record(goal, resolved, target, stamp)
+        data["updated_at"] = stamp
+        try:
+            self._write(data)
+        except OSError as exc:
+            return self._failed(exc)
+        return {
+            "status": WRITE_OK,
+            "path": str(self.path),
+            "latest_goal": _deepcopy(data["latest_goal"]),
+        }
+
+    def set_pending_next_round(self, payload: dict, now: datetime | None = None) -> dict:
+        """记下"这一轮还没存成计划"的恢复信息，供下次重试。
+
+        调用方应在**工作流开始前**写一次（此时只有一个待办事件清单），
+        工作流产完之后再把算好的计划补进同一个标记。任何失败都只返回状态，
+        不抛 —— 恢复标记本身不能成为业务失败的放大器。
+        """
+        if not isinstance(payload, dict):
+            raise LoopStoreError(f"pending_next_round 必须是字典，收到 {type(payload).__name__}")
+
+        loaded = self.load()
+        if not loaded.writable:
+            return {"status": WRITE_REFUSED, "warning": loaded.warning or "闭环记录当前不可安全写入",
+                    "path": str(self.path)}
+
+        data = _deepcopy(loaded.data)
+        stamp = _stamp(now)
+        marker = _deepcopy(payload)
+        marker["created_at"] = stamp
+        data["pending_next_round"] = marker
+        data["updated_at"] = stamp
+        try:
+            self._write(data)
+        except OSError as exc:
+            return self._failed(exc)
+        return {"status": WRITE_OK, "path": str(self.path),
+                "pending_next_round": _deepcopy(marker)}
+
+    def clear_pending_next_round(self, now: datetime | None = None) -> dict:
+        """清掉恢复标记；本来没有标记时**不写盘**。"""
+        loaded = self.load()
+        if not loaded.writable:
+            return {"status": WRITE_REFUSED, "warning": loaded.warning or "闭环记录当前不可安全写入",
+                    "path": str(self.path)}
+        if not loaded.data.get("pending_next_round"):
+            return {"status": "not_needed", "path": str(self.path)}
+
+        data = _deepcopy(loaded.data)
+        data.pop("pending_next_round", None)
+        data["updated_at"] = _stamp(now)
+        try:
+            self._write(data)
+        except OSError as exc:
+            return self._failed(exc)
+        return {"status": WRITE_OK, "path": str(self.path)}
 
     def mark_completed(
         self,
@@ -447,11 +697,16 @@ class LoopStore:
         evidence: str = "",
         round_no: int | None = None,
         now: datetime | None = None,
+        evidence_kind: str = "",
+        note: str = "",
     ) -> dict:
-        """把一个任务标成已完成，记下完成时间与证据。
+        """把一个任务标成已完成，记下完成时间、证据与心得。
 
         - **已完成的任务不会被重复登记**：再次调用直接返回
           :data:`COMPLETE_ALREADY`，**不写盘**，磁盘文件逐字节不变。
+        - ``evidence`` 可以为空：空证据 + ``evidence_kind=self_report``
+          表示"自述完成"，升级照规则走，但不算直接证据。
+        - ``note`` 是用户心得，单独保存，**不并入 evidence**。
         - ``round_no`` 省略时在所有轮次里找；给了则只在该轮里找。
         - 返回 :data:`COMPLETE_OK` 之外的任何状态，磁盘文件都没有被改动。
         """
@@ -509,6 +764,12 @@ class LoopStore:
         task["status"] = TASK_COMPLETED
         task["completed_at"] = stamp
         task["evidence"] = evidence
+        kind_text = str(evidence_kind or "").strip()
+        if kind_text not in (TASK_EVIDENCE_KIND_GROWTH, TASK_EVIDENCE_KIND_SELF_REPORT):
+            kind_text = (TASK_EVIDENCE_KIND_GROWTH if evidence.strip()
+                         else TASK_EVIDENCE_KIND_SELF_REPORT)
+        task["evidence_kind"] = kind_text
+        task["note"] = "" if note is None else str(note)
         data["updated_at"] = stamp
 
         try:
@@ -517,6 +778,168 @@ class LoopStore:
             return self._failed(exc)
 
         return {"status": COMPLETE_OK, "path": str(self.path), "round": task.get("round"),
+                "task": _deepcopy(task), "written": True}
+
+    def reopen(
+        self,
+        task_id,
+        round_no: int | None = None,
+        now: datetime | None = None,
+    ) -> dict:
+        """把一条**已完成**任务退回待完成，并清空完成时间与证据。
+
+        只处理 ``loop.json``；是否已经计入成长历史由服务层先判定 —— 已入账的
+        完成记录不能靠本方法撤回，否则成长历史会凭空多出一条无源记录。
+        未完成的任务直接返回 :data:`REOPEN_NOT_COMPLETED`，不写盘。
+        """
+        if not isinstance(task_id, str) or not _TASK_ID_RE.match(task_id.strip()):
+            return {
+                "status": COMPLETE_INVALID_TASK_ID,
+                "warning": f"任务 ID 不合法：{task_id!r}；"
+                           f"格式应为 r<轮次三位以上>-<l|p><序号两位以上>，例如 r001-l01",
+                "path": str(self.path),
+            }
+        task_id = task_id.strip()
+
+        if round_no is not None:
+            problem = _round_no_error(round_no)
+            if problem:
+                return {"status": ROUND_INVALID, "warning": problem, "path": str(self.path)}
+
+        loaded = self.load()
+        if not loaded.writable:
+            return {"status": WRITE_REFUSED, "warning": loaded.warning or "闭环记录当前不可安全写入",
+                    "path": str(self.path)}
+
+        if round_no is not None and not any(
+            r.get("round") == round_no for r in loaded.data.get("rounds") or []
+        ):
+            return {"status": ROUND_UNKNOWN,
+                    "warning": f"第 {round_no} 轮不存在", "path": str(self.path)}
+
+        data = _deepcopy(loaded.data)
+        found = self._locate(data, task_id, round_no)
+        if not found:
+            return {"status": COMPLETE_UNKNOWN_TASK,
+                    "warning": f"闭环记录里没有任务 {task_id}", "path": str(self.path)}
+
+        _, task = found
+        if task.get("status") != TASK_COMPLETED:
+            return {
+                "status": REOPEN_NOT_COMPLETED,
+                "warning": f"任务 {task_id} 当前不是已完成状态，无需撤回",
+                "path": str(self.path),
+                "task": _deepcopy(task),
+                "written": False,
+            }
+
+        stamp = _stamp(now)
+        task["status"] = TASK_PENDING
+        task["completed_at"] = None
+        task["evidence"] = ""
+        task["evidence_kind"] = ""
+        task["note"] = ""
+        data["updated_at"] = stamp
+
+        try:
+            self._write(data)
+        except OSError as exc:
+            return self._failed(exc)
+
+        return {"status": REOPEN_OK, "path": str(self.path), "round": task.get("round"),
+                "task": _deepcopy(task), "written": True}
+
+    def attach_evidence(
+        self,
+        task_id,
+        evidence: str,
+        round_no: int | None = None,
+        now: datetime | None = None,
+        note: str | None = None,
+    ) -> dict:
+        """给一条**已完成**任务补上凭证，并把证据类型翻成 ``growth``。
+
+        只改 ``loop.json``：成长历史里的补记由服务层在锁内另行追加，
+        本方法绝不碰成长历史。任务尚未完成时返回
+        :data:`ATTACH_NOT_COMPLETED`；同样的凭证已经记过时返回
+        :data:`ATTACH_ALREADY`，两种情况都不写盘。
+        """
+        if not isinstance(task_id, str) or not _TASK_ID_RE.match(task_id.strip()):
+            return {
+                "status": COMPLETE_INVALID_TASK_ID,
+                "warning": f"任务 ID 不合法：{task_id!r}；"
+                           f"格式应为 r<轮次三位以上>-<l|p><序号两位以上>，例如 r001-l01",
+                "path": str(self.path),
+            }
+        task_id = task_id.strip()
+
+        if not isinstance(evidence, str):
+            return {"status": COMPLETE_INVALID_EVIDENCE,
+                    "warning": f"证据必须是字符串，收到 {type(evidence).__name__}",
+                    "path": str(self.path)}
+        evidence = evidence.strip()
+        if not evidence:
+            return {"status": COMPLETE_INVALID_EVIDENCE,
+                    "warning": "补凭证不能为空", "path": str(self.path)}
+
+        if round_no is not None:
+            problem = _round_no_error(round_no)
+            if problem:
+                return {"status": ROUND_INVALID, "warning": problem, "path": str(self.path)}
+
+        loaded = self.load()
+        if not loaded.writable:
+            return {"status": WRITE_REFUSED, "warning": loaded.warning or "闭环记录当前不可安全写入",
+                    "path": str(self.path)}
+
+        if round_no is not None and not any(
+            r.get("round") == round_no for r in loaded.data.get("rounds") or []
+        ):
+            return {"status": ROUND_UNKNOWN,
+                    "warning": f"第 {round_no} 轮不存在", "path": str(self.path)}
+
+        data = _deepcopy(loaded.data)
+        found = self._locate(data, task_id, round_no)
+        if not found:
+            return {"status": COMPLETE_UNKNOWN_TASK,
+                    "warning": f"闭环记录里没有任务 {task_id}", "path": str(self.path)}
+
+        _, task = found
+        if task.get("status") != TASK_COMPLETED:
+            return {
+                "status": ATTACH_NOT_COMPLETED,
+                "warning": f"任务 {task_id} 还没完成，不能补凭证",
+                "path": str(self.path),
+                "task": _deepcopy(task),
+                "written": False,
+            }
+
+        already = (
+            task.get("evidence_kind") == TASK_EVIDENCE_KIND_GROWTH
+            and str(task.get("evidence") or "") == evidence
+        )
+        if already:
+            return {
+                "status": ATTACH_ALREADY,
+                "warning": "这条凭证已经记过，不重复写入",
+                "path": str(self.path),
+                "task": _deepcopy(task),
+                "written": False,
+            }
+
+        stamp = _stamp(now)
+        task["evidence"] = evidence
+        task["evidence_kind"] = TASK_EVIDENCE_KIND_GROWTH
+        if note is not None:
+            task["note"] = str(note)
+        data["updated_at"] = stamp
+
+        try:
+            self._write(data)
+        except OSError as exc:
+            return self._failed(exc)
+
+        return {"status": ATTACH_OK, "path": str(self.path), "round": task.get("round"),
                 "task": _deepcopy(task), "written": True}
 
     def backup_corrupt(self, now: datetime | None = None, then_reset: bool = False) -> dict:

@@ -1,0 +1,140 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 新媒体运营 —— 岗位画像（人工整理）
+# 版本：v1
+# 最后更新：2026-10-22
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_operations_std_001  互联网营销师等公开职业标准中的通用能力要求整理
+#                              （概括，非逐字原文）
+#   source_operations_jd_001   公开招聘信息中新媒体运营/内容运营/社群运营岗位的
+#                              通用职责与要求整理（多家合并，非单份 JD 逐字引用）
+#
+#   本文件的证据字段标注要求来自哪类公开材料，不是可逐字反查的招聘原文。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: new_media_operator
+job_name: 新媒体运营
+
+aliases:
+  - 新媒体运营
+  - 内容运营
+  - 社群运营
+  - 用户运营
+  - 短视频运营
+  - 运营专员
+  - 新媒体专员
+  - 直播运营
+
+category: marketing-operations
+domain: operations
+origin: human-curated
+version: 1
+updated_at: 2026-10-22
+
+# 运营岗没有可逐字反查的招聘原文；岗位要求以本文件的人工整理技能表为准。
+ground_requirements: true
+
+profile:
+  summary: 新媒体运营负责账号定位、内容策划与制作发布，通过数据复盘持续优化选题与投放；交付稳定产出的内容与可衡量的增长结果。
+  core_tasks:
+    - {name: 账号定位与内容规划, detail: 明确目标用户、账号人设与栏目，制定内容排期}
+    - {name: 选题策划与文案脚本, detail: 跟踪热点与竞品，产出标题、正文与短视频脚本}
+    - {name: 拍摄剪辑与发布, detail: 完成素材拍摄、剪辑包装、字幕与多平台发布}
+    - {name: 社群与用户互动, detail: 维护评论区与社群，策划活动提升活跃与转化}
+    - {name: 数据复盘与优化, detail: 分析播放、互动、转化数据，调整选题与投放}
+    - {name: 竞品与平台规则跟踪, detail: 关注平台政策与同类账号打法，规避违规风险}
+  tools: [抖音/小红书/视频号/公众号后台, 剪映/Premiere, Canva/创可贴/PS, 新榜/蝉妈妈/巨量算数, Excel/飞书]
+  deliverables: [内容选题库与排期表, 图文与短视频成片, 活动方案与复盘报告, 周/月运营数据报表]
+  entry_requirements: [新闻/传播/中文/市场营销等相关专业或作品集, 文案与剪辑能力, 熟悉主流平台规则, 基本的数据分析能力, 能持续跟进热点]
+  career_path:
+    - {name: 运营助理, detail: 能完成素材整理、发布与基础数据统计}
+    - {name: 内容/社群运营, detail: 能独立负责栏目内容与社群活动}
+    - {name: 运营主管, detail: 能制定账号策略并带小团队达成增长目标}
+    - {name: 运营经理, detail: 能负责多账号矩阵、预算与投放策略}
+
+skills:
+
+  - skill: 内容策划
+    importance: 5
+    level: 中级
+    reason: 决定账号做什么、给谁看、按什么节奏发，是运营工作的起点。
+    evidence:
+      - {source_id: source_operations_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能围绕目标用户与平台特性制定内容计划'}
+      - {source_id: source_operations_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责选题策划、内容排期与账号栏目规划'}
+
+  - skill: 文案写作
+    importance: 5
+    level: 中级
+    reason: 标题、正文、脚本与活动话术直接决定内容的点击与转化。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备较强的文案撰写与标题提炼能力'}
+
+  - skill: 短视频剪辑
+    importance: 4
+    level: 中级
+    reason: 短视频是主流内容形态，剪辑节奏与字幕包装影响完播率。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成短视频剪辑、字幕与基础包装'}
+
+  - skill: 运营数据分析
+    importance: 5
+    level: 中级
+    reason: 用播放、互动、转化等指标判断内容好坏，并指导下一轮调整。
+    evidence:
+      - {source_id: source_operations_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能读取平台数据并做基础效果分析'}
+      - {source_id: source_operations_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：定期复盘数据，输出优化建议'}
+
+  - skill: 用户增长
+    importance: 4
+    level: 中级
+    reason: 通过活动、内容与渠道组合获取新用户并提升留存。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：策划拉新活动，跟踪新增、留存与转化'}
+
+  - skill: 社群运营
+    importance: 4
+    level: 初级
+    reason: 维护用户群、组织互动与转化，是私域运营的日常动作。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责社群日常维护、活动组织与用户答疑'}
+
+  - skill: 投放优化
+    importance: 3
+    level: 中级
+    reason: 付费投放需要根据成本与转化数据调整素材、人群与出价。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：有信息流投放与素材优化经验者优先'}
+
+  - skill: 竞品分析
+    importance: 3
+    level: 初级
+    reason: 通过拆解同类账号的选题、形式与节奏，找到可复用的做法。
+    evidence:
+      - {source_id: source_operations_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：能收集并整理竞品与行业信息'}
+
+  - skill: 平台规则与合规
+    importance: 3
+    level: 初级
+    reason: 不了解平台规则容易限流、下架，广告与内容合规是底线。
+    evidence:
+      - {source_id: source_operations_std_001, requirement_type: required, context: qualification,
+         note: '公开标准整理：了解平台内容规范与广告合规要求'}
+
+  - skill: 图片设计
+    importance: 3
+    level: 初级
+    reason: 封面、海报与配图影响点击率，运营需要能独立完成基础设计。
+    evidence:
+      - {source_id: source_operations_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：会使用 Canva/PS 等工具制作封面与海报者优先'}

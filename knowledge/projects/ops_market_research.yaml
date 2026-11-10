@@ -1,0 +1,15 @@
+# Project 知识库 —— 运营：市场调研与推广方案（进阶）
+name: 市场调研与推广方案
+domain: operations
+difficulty: intermediate
+covers_skills: [市场调研, 市场推广策划, 品牌传播, 竞品分析]
+prerequisites: []
+tech_stack: [问卷工具, Excel, 公开行业报告]
+stage_hint: 学习路线中期，从调研问题走到可执行的推广方案
+deliverable: 一份调研报告与配套推广方案，含目标人群、渠道选择与预算分配
+acceptance_criteria:
+  - 调研问题能回答一个具体决策，不是泛泛了解市场
+  - 样本来源与局限写清楚，不把便利样本当代表性结论
+  - 竞品拆解覆盖定位、内容与渠道打法
+  - 推广方案有明确目标、预算与衡量指标
+estimated_weeks: 2

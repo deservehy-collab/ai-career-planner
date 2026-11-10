@@ -1,0 +1,15 @@
+# Project 知识库 —— 新媒体运营：短视频脚本与成片制作（入门项目）
+name: 短视频脚本与成片制作
+domain: operations
+difficulty: beginner
+covers_skills: [短视频剪辑, 文案写作, 图片设计, 平台规则与合规]
+prerequisites: [文案写作]
+tech_stack: [剪映, Canva, 手机拍摄, 平台发布后台]
+stage_hint: 运营学习早期，用 3 条成片走完脚本、拍摄、剪辑与发布
+deliverable: 3 条 60 秒内短视频 + 对应脚本 + 封面，附发布数据记录
+acceptance_criteria:
+  - 每条视频有明确开头钩子、信息结构与结尾行动指引
+  - 字幕、封面与画面比例符合平台要求，无版权与违规风险
+  - 能按脚本完成剪辑，节奏与重点清晰
+  - 发布后记录播放、完播、互动数据并写一句复盘
+estimated_weeks: 2

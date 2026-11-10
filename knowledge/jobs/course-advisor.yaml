@@ -1,0 +1,141 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 课程顾问 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_course_std_001  教育部公开的校外培训管理与学生发展指导相关文件要点整理
+#                          https://www.moe.gov.cn/ （访问日期 2026-11-10）
+#   source_course_std_002  中国大学MOOC 公开的教育咨询、沟通与学习规划课程要点整理
+#                          https://www.icourse163.org/ （访问日期 2026-11-10）
+#   source_course_jd_001   公开招聘信息中课程顾问/教育咨询师/学习规划师岗位的通用职责
+#                          与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: course_advisor
+job_name: 课程顾问
+
+aliases:
+  - 课程顾问
+  - 教育咨询师
+  - 课程咨询
+  - 学习规划师
+  - 招生顾问
+
+category: education
+domain: teaching
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 课程顾问通过咨询了解学员基础与目标，匹配课程并制定学习规划，完成报名转化，并在报名后持续跟进学习效果与关系维护。
+  core_tasks:
+    - {name: 接待与需求访谈, detail: 了解学员基础、目标、时间与预算，识别真实需求}
+    - {name: 匹配课程并说明, detail: 解释课程目标、内容与适合人群，给出组合建议}
+    - {name: 制定学习规划, detail: 按目标与考试节点排出阶段计划与检查点}
+    - {name: 完成报名转化, detail: 处理价格与效果异议，准确完成报名与信息录入}
+    - {name: 跟进学习进度, detail: 按节点回访，协调教师与家长解决学习问题}
+    - {name: 维护学员关系, detail: 记录沟通与服务情况，推动续费与转介绍}
+  tools: [课程手册, CRM/学员管理系统, Excel, 沟通话术库, 学习计划模板]
+  deliverables: [学员需求记录, 课程匹配与学习规划, 报名与合同资料, 回访记录, 续费与转介绍跟进表]
+  entry_requirements: [教育学/心理学/市场营销等相关专业优先, 沟通表达与倾听能力强, 了解课程体系与升学政策, 有教育行业咨询或销售经验优先, 能承受业绩目标]
+  career_path:
+    - {name: 课程顾问, detail: 能完成咨询接待、课程介绍与报名流程}
+    - {name: 资深课程顾问, detail: 能处理复杂需求与异议，稳定达成转化目标}
+    - {name: 咨询主管, detail: 能带团队、优化话术与咨询流程}
+    - {name: 校区负责人, detail: 能负责校区招生、服务与经营结果}
+
+skills:
+
+  - skill: 课程体系理解
+    importance: 5
+    level: 中级
+    reason: 只有真正理解课程结构与适用人群，才能做出负责任的匹配。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉课程体系、班型与适合人群'}
+      - {source_id: source_course_std_001, requirement_type: required, context: qualification,
+         note: '公开文件整理：了解培训课程设置与学生发展指导的基本要求'}
+
+  - skill: 学员需求分析
+    importance: 5
+    level: 中级
+    reason: 需求判断错误会导致错配、退费与口碑损失。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：通过沟通了解学员基础与目标并推荐合适课程'}
+
+  - skill: 学习规划
+    importance: 4
+    level: 中级
+    reason: 可执行的学习计划是学员留存与效果达成的关键。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：为学员制定阶段学习计划并跟踪执行'}
+      - {source_id: source_course_std_002, requirement_type: required, context: qualification,
+         note: '公开课程整理：掌握学习目标拆解与计划制定的基本方法'}
+
+  - skill: 咨询沟通
+    importance: 5
+    level: 中级
+    reason: 咨询是岗位的主要工作方式，倾听、提问与表达决定信任。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备良好的沟通表达与客户接待能力'}
+      - {source_id: source_course_std_002, requirement_type: required, context: qualification,
+         note: '公开课程整理：掌握倾听、提问、复述与异议处理等沟通方法'}
+
+  - skill: 销售转化
+    importance: 5
+    level: 中级
+    reason: 岗位对报名转化负责，需要在匹配需求的前提下推动成交。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成课程咨询到报名的转化目标'}
+
+  - skill: 学员关系维护
+    importance: 4
+    level: 中级
+    reason: 续费与转介绍来自持续的服务与关系经营。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟进学员学习情况，维护关系并推动续费'}
+
+  - skill: 教育心理学
+    importance: 3
+    level: 初级
+    reason: 理解学习动机、焦虑与家庭因素，咨询建议才更贴近实际。
+    evidence:
+      - {source_id: source_course_std_002, requirement_type: required, context: qualification,
+         note: '公开课程整理：了解学习动机、情绪与个体差异的基本规律'}
+
+  - skill: 学情分析
+    importance: 3
+    level: 初级
+    reason: 通过成绩、作业与课堂表现判断基础，是规划课程的前提。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：能根据学员成绩与反馈判断学习问题者优先'}
+
+  - skill: 学科专业知识
+    importance: 3
+    level: 初级
+    reason: 了解学科内容与考试要求，才能解释课程价值与规划路径。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉所售学科课程与考试政策者优先'}
+
+  - skill: Excel
+    importance: 2
+    level: 初级
+    reason: 学员名单、跟进记录与转化数据需要表格管理。
+    evidence:
+      - {source_id: source_course_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能使用 Excel 管理学员与跟进数据者优先'}

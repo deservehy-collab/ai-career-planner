@@ -1,0 +1,15 @@
+# Project 知识库 —— 软件测试：Web 自动化与质量门禁（高级）
+name: Web 自动化与质量门禁
+domain: software-testing
+difficulty: advanced
+covers_skills: [自动化测试, 接口测试, 缺陷管理, Git]
+prerequisites: [自动化测试, 接口测试]
+tech_stack: [Python, Playwright, pytest, Git, CI]
+stage_hint: 学习路线后期，把自动化测试接进提交与合并流程
+deliverable: 一套 Web 自动化用例与一份质量门禁配置说明
+acceptance_criteria:
+  - 用例选择稳定的定位方式，避免依赖易变样式
+  - 失败用例能截图或留日志，重跑可区分偶发与真实问题
+  - 门禁规则明确哪些失败阻断合并、哪些只告警
+  - 测试代码与业务代码分仓或分目录管理，提交历史清晰
+estimated_weeks: 3

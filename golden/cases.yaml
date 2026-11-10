@@ -1,0 +1,578 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 黄金评测集（人工标注）
+#
+# 用途：改 prompt、换模型、动知识库之后，用同一批输入重跑，比较通过率与
+#       具体用例的通过情况，判断是变好还是变坏（scripts/eval_golden.py）。
+#
+# 说明：
+#   - 每条用例是"一个学生 + 一个目标岗位（可选一段 JD）"。
+#   - note 是人工标注的原因：这条用例专门盯哪一种回归。
+#   - expect 只写**确定能判定**的期望：知识库规范技能、证据门槛、领域隔离、
+#     高优先级缺口覆盖；不写"文风好不好"这类主观项。
+#   - requirement_basis 三档由"有没有粘原文 / 岗位在不在内置目录"决定：
+#     粘了原文 = user_pasted；没粘但岗位认得出来 = knowledge_base（依据是
+#     knowledge/jobs 里人工整理的资料原句，逐条可回查，但不是这家公司的话）；
+#     岗位也认不出来 = model_only。长尾用例专门盯第三档。
+#   - 未知岗位（domain: null）不校验项目领域：项目筛选在认不出岗位时
+#     会退回技能投票，这是已知边界，不作为判定项。
+#   - 用例数量保持在 20~30 条：足够覆盖四类岗位与主要证据路径，
+#     又不至于每跑一次要等太久。
+# ═══════════════════════════════════════════════════════════════════════════
+
+version: 1
+updated_at: 2026-11-03
+
+cases:
+
+  # ── AI 应用开发（6 条）──────────────────────────────────────────────────
+  - id: ai-jd-rag
+    note: >
+      JD 原文路径：只从原话提要求，Python 有项目证据、RAG/Docker 没有。
+      盯"等级不够 ≠ 已满足"和"没粘原文才允许模型补"这两条。
+    profile:
+      major: 计算机科学与技术
+      grade: 大四
+      skills: [Python]
+      projects:
+        - 课程设计：用 Python 完成了一个作业管理系统的后端
+    target_job: AI 应用开发工程师
+    jd_text: |
+      岗位要求：
+      1. 熟练掌握 Python，能独立编写后端接口；
+      2. 了解 RAG 检索增强生成，能搭建检索问答链路；
+      3. 熟悉 Prompt Engineering；
+      4. 熟悉 Docker 部署。
+    expect:
+      domain: ai-application
+      requirement_basis: user_pasted
+      requirements_include: [Python, RAG, Prompt Engineering, Docker]
+      requirements_exclude: [会计准则, 纳税申报, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [RAG, Docker]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 0
+
+  - id: ai-no-jd-accounting-profile
+    note: >
+      跨专业：会计背景的学生转 AI。岗位领域必须按目标岗位定，
+      不能因为学生会 Excel/会计准则就把 AI 岗位的要求换成会计技能。
+    profile:
+      major: 会计学
+      grade: 大三
+      skills: [Excel, 会计准则]
+      projects:
+        - 班级活动经费核算：用 Excel 做过收支明细与汇总
+    target_job: AI 应用开发工程师
+    expect:
+      domain: ai-application
+      requirement_basis: knowledge_base
+      requirements_exclude: [会计准则, 财务报表分析, 纳税申报, 成本核算, 教学设计]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 1
+
+  - id: ai-jd-junior-no-project
+    note: >
+      零项目文科转行：四项 JD 要求都没有可验证经历。
+      四项都必须判为未满足，不能因为"学生说想学"就标已满足。
+    profile:
+      major: 英语
+      grade: 大三
+      skills: [Excel]
+      projects: []
+    target_job: AI 应用开发工程师
+    jd_text: |
+      岗位要求：会用 Python 写后端接口；了解数据结构与算法；熟悉 Git；
+      能在 Linux 上部署服务。
+    expect:
+      domain: ai-application
+      requirement_basis: user_pasted
+      requirements_include: [Python, 数据结构与算法, Git, Linux]
+      requirements_exclude: [会计准则, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [Python, 数据结构与算法, Git, Linux]
+      learning:
+        forbid_keywords: [零基础, 从零开始]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 0
+
+  - id: ai-jd-advanced-no-basics
+    note: >
+      已有 Python/RAG 项目的进阶学生：学习路线不应再排 Python 基础语法。
+      Docker 只有"了解"且没有经历，必须判未满足。
+    profile:
+      major: 计算机科学与技术
+      grade: 研一
+      skills: [Python, RAG]
+      projects:
+        - 独立完成一个 RAG 知识库问答系统，用 Python 实现检索与生成
+    target_job: AI 应用开发工程师
+    jd_text: |
+      岗位要求：精通 Python；熟悉 RAG；了解 Docker。
+    expect:
+      domain: ai-application
+      requirement_basis: user_pasted
+      requirements_include: [Python, RAG, Docker]
+      requirements_exclude: [会计准则, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [Docker]
+      learning:
+        forbid_keywords: [Python 基础语法, Python 入门, 从零开始学 Python]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 0
+
+  - id: ai-no-jd-core-profile
+    note: >
+      无 JD 的常规 AI 画像：岗位要求走知识库，项目推荐不得跨到会计/教学。
+      用于观察模型在"没有任何原文"时会不会自己编出跨领域要求。
+    profile:
+      major: 软件工程
+      grade: 大四
+      skills: [Python, RAG, Agent]
+      projects:
+        - 用 LangGraph 做过一个多工具调用的 Agent 课程项目
+    target_job: AI 应用开发工程师
+    expect:
+      domain: ai-application
+      requirement_basis: knowledge_base
+      requirements_exclude: [会计准则, 纳税申报, 教学设计, 内容策划]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 1
+
+  - id: ai-jd-sparse-embedding
+    note: >
+      一份只写了两项要求的短 JD：允许少于 3 条，不能为凑数编能力。
+      "向量检索"必须归一到 Embedding，再判定学生没有这项证据。
+    profile:
+      major: 数学与应用数学
+      grade: 大三
+      skills: [Python]
+      projects: []
+    target_job: AI 应用开发工程师
+    jd_text: |
+      任职要求：熟悉 Embedding 与向量检索；能写 Python。
+    expect:
+      domain: ai-application
+      requirement_basis: user_pasted
+      requirements_include: [Embedding, Python]
+      requirements_exclude: [会计准则, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [Embedding]
+      projects:
+        allowed_domains: [ai-application]
+        min_from_kb: 0
+
+  # ── 会计（5 条）─────────────────────────────────────────────────────────
+  - id: acct-fresh-graduate
+    note: >
+      会计应届生：课程实训只能证明做过账务处理，不能顺带证明纳税申报、
+      财务软件和成本核算。三项都必须未满足，学习路线要覆盖纳税申报。
+    profile:
+      major: 会计学
+      grade: 大四
+      skills: [会计准则, Excel]
+      projects:
+        - 课程实训：完成一套小企业月度账务处理与报表编制
+    target_job: 会计
+    expect:
+      domain: accounting
+      requirement_basis: knowledge_base
+      requirements_include: [会计准则, 财务报表分析, 纳税申报, 财务软件, 成本核算]
+      requirements_exclude: [Python, RAG, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [纳税申报, 财务软件, 成本核算]
+      learning:
+        cover: [纳税申报]
+      projects:
+        allowed_domains: [accounting]
+        min_from_kb: 1
+
+  - id: acct-self-report-only
+    note: >
+      只有自述、没有项目：Excel 和财务软件即使等级够，也只能是未验证，
+      不能画成已满足。这是证据门槛最核心的一条。
+    profile:
+      major: 会计学
+      grade: 大三
+      skills: [Excel, 财务软件]
+      projects: []
+    target_job: 会计助理
+    expect:
+      domain: accounting
+      requirement_basis: knowledge_base
+      requirements_include: [Excel, 财务软件, 会计准则]
+      requirements_exclude: [Python, RAG, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [Excel, 财务软件, 会计准则]
+      projects:
+        allowed_domains: [accounting]
+        min_from_kb: 1
+
+  - id: acct-cost-project
+    note: >
+      成本核算有真实实习产出，但纳税申报与财务软件没有。
+      项目可以继续训练已会技能，但不能把"没做过的税"算成缺口已补。
+    profile:
+      major: 会计学
+      grade: 大四
+      skills: [成本核算]
+      projects:
+        - 生产实习：参与车间成本归集，编制过成本报表
+    target_job: 成本会计
+    expect:
+      domain: accounting
+      requirement_basis: knowledge_base
+      requirements_include: [成本核算, 预算管理, 财务报表分析]
+      requirements_exclude: [Python, RAG, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [纳税申报, 财务软件]
+      learning:
+        cover: [纳税申报]
+      projects:
+        allowed_domains: [accounting]
+        min_from_kb: 1
+
+  - id: acct-jd-tax
+    note: >
+      税务会计 JD：金蝶要归一到财务软件，自述 Excel 不能算已满足。
+      检查 JD 原话路径下技能归一是否仍然生效。
+    profile:
+      major: 会计学
+      grade: 大四
+      skills: [Excel]
+      projects: []
+    target_job: 税务会计
+    jd_text: |
+      岗位职责：负责增值税与企业所得税的纳税申报；熟练使用金蝶财务软件；
+      熟练使用 Excel 处理数据；了解企业会计准则。
+    expect:
+      domain: accounting
+      requirement_basis: user_pasted
+      requirements_include: [Excel, 财务软件, 会计准则]
+      requirements_exclude: [Python, RAG, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [Excel, 财务软件, 会计准则]
+      projects:
+        allowed_domains: [accounting]
+        min_from_kb: 0
+
+  - id: acct-cross-skills
+    note: >
+      计算机背景转会计：Python/RAG 不能出现在会计岗位要求里，
+      也不能因为学生"会技术"就跳过去教会计准则。
+    profile:
+      major: 计算机科学与技术
+      grade: 大二
+      skills: [Python, RAG]
+      projects: []
+    target_job: 会计
+    expect:
+      domain: accounting
+      requirement_basis: knowledge_base
+      requirements_include: [会计准则, 纳税申报]
+      requirements_exclude: [Python, RAG, 教学设计, 内容策划]
+      assessment:
+        not_satisfied: [会计准则, 纳税申报]
+      learning:
+        cover: [会计准则]
+      projects:
+        allowed_domains: [accounting]
+        min_from_kb: 1
+
+  # ── 新媒体运营（4 条）──────────────────────────────────────────────────
+  - id: ops-self-report
+    note: >
+      运营岗自述型画像：文案/内容策划只有自述，不能算已满足；
+      运营数据分析等没提过的能力必须是明显缺口。
+    profile:
+      major: 市场营销
+      grade: 大三
+      skills: [文案写作, 内容策划]
+      projects: []
+    target_job: 新媒体运营
+    expect:
+      domain: operations
+      requirement_basis: knowledge_base
+      requirements_include: [内容策划, 文案写作, 运营数据分析]
+      requirements_exclude: [Python, 会计准则, 教学设计]
+      assessment:
+        not_satisfied: [内容策划, 文案写作]
+      projects:
+        allowed_domains: [operations]
+        min_from_kb: 1
+
+  - id: ops-video-project
+    note: >
+      短视频有真实作品，但内容策划和运营数据分析没有证据；
+      项目推荐必须留在运营领域，不能因为会剪视频就给 AI 项目。
+    profile:
+      major: 数字媒体艺术
+      grade: 大三
+      skills: [短视频剪辑, 图片设计]
+      projects:
+        - 运营校园抖音号：剪辑 12 条短视频并制作封面图
+    target_job: 新媒体运营
+    expect:
+      domain: operations
+      requirement_basis: knowledge_base
+      requirements_include: [短视频剪辑, 内容策划, 运营数据分析]
+      requirements_exclude: [Python, 会计准则, 教学设计]
+      assessment:
+        not_satisfied: [内容策划, 运营数据分析, 用户增长]
+      learning:
+        cover: [内容策划]
+      projects:
+        allowed_domains: [operations]
+        min_from_kb: 1
+
+  - id: ops-jd-live
+    note: >
+      运营 JD 原话路径：内容策划、文案、剪辑、数据分析都要落到规范技能；
+      只有公众号经历的学生不能算会看后台数据。
+    profile:
+      major: 汉语言文学
+      grade: 大四
+      skills: [文案写作]
+      projects:
+        - 运营个人公众号：持续写了 30 篇推文
+    target_job: 新媒体运营
+    jd_text: |
+      岗位职责：负责小红书账号的内容策划与文案写作；会用剪映完成短视频剪辑；
+      能看懂后台数据并做运营数据分析。
+    expect:
+      domain: operations
+      requirement_basis: user_pasted
+      requirements_include: [内容策划, 文案写作, 短视频剪辑, 运营数据分析]
+      requirements_exclude: [Python, 会计准则, 教学设计]
+      assessment:
+        not_satisfied: [运营数据分析, 短视频剪辑]
+      projects:
+        allowed_domains: [operations]
+        min_from_kb: 0
+
+  - id: ops-cross-major
+    note: >
+      计算机背景转运营：Python/SQL 是学生技能，不是运营岗位要求；
+      岗位要求仍以运营知识库为准。
+    profile:
+      major: 计算机科学与技术
+      grade: 大二
+      skills: [Python, SQL]
+      projects:
+        - 数据分析课程项目：用 Python 做过一份销售数据清洗
+    target_job: 新媒体运营
+    expect:
+      domain: operations
+      requirement_basis: knowledge_base
+      requirements_include: [内容策划, 文案写作]
+      requirements_exclude: [Python, SQL, 会计准则, 教学设计]
+      assessment:
+        not_satisfied: [内容策划, 文案写作]
+      learning:
+        cover: [内容策划]
+      projects:
+        allowed_domains: [operations]
+        min_from_kb: 1
+
+  # ── 中学教师（5 条）────────────────────────────────────────────────────
+  - id: teach-cross-evidence-trap
+    note: >
+      关键防误判：教育心理学有项目证据，不等于会做教学设计/命题/学情分析。
+      跨技能只能算疑似具备，四项都必须未满足，且学习路线要补教学设计。
+    profile:
+      major: 教育学
+      grade: 大三
+      skills: [教育心理学]
+      projects:
+        - 支教：用教育心理学原理设计并组织了一节主题班会
+    target_job: 中学教师
+    expect:
+      domain: teaching
+      requirement_basis: knowledge_base
+      requirements_include: [教育心理学, 教学设计, 学情分析]
+      requirements_exclude: [Python, 会计准则, 内容策划]
+      assessment:
+        not_satisfied: [教学设计, 命题与作业设计, 学情分析, 课堂管理]
+      learning:
+        cover: [教学设计]
+      projects:
+        allowed_domains: [teaching]
+        min_from_kb: 1
+
+  - id: teach-no-projects
+    note: >
+      师范生只有自述：学科专业知识和课件制作等级可能够，但没有可验证产出，
+      必须是未验证；教学设计与课堂管理必须是明显缺口。
+    profile:
+      major: 汉语言文学
+      grade: 大四
+      skills: [学科专业知识, 课件制作]
+      projects: []
+    target_job: 中学教师
+    expect:
+      domain: teaching
+      requirement_basis: knowledge_base
+      requirements_include: [学科专业知识, 教学设计, 课堂管理]
+      requirements_exclude: [Python, 会计准则, 内容策划]
+      assessment:
+        not_satisfied: [学科专业知识, 课件制作, 教学设计, 课堂管理]
+      projects:
+        allowed_domains: [teaching]
+        min_from_kb: 1
+
+  - id: teach-real-project
+    note: >
+      真实实习产出（教案）只覆盖教学设计，不应顺带把课堂管理/家校沟通
+      也算已满足；课堂管理必须进学习路线。
+    profile:
+      major: 数学与应用数学
+      grade: 研一
+      skills: [学科专业知识, 教学设计]
+      projects:
+        - 在中学实习：独立设计 10 份数学教案，并录制了讲解视频
+    target_job: 中学教师
+    expect:
+      domain: teaching
+      requirement_basis: knowledge_base
+      requirements_include: [教学设计, 课堂管理, 学情分析]
+      requirements_exclude: [Python, 会计准则, 内容策划]
+      assessment:
+        not_satisfied: [课堂管理, 家校沟通, 命题与作业设计]
+      learning:
+        cover: [课堂管理]
+      projects:
+        allowed_domains: [teaching]
+        min_from_kb: 1
+
+  - id: teach-policy
+    note: >
+      师德学习笔记只能证明政策学习，不能证明课堂管理与学情分析；
+      非技术岗的项目与学习内容不得出现编程技术。
+    profile:
+      major: 小学教育
+      grade: 大三
+      skills: [教育政策与师德规范]
+      projects:
+        - 完成师德师风专题学习并写了 3 篇反思笔记
+    target_job: 中学教师
+    expect:
+      domain: teaching
+      requirement_basis: knowledge_base
+      requirements_include: [教育政策与师德规范, 课堂管理, 学情分析]
+      requirements_exclude: [Python, RAG, 会计准则, 内容策划]
+      assessment:
+        not_satisfied: [课堂管理, 学情分析, 教学设计]
+      learning:
+        cover: [教学设计]
+        forbid_keywords: [Python, Docker, 代码仓库]
+      projects:
+        allowed_domains: [teaching]
+        min_from_kb: 1
+
+  - id: teach-jd-competition
+    note: >
+      教师 JD 原话路径：家教经历不能直接证明课堂管理/学情分析/命题能力，
+      三项都必须未满足；JD 没提的技能不能因为知识库里有就加进来。
+    profile:
+      major: 英语
+      grade: 大四
+      skills: [学科专业知识]
+      projects:
+        - 家教两年，辅导过 5 名初中生的英语
+    target_job: 中学教师
+    jd_text: |
+      岗位要求：能独立完成单元教学设计；有课堂管理经验；
+      会做学情分析；能设计分层作业与命题。
+    expect:
+      domain: teaching
+      requirement_basis: user_pasted
+      requirements_include: [教学设计, 课堂管理, 学情分析, 命题与作业设计]
+      requirements_exclude: [Python, 会计准则, 内容策划]
+      assessment:
+        not_satisfied: [课堂管理, 学情分析, 命题与作业设计]
+      projects:
+        allowed_domains: [teaching]
+        min_from_kb: 0
+
+  # ── 长尾未知岗位（3 条）─────────────────────────────────────────────────
+  # 知识库没有这些岗位：允许模型按常识给要求，但必须如实标成 model_only，
+  # 不得伪造"人工岗位画像"，也不得把其他领域的规范技能塞进来充数。
+  - id: longtail-pet-groomer
+    note: >
+      宠物美容不在知识库：应走纯模型路径（profile_origin=unavailable），
+      不能套用会计/教师/运营的规范技能。
+    profile:
+      major: 畜牧兽医
+      grade: 大三
+      skills: [宠物美容, 犬只行为观察]
+      projects:
+        - 宠物店实习 8 周：独立完成犬只洗护与基础修剪
+    target_job: 宠物美容师
+    expect:
+      domain: null
+      requirement_basis: model_only
+      requirements_exclude: [会计准则, 纳税申报, Python, 教学设计, 内容策划]
+      projects:
+        allowed_domains: []
+        min_from_kb: 0
+
+  - id: longtail-sommelier
+    note: >
+      品酒师不在知识库：同样必须如实走模型路径；酒庄实习经历不能让它
+      误用 AI 或会计知识库。
+    profile:
+      major: 葡萄与葡萄酒工程
+      grade: 大四
+      skills: [葡萄酒品鉴, 酒单设计]
+      projects:
+        - 酒庄实习：参与 30 款酒的盲品记录
+    target_job: 品酒师
+    expect:
+      domain: null
+      requirement_basis: model_only
+      requirements_exclude: [会计准则, 纳税申报, Python, 教学设计, 内容策划]
+      projects:
+        allowed_domains: []
+
+  - id: longtail-law
+    note: >
+      法律不在知识库：合同审查实习只能作为自述/项目输入，
+      岗位要求应如实标为模型推断，不得借用其他领域技能表。
+    profile:
+      major: 法学
+      grade: 大四
+      skills: [合同法, 法律检索]
+      projects:
+        - 律所实习：整理过 20 份合同审查意见
+    target_job: 律师
+    expect:
+      domain: null
+      requirement_basis: model_only
+      requirements_exclude: [会计准则, 纳税申报, Python, 教学设计, 内容策划]
+      projects:
+        allowed_domains: []
+        min_from_kb: 0
+
+  # ── 未知岗位防误配（1 条）──────────────────────────────────────────────
+  - id: unknown-ai-product-manager
+    note: >
+      "AI 产品经理"不是"AI 应用开发工程师"：岗位解析不得靠包含关系硬认，
+      否则会把开发岗的技能与项目套给产品岗。必须保持未知岗位。
+    profile:
+      major: 信息管理与信息系统
+      grade: 大三
+      skills: [Python, RAG]
+      projects:
+        - 做过 RAG 问答系统的需求调研与竞品分析
+    target_job: AI 产品经理
+    expect:
+      domain: null
+      requirement_basis: model_only
+      requirements_exclude: [会计准则, 纳税申报, 教学设计, 内容策划]
+      projects:
+        allowed_domains: []
+        min_from_kb: 0

@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：增值税与企业所得税申报模拟（中级项目）
+name: 增值税与企业所得税申报模拟
+domain: accounting
+difficulty: intermediate
+covers_skills: [纳税申报, 会计准则, Excel]
+prerequisites: [会计准则, Excel]
+tech_stack: [电子税务局模拟系统, Excel, 增值税申报表]
+stage_hint: 学完基础账务之后，用一个完整纳税期练习从账到申报的转换
+deliverable: 一套申报资料：销项与进项台账、增值税申报表、企业所得税预缴表及计算说明
+acceptance_criteria:
+  - 能根据业务与发票数据归集销项、进项，税额计算正确
+  - 能填写主要申报表，表内与表间勾稽关系正确
+  - 能说明税会差异及调整过程，不把会计利润直接当应纳税所得额
+  - 申报资料附计算底稿，关键数字可追溯
+estimated_weeks: 3

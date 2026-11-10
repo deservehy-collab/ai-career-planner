@@ -3,12 +3,14 @@ import { computed, ref, watch } from 'vue'
 
 import { useProfileStore } from '../stores/profile'
 import { ALL_MAJORS, GRADE_OPTIONS, MAJOR_GROUPS } from '../utils/enums'
-import { formatDateTime } from '../utils/format'
 import { formatList, parseList } from '../utils/storage'
 
 /**
  * 画像表单：直接编辑 profile store；store 内部已把改动写进 localStorage，
  * 所以这里不需要额外的"保存"按钮 —— 刷新页面内容还在。
+ *
+ * 「清空自述画像」承担的是**防串味**职责：换求职方向时点一下，专业/年级/技能/
+ * 项目/目标岗位连同粘贴的招聘要求原文一起归零。分析产出的能力表**不在**此列。
  *
  * 专业 / 年级用下拉：常用值点选即可；专业不在名单里时切「其他（手动输入）」
  * 自由填写 —— 下拉只是输入辅助，不是白名单，任何专业都要能填。
@@ -59,9 +61,6 @@ watch(
   { deep: true },
 )
 
-const skillCount = computed(() => profile.skills.length)
-const projectCount = computed(() => profile.projects.length)
-
 function onSkillsInput(event) {
   skillsText.value = event.target.value
   profile.skills = parseList(event.target.value)
@@ -73,7 +72,14 @@ function onProjectsInput(event) {
 }
 
 function handleClear() {
-  if (!window.confirm('清空自述画像？已分析得到的能力表不会被删除。')) return
+  if (
+    !window.confirm(
+      '清空画像、目标岗位与粘贴的招聘要求？\n\n' +
+        '换求职方向时点这里，上一次填的专业和技能不会偷偷带进下一次分析。\n' +
+        '已经分析得到的能力表**不会**被删除。',
+    )
+  )
+    return
   profile.clearProfile()
   skillsText.value = ''
   projectsText.value = ''
@@ -84,20 +90,16 @@ function handleClear() {
   <section class="panel-block">
     <div class="panel-head">
       <h2>我的画像</h2>
-      <span class="panel-src">localStorage · career-agent:profile</span>
     </div>
 
     <div v-if="profile.storageFailed" class="notice notice-warn">
-      浏览器本地存储不可用（可能是隐私模式或空间已满），画像这次没能保存，刷新后会丢失。
+      这台设备暂时存不下内容（可能是隐私模式或空间已满），画像这次没能保存，刷新后会丢失。
     </div>
 
     <div class="grid grid-2">
       <div>
         <div class="field">
-          <label for="pf-major">
-            专业
-            <span class="hint">常见专业直接选，没有就选「其他」手动输入</span>
-          </label>
+          <label for="pf-major">专业</label>
           <select id="pf-major" v-model="majorSelection">
             <option value="">未填写</option>
             <optgroup v-for="group in MAJOR_GROUPS" :key="group.label" :label="group.label">
@@ -123,44 +125,35 @@ function handleClear() {
         </div>
 
         <div class="field">
-          <label for="pf-job">
-            目标岗位
-            <span class="hint">必填，任何行业的岗位都可以</span>
-          </label>
+          <label for="pf-job">目标岗位</label>
           <input
             id="pf-job"
             v-model="profile.targetJob"
             type="text"
-            placeholder="如：AI 应用开发工程师 / 注册会计师 / 临床护士"
+            placeholder="必填，如：AI 应用开发工程师 / 注册会计师 / 临床护士"
           />
         </div>
       </div>
 
       <div>
         <div class="field">
-          <label for="pf-skills">
-            自述技能
-            <span class="hint">每行一项，或用顿号/逗号分隔 · 已填 {{ skillCount }} 项</span>
-          </label>
+          <label for="pf-skills">自述技能</label>
           <textarea
             id="pf-skills"
             :value="skillsText"
             rows="5"
-            placeholder="Python&#10;Java&#10;财务报表分析&#10;静脉输液操作"
+            placeholder="每行一项或用逗号分隔，如：Python、财务报表分析"
             @input="onSkillsInput"
           />
         </div>
 
         <div class="field">
-          <label for="pf-projects">
-            项目经历
-            <span class="hint">每行一项 · 已填 {{ projectCount }} 项</span>
-          </label>
+          <label for="pf-projects">项目经历</label>
           <textarea
             id="pf-projects"
             :value="projectsText"
             rows="3"
-            placeholder="RAG 知识库问答系统&#10;社区医院实习"
+            placeholder="每行一项，如：校园二手交易平台、社区医院实习"
             @input="onProjectsInput"
           />
         </div>
@@ -173,10 +166,7 @@ function handleClear() {
     </div>
 
     <div class="btn-row form-actions">
-      <button class="btn" @click="handleClear">清空自述画像</button>
-      <span v-if="profile.hasLastSkills" class="faint">
-        已有 {{ profile.lastSkills.length }} 项分析能力{{ profile.lastSkillsAt ? ` · 更新于 ${formatDateTime(profile.lastSkillsAt)}` : '' }}
-      </span>
+      <button class="btn" @click="handleClear">清空画像与求职目标</button>
     </div>
   </section>
 </template>

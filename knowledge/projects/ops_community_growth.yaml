@@ -1,0 +1,15 @@
+# Project 知识库 —— 新媒体运营：社群拉新与活动复盘（中级项目）
+name: 社群拉新与活动复盘
+domain: operations
+difficulty: intermediate
+covers_skills: [社群运营, 用户增长, 运营数据分析]
+prerequisites: [文案写作, 运营数据分析, Excel]
+tech_stack: [微信群/企业微信, Excel, 活动海报, 社群 SOP 模板]
+stage_hint: 学完内容基础之后，练习从拉新到留存再到转化的完整活动
+deliverable: 一份活动方案 + 社群 SOP + 拉新与留存数据表 + 复盘报告
+acceptance_criteria:
+  - 活动目标可量化，明确目标人群、渠道与奖励规则
+  - 社群有入群欢迎、日常内容、活动节奏与退群干预规则
+  - 能统计新增、留存、活跃与转化，数据口径前后一致
+  - 复盘写清有效动作、无效动作与下一轮调整，不只看新增人数
+estimated_weeks: 3

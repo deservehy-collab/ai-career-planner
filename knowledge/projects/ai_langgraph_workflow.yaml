@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：LangGraph 多节点工作流编排（进阶）
+name: LangGraph 多节点工作流编排
+domain: ai-application
+difficulty: intermediate
+covers_skills: [LangChain / LangGraph, Agent]
+prerequisites: [Python, Agent]
+tech_stack: [Python, LangGraph, LLM API]
+stage_hint: 学习路线中后期，把单次问答升级为可分支、可回退的流程
+deliverable: 一条包含多个节点与条件分支的工作流，附节点图与一次完整运行记录
+acceptance_criteria:
+  - 节点职责单一，输入输出字段写明，能被单独测试
+  - 条件分支有明确触发条件，不依赖模型自由发挥
+  - 单个节点失败时流程能降级或停止，并留下可读原因
+  - 能画出节点图并解释每一步为什么需要它
+estimated_weeks: 2

@@ -34,7 +34,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <AuthShell title="创建账号" subtitle="注册成功后自动登录，马上就能开始规划。">
+  <AuthShell title="创建账号">
     <form @submit.prevent="onSubmit">
       <AuthField
         id="reg-username"
@@ -42,8 +42,7 @@ async function onSubmit() {
         label="用户名"
         type="text"
         autocomplete="username"
-        placeholder="2~32 个字符"
-        hint="可用中英文、数字与下划线"
+        placeholder="2~32 个字符，可用中英文、数字与下划线"
       />
       <AuthField
         id="reg-password"

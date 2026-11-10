@@ -1,0 +1,15 @@
+# Project 知识库 —— 生化检验：细胞培养与无菌操作（进阶）
+name: 细胞培养与无菌操作
+domain: bio-chemical
+difficulty: intermediate
+covers_skills: [细胞培养, 无菌操作技术, 试剂配制与标定, 实验记录与数据管理, 实验室安全与生物安全]
+prerequisites: [无菌操作技术]
+tech_stack: [超净工作台, CO2 培养箱, 倒置显微镜, 细胞计数板, 培养基与血清]
+stage_hint: 从复苏一株细胞开始，把培养与记录做稳
+deliverable: 一份细胞培养记录、污染排查记录与实验小结
+acceptance_criteria:
+  - 复苏、传代与冻存流程符合 SOP，参数记录完整
+  - 每次操作前后有环境与器具消毒记录
+  - 能识别细胞状态异常并说明判断依据
+  - 出现污染时有排查过程与改进措施，而非直接丢弃
+estimated_weeks: 4

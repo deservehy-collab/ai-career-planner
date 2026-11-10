@@ -1,0 +1,15 @@
+# Project 知识库 —— 中学教师：微课与课堂活动设计（中级项目）
+name: 微课与课堂活动设计
+domain: teaching
+difficulty: intermediate
+covers_skills: [课件制作, 教学设计, 课堂管理]
+prerequisites: [教学设计, 教育心理学]
+tech_stack: [PPT, 录屏工具, 课堂活动卡, 计时器]
+stage_hint: 学完基础教案之后，练习把一个难点讲清并组织学生参与
+deliverable: 一节 8 分钟微课 + 一份课堂活动方案 + 试讲反馈记录
+acceptance_criteria:
+  - 微课只解决一个明确难点，画面与讲解节奏匹配
+  - 课堂活动有清晰指令、分组方式与时间控制
+  - 能预设学生可能出现的错误并准备应对
+  - 试讲后记录至少 2 条具体改进并落到下一版设计
+estimated_weeks: 2

@@ -4,22 +4,24 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import AppBadge from './AppBadge.vue'
 import { formatDuration } from '../utils/format'
 import { runStatusText, runStatusTone } from '../utils/enums'
+import { runningAgents, WORKFLOW_ORDER } from '../utils/agents'
 
 /**
  * 后台运行进度卡。
  *
- * ⚠️ 后端只提供四态（queued / running / succeeded / failed），**没有进度百分比**。
- * 因此这里只用「已耗时计时 + 不确定进度条」表达"正在跑"，
- * 绝不显示任何伪造的百分比数字。
+ * run 记录只有四态（queued / running / succeeded / failed），**没有百分比**；
+ * 节点级信息来自后端回报的 `progress` / `current_node`，所以这里可以点名
+ * "正在跑哪一步、已经完成几步"，但依然不画百分比、不按时间估算剩余。
  */
 const props = defineProps({
   status: { type: String, default: 'idle' },
-  runId: { type: String, default: null },
   startedAt: { type: String, default: null },
   finishedAt: { type: String, default: null },
   errorMessage: { type: String, default: '' },
   errorKind: { type: String, default: null },
   title: { type: String, default: '分析进度' },
+  progress: { type: Array, default: () => [] },
+  currentNode: { type: String, default: null },
 })
 
 const now = ref(Date.now())
@@ -67,14 +69,28 @@ const statusText = computed(() => {
 })
 
 const tone = computed(() => runStatusTone(props.status))
-</script>
+
+const currentAgents = computed(() => runningAgents(props.progress, props.currentNode))
+const runningNames = computed(() =>
+  currentAgents.value.map((agent) => `「${agent.displayName}」`).join(''),
+)
+const totalSteps = WORKFLOW_ORDER.length
+// 按节点去重：同一步被重复回报（旧记录/重跑）时，不能把"已完成"算到 8/7。
+const doneCount = computed(
+  () =>
+    Math.min(
+      new Set(props.progress.filter((item) => item.status === 'done' && item.node).map((item) => item.node))
+        .size,
+      totalSteps,
+    ),
+)</script>
 
 <template>
   <section v-if="status !== 'idle'" class="card">
     <div class="card-head">
       <h2>
         {{ title }}
-        <span class="sub">本地模型推理，通常需要数十秒到数分钟</span>
+        <span class="sub">在本机 AI 上分析，通常需要几十秒到几分钟</span>
       </h2>
       <AppBadge :text="statusText" :tone="tone" />
     </div>
@@ -83,15 +99,22 @@ const tone = computed(() => runStatusTone(props.status))
       <div v-if="isRunning">
         <div class="progress-indeterminate" />
         <p class="muted run-line">
-          {{
-            status === 'queued'
-              ? '任务已排队。后台按单线程串行执行，请稍候…'
-              : '模型正在分析岗位、能力与学习路线…'
-          }}
+          <template v-if="status === 'queued'">
+            任务已排队，前面跑完就轮到你，请稍候…
+          </template>
+          <template v-else-if="currentAgents.length === 1">
+            正在执行「{{ currentAgents[0].displayName }}」 · 第 {{ currentAgents[0].order }}/{{ totalSteps }} 步…
+          </template>
+          <template v-else-if="currentAgents.length > 1">
+            正在并行执行{{ runningNames }}…
+          </template>
+          <template v-else>
+            正在分析岗位、能力和学习路线…
+          </template>
         </p>
         <p class="faint run-line run-line--tight">
           已等待 <strong>{{ formatDuration(elapsedSeconds) }}</strong>
-          <span v-if="runId"> · run_id <code class="mono">{{ runId }}</code></span>
+          <template v-if="doneCount"> · 已完成 {{ doneCount }}/{{ totalSteps }} 步</template>
         </p>
       </div>
 
@@ -104,9 +127,9 @@ const tone = computed(() => runStatusTone(props.status))
           <strong>
             {{
               errorKind === 'network'
-                ? '无法连接后端'
+                ? '连不上服务'
                 : errorKind === 'notfound'
-                  ? '运行记录已失效'
+                  ? '这次记录已失效'
                   : errorKind === 'timeout'
                     ? '等待超时'
                     : '分析失败'

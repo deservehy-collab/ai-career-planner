@@ -1,0 +1,135 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 视觉设计师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_design_std_001    Adobe 官方设计工具文档与公开设计基础规范要点
+#                            https://helpx.adobe.com/ （访问日期 2026-11-10）
+#   source_design_guide_001  公开品牌视觉规范与印刷输出要求的通用整理
+#                            https://helpx.adobe.com/photoshop/using/printing.html
+#                            （访问日期 2026-11-10）
+#   source_design_jd_001     公开招聘信息中视觉设计/平面设计岗位的通用职责与要求
+#                            汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: visual_designer
+job_name: 视觉设计师
+
+aliases:
+  - 视觉设计师
+  - 平面设计师
+  - 品牌设计师
+  - 视觉设计
+  - 美工
+
+category: design
+domain: design
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 视觉设计师负责品牌与营销物料的视觉产出，从版式、配色到图片与图形制作，按需求交付可印刷或可发布的成品，并维护品牌视觉一致性。
+  core_tasks:
+    - {name: 理解设计需求, detail: 确认用途、受众、尺寸与交付时间，列出待确认问题}
+    - {name: 完成版面设计, detail: 按网格排出主次清晰的海报、长图或宣传页}
+    - {name: 制作视觉元素, detail: 修图、绘制图形与标志应用，保证清晰度与可用性}
+    - {name: 应用品牌规范, detail: 按标志、色彩与字体规则制作，避免随意变形改色}
+    - {name: 输出印刷或发布文件, detail: 检查出血、分辨率与色彩模式，按渠道导出}
+    - {name: 整理源文件与素材, detail: 按项目归档分层源文件，便于后续改版}
+  tools: [Photoshop, Illustrator, Figma, 品牌规范手册, 印刷打样]
+  deliverables: [海报与宣传物料, 图片精修稿, 标志与图形源文件, 印刷输出文件, 设计说明]
+  entry_requirements: [视觉传达/数字媒体/美术等相关专业或作品集, 熟练使用 Photoshop 与 Illustrator, 具备版式与配色基础, 能按反馈快速修改, 有完整作品集优先]
+  career_path:
+    - {name: 视觉设计师, detail: 能独立完成常规物料设计并按时交付}
+    - {name: 资深视觉设计师, detail: 能负责品牌项目并输出规范}
+    - {name: 设计主管, detail: 能管理项目排期与质量，指导初级设计师}
+    - {name: 设计总监, detail: 能定义品牌视觉方向与团队标准}
+
+skills:
+
+  - skill: 版式与构图
+    importance: 5
+    level: 中级
+    reason: 版面决定信息能否被一眼读懂，是视觉设计最核心的基本功。
+    evidence:
+      - {source_id: source_design_std_001, requirement_type: required, context: qualification,
+         note: '公开设计规范整理：对齐、留白、层级与网格的版面组织原则'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：具备良好的版式与视觉表现能力'}
+
+  - skill: 色彩与视觉风格
+    importance: 5
+    level: 中级
+    reason: 配色决定第一印象，也直接影响文字与背景的可读性。
+    evidence:
+      - {source_id: source_design_std_001, requirement_type: required, context: qualification,
+         note: '公开设计规范整理：主辅色搭配、对比度与可读性要求'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：对色彩与视觉风格有判断力'}
+
+  - skill: 品牌视觉规范
+    importance: 5
+    level: 中级
+    reason: 不同物料出自不同人之手，规范是保持品牌一致的唯一手段。
+    evidence:
+      - {source_id: source_design_guide_001, requirement_type: required, context: responsibility,
+         note: '公开规范整理：标志用法、色彩与字体的统一应用规则'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：按品牌规范完成视觉物料并维护一致性'}
+
+  - skill: Photoshop
+    importance: 5
+    level: 中级
+    reason: 图片精修与合成是日常交付的主要工作量。
+    evidence:
+      - {source_id: source_design_std_001, requirement_type: required, context: qualification,
+         note: '工具文档整理：图层、蒙版与调色的标准工作流'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Photoshop'}
+
+  - skill: Illustrator
+    importance: 4
+    level: 中级
+    reason: 标志、图标与印刷图形需要矢量文件才能无损缩放。
+    evidence:
+      - {source_id: source_design_std_001, requirement_type: required, context: qualification,
+         note: '工具文档整理：钢笔路径、符号与矢量输出的基本要求'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Illustrator'}
+
+  - skill: 印刷与物料落地
+    importance: 3
+    level: 初级
+    reason: 参数错误的文件交到印厂会整批报废，必须能自己检查。
+    evidence:
+      - {source_id: source_design_guide_001, requirement_type: required, context: qualification,
+         note: '公开规范整理：出血、分辨率、CMYK 与打样要求'}
+
+  - skill: 设计需求沟通
+    importance: 4
+    level: 中级
+    reason: 需求理解偏差是返工的主要来源，先确认再动手能省大量时间。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：与业务方沟通需求并按时交付设计'}
+
+  - skill: 设计文件管理
+    importance: 3
+    level: 初级
+    reason: 后续改版与多人协作都依赖源文件能被找到、看懂。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：整理并维护设计源文件与素材库'}
+
+  - skill: 图片设计
+    importance: 4
+    level: 中级
+    reason: 营销物料大量使用图片组合与画面处理，需要独立完成。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：独立完成海报、banner 与宣传图设计'}

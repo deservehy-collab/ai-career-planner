@@ -42,7 +42,7 @@ from agents.growth_store import (
     GrowthStore,
     load_skill_base,
 )
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
 from agents.utils import log
 from graph.state import CareerState, check_update
 
@@ -82,7 +82,7 @@ def _load_vocabulary() -> SkillVocabulary | None:
 
 
 # 可替换的成长记录存储：默认指向项目下的 runs/。
-# 与 retrieval_agent.set_retriever() 同款注入方式 —— 测试必须能把目录换成临时目录，
+# 和下面 _vocabulary() 的注入方式同款 —— 测试必须能把目录换成临时目录，
 # 否则跑一次用例就会在项目里写出 runs/growth.json。
 _store: GrowthStore | None = None
 
@@ -297,7 +297,6 @@ def growth_node(state: CareerState) -> dict:
                 "invalid_events": plan["invalid"],
                 "knowledge_base_status": kb.status,
                 "target_job": state.get("target_job"),
-                "jd_source_id": state.get("jd_source_id"),
             },
             baseline_skills=merge.user_skills,
         )

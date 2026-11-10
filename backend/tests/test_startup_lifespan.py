@@ -65,9 +65,12 @@ class LifespanTest(unittest.TestCase):
         def drop_engine_and_tmp():
             """engine 的连接池留在 ``backend.db`` 的模块级缓存里；Windows 上句柄
             不释放就删不掉临时目录（正是那类 ``os.replace`` 占用的同款问题）。"""
-            factory = db._cache.pop(self.db_path, None)
-            if factory is not None:
-                factory.kw["bind"].dispose()
+            url = f"sqlite:///{self.db_path}"
+            with db._cache_lock:
+                db._factories.pop(url, None)
+                engine = db._engines.pop(url, None)
+            if engine is not None:
+                engine.dispose()
             self._tmp.cleanup()
 
         # addCleanup 是 LIFO（后注册的先跑）：先放行阻塞任务，再释放引擎、删临时目录。

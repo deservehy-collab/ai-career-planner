@@ -1,0 +1,249 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 农林与环境技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/environmental-monitor.yaml 或
+#     knowledge/jobs/agriculture-technician.yaml 里。
+#   - 实验室质量控制、实验室安全与生物安全定义在 knowledge/skills/healthcare.yaml，
+#     此处复用不重复定义。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 环境监测方法
+  category: agriculture-environment
+  level_guides:
+    入门: 知道水、气、声等监测对象与常见指标。
+    初级: 能按标准方法完成常规项目的监测流程。
+    中级: 能按监测目的选择方法与点位布设方案。
+    高级: 能编制监测方案并处理方法偏离。
+  prerequisites: [采样与现场记录]
+  typical_usage: 监测数据是环保执法与企业自查的依据，方法不对结果无效。
+  common_pitfalls:
+    - 方法标准选错版本，结果不被认可。
+    - 只看单一指标，无法判断整体状况。
+  learning_resources:
+    - {title: '生态环境部（国家生态环境标准）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 采样与现场记录
+  category: agriculture-environment
+  level_guides:
+    入门: 知道采样要代表性强、容器洁净、标签完整。
+    初级: 能按规范完成水、气、土壤样品的采集与保存。
+    中级: 能设计采样计划，处理平行样与空白样。
+    高级: 能审核采样方案并处理现场异常。
+  prerequisites: []
+  typical_usage: 样品采错，后面仪器再准也没有意义。
+  common_pitfalls:
+    - 采样瓶未按要求清洗或未加保存剂。
+    - 现场记录缺时间、点位与天气，事后无法追溯。
+  learning_resources:
+    - {title: '生态环境部（水和废水监测分析方法）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 水质与大气检测
+  category: agriculture-environment
+  level_guides:
+    入门: 知道 pH、COD、氨氮、颗粒物等常见指标含义。
+    初级: 能按标准方法完成常规水质与大气项目检测。
+    中级: 能处理干扰、超标复核与异常数据。
+    高级: 能建立项目方法验证与不确定度评估。
+  prerequisites: [环境监测方法]
+  typical_usage: 水与气是最主要的监测对象，也是企业自查的核心内容。
+  common_pitfalls:
+    - 不控制空白与平行样，数据偏差无法发现。
+    - 超标不复核就直接报出。
+  learning_resources:
+    - {title: '生态环境部（国家生态环境标准）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 仪器分析
+  category: agriculture-environment
+  level_guides:
+    入门: 知道分光光度计、色谱等仪器的基本用途。
+    初级: 能按操作规程完成测定并做标准曲线。
+    中级: 能排查基线漂移、峰形异常等方法问题。
+    高级: 能做方法开发、验证与仪器期间核查。
+  prerequisites: []
+  typical_usage: 痕量污染物只能靠仪器测，操作与维护决定数据可信度。
+  common_pitfalls:
+    - 标准曲线线性差仍继续使用。
+    - 不做期间核查，仪器漂移无人发现。
+  learning_resources:
+    - {title: '生态环境部（国家生态环境标准）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 环保法规与标准
+  category: agriculture-environment
+  level_guides:
+    入门: 知道排放标准、监测规范的基本作用。
+    初级: 能查找到适用的排放限值与监测要求。
+    中级: 能判断项目适用的标准与合规边界。
+    高级: 能参与排污许可与合规体系建设。
+  prerequisites: []
+  typical_usage: 检测报告要对照标准判定，标准用错结论就是错的。
+  common_pitfalls:
+    - 用错行业标准或地方标准。
+    - 忽略标准更新，仍按旧限值判定。
+  learning_resources:
+    - {title: '生态环境部（法律法规与标准）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 检测报告编制
+  category: agriculture-environment
+  level_guides:
+    入门: 知道报告要含方法、结果、判定与签发信息。
+    初级: 能按模板编制完整报告并核对数据。
+    中级: 能处理异常数据说明与偏离记录。
+    高级: 能审核报告并对结论负责。
+  prerequisites: [环境监测方法]
+  typical_usage: 报告是最终交付物，也是执法与纠纷中的证据。
+  common_pitfalls:
+    - 报告与原始记录不一致。
+    - 缺方法依据与检出限，结论无法复核。
+  learning_resources:
+    - {title: '生态环境部（监测报告编制要求）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 危废与安全管理
+  category: agriculture-environment
+  level_guides:
+    入门: 知道危险废物的分类与标识要求。
+    初级: 能按规范分类收集、暂存与转移登记。
+    中级: 能编制危废管理计划并处理异常情况。
+    高级: 能建立危废全过程管理体系。
+  prerequisites: []
+  typical_usage: 危废管理不合规是环保处罚的高发点。
+  common_pitfalls:
+    - 废液混装，转移时被拒收。
+    - 暂存超期或无台账，检查时无法说明。
+  learning_resources:
+    - {title: '生态环境部（危险废物管理相关规范）', url: 'https://www.mee.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 作物栽培技术
+  category: agriculture-environment
+  level_guides:
+    入门: 知道作物生长周期与基本田间管理内容。
+    初级: 能按技术规程完成播种、水肥与田间管理。
+    中级: 能根据长势调整管理措施并处理异常。
+    高级: 能制定高产优质栽培方案并推广。
+  prerequisites: []
+  typical_usage: 农业技术员的核心工作就是让作物按目标长出来。
+  common_pitfalls:
+    - 照搬外地经验，不考虑本地气候土壤。
+    - 只追产量，忽略品质与成本。
+  learning_resources:
+    - {title: '农业农村部（农业技术推广相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 6
+
+- skill: 土壤与肥料
+  category: agriculture-environment
+  level_guides:
+    入门: 知道土壤质地、酸碱度与常见肥料类型。
+    初级: 能看懂测土报告并计算施肥量。
+    中级: 能制定配方施肥方案并处理缺素症状。
+    高级: 能做土壤改良与长期地力提升规划。
+  prerequisites: [采样与现场记录]
+  typical_usage: 施肥不当既浪费成本又污染环境，测土配方是基本方法。
+  common_pitfalls:
+    - 凭经验施肥，氮磷过量。
+    - 不测土直接照搬配方。
+  learning_resources:
+    - {title: '农业农村部（测土配方施肥技术规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 病虫害防治
+  category: agriculture-environment
+  level_guides:
+    入门: 认识主要病虫害症状与危害方式。
+    初级: 能识别常见病虫害并选择防治措施。
+    中级: 能制定综合防治方案，把握防治适期。
+    高级: 能建立监测预警与绿色防控体系。
+  prerequisites: [作物栽培技术]
+  typical_usage: 防治时机错一天，损失可能就不可逆。
+  common_pitfalls:
+    - 见虫就打，不查防治指标。
+    - 长期单一用药，抗性上升。
+  learning_resources:
+    - {title: '农业农村部（农作物病虫害防治相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 5
+
+- skill: 田间试验与记录
+  category: agriculture-environment
+  level_guides:
+    入门: 知道试验要有对照、重复与随机排列。
+    初级: 能按方案完成试验布置与生育期记录。
+    中级: 能处理数据并做基本统计分析。
+    高级: 能设计多因素试验并撰写试验报告。
+  prerequisites: [作物栽培技术]
+  typical_usage: 新品种与新技术的推广必须以试验数据为依据。
+  common_pitfalls:
+    - 无重复无对照，结论不可信。
+    - 记录不全，无法解释产量差异。
+  learning_resources:
+    - {title: '农业农村部（农业试验与推广相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 农药安全使用
+  category: agriculture-environment
+  level_guides:
+    入门: 知道农药分类、安全间隔期与防护要求。
+    初级: 能按标签推荐剂量施药并做好防护。
+    中级: 能轮换用药并处理药害与残留问题。
+    高级: 能制定减量增效方案并组织安全培训。
+  prerequisites: [病虫害防治]
+  typical_usage: 用药不当会直接造成农残超标与人员中毒。
+  common_pitfalls:
+    - 随意加大剂量，残留超标。
+    - 不遵守安全间隔期就采收。
+  learning_resources:
+    - {title: '农业农村部（农药管理条例与安全使用规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 农产品质量安全
+  category: agriculture-environment
+  level_guides:
+    入门: 知道农残、重金属等常见安全指标。
+    初级: 能按规程做好生产记录与自检。
+    中级: 能建立投入品管理与追溯记录。
+    高级: 能推动质量认证与全程质量控制体系。
+  prerequisites: [农药安全使用]
+  typical_usage: 一次抽检不合格就可能影响整批销售与品牌。
+  common_pitfalls:
+    - 生产记录缺失，出问题无法追溯。
+    - 只关注农残，忽略重金属与投入品。
+  learning_resources:
+    - {title: '农业农村部（农产品质量安全相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 农业推广与培训
+  category: agriculture-environment
+  level_guides:
+    入门: 知道推广要把技术讲成农户能听懂的话。
+    初级: 能组织田间观摩并做现场讲解。
+    中级: 能针对不同农户设计推广方式并跟踪效果。
+    高级: 能建立示范基地与推广体系。
+  prerequisites: [作物栽培技术]
+  typical_usage: 好技术推广不下去，就等于没有产生价值。
+  common_pitfalls:
+    - 只讲原理不讲操作，农户不会用。
+    - 推完不跟踪，问题无人解决。
+  learning_resources:
+    - {title: '农业农村部（农业技术推广相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 农机与设施基础
+  category: agriculture-environment
+  level_guides:
+    入门: 知道常用农机与大棚设施的基本用途。
+    初级: 能操作常规农机并做日常保养。
+    中级: 能按生产需求配置农机与设施方案。
+    高级: 能评估设施化生产的投入产出与风险。
+  prerequisites: []
+  typical_usage: 规模化生产离不开农机与设施，用不好反而增加成本。
+  common_pitfalls:
+    - 不按规程保养，作业季故障频发。
+    - 盲目上设施，投入与产出不匹配。
+  learning_resources:
+    - {title: '农业农村部（农业机械化相关规范）', url: 'https://www.moa.gov.cn/'}
+  estimated_weeks: 3

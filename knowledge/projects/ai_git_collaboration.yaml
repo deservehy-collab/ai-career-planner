@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：Git 协作与提交规范（入门）
+name: Git 协作与提交规范
+domain: ai-application
+difficulty: beginner
+covers_skills: [Git]
+prerequisites: []
+tech_stack: [Git, GitHub]
+stage_hint: 学习路线起点，在真实仓库里完成分支、提交与冲突处理
+deliverable: 一个带清晰提交历史的练习仓库，含分支说明、合并记录与一份协作规范
+acceptance_criteria:
+  - 能用 feature 分支完成开发并合并回主干，历史可读
+  - 提交信息能说明改动原因，而不是只写"更新"
+  - 能独立解决一次人为制造的合并冲突
+  - 仓库里能看懂 .gitignore 的作用并正确忽略无关文件
+estimated_weeks: 1

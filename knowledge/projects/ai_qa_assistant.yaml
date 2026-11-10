@@ -8,6 +8,7 @@
 # ═══════════════════════════════════════════════════════════════════════════
 
 name: AI 智能问答助手
+domain: ai-application
 difficulty: beginner
 covers_skills: [Python, LLM API, Prompt Engineering]
 prerequisites: [Python]

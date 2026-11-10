@@ -1,10 +1,14 @@
 """Project Planning Agent：用项目来补齐能力缺口，而不是只推荐"学什么"。"""
 
+import re
+
 from pydantic import BaseModel, Field
 
+from agents.job_catalog import JobCatalog
 from agents.llm import structured_invoke
 from agents.project_knowledge import DIFFICULTY_RANK, ProjectKnowledgeBase
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
+from agents.source_attribution import gap_source_hint
 from agents.utils import (
     SKILL_LEVELS,
     build_skill_mapping,
@@ -17,6 +21,145 @@ from graph.state import CareerState, check_update
 
 # Assessment Agent 给出的"已满足"状态：这类技能不是待补缺口
 SATISFIED_STATUS = "已满足"
+
+# 判断"这是不是技术岗"的信号。岗位、差距、学习路线、已有技能里只要出现一个，
+# 就按技术岗处理，不干预模型给出的技术栈 —— 宁可少管，也不误删。
+_TECH_CONTEXT_TERMS: tuple[str, ...] = (
+    "python", "java", "javascript", "typescript", "c++", "c#", "golang", "go",
+    "rust", "php", "ruby", "kotlin", "swift", "scala", "sql", "mysql",
+    "postgresql", "sqlite", "mongodb", "redis", "fastapi", "flask", "django",
+    "spring", "react", "vue", "angular", "node.js", "docker", "kubernetes",
+    "git", "linux", "nginx", "langchain", "langgraph", "pytorch", "tensorflow",
+    "rag", "agent", "llm api", "prompt engineering", "function calling",
+    "embedding", "后端 api 开发", "后端开发", "api 开发", "数据结构与算法",
+    "计算机网络", "操作系统", "测试与效果评测",
+)
+
+# 软件开发技术名。非技术岗的项目里出现这些、又没有任何岗位依据时，移除并留痕。
+_SOFTWARE_TECH_TERMS: tuple[str, ...] = (
+    "python", "java", "javascript", "typescript", "c++", "c#", "golang", "go",
+    "rust", "php", "ruby", "kotlin", "swift", "scala", "sql", "mysql",
+    "postgresql", "sqlite", "mongodb", "redis", "fastapi", "flask", "django",
+    "spring boot", "spring", "react", "vue", "angular", "node.js", "express",
+    "docker", "kubernetes", "git", "github", "linux", "nginx", "langchain",
+    "langgraph", "pytorch", "tensorflow", "scikit-learn", "pandas", "numpy",
+    "openai api", "llm api", "rag", "agent", "prompt engineering",
+    "function calling", "embedding", "后端 api 开发", "后端开发", "api 开发",
+    "数据库", "代码仓库", "接口开发", "web 应用", "数据结构与算法",
+)
+
+
+def _contains_term(haystack: str, needle: str) -> bool:
+    """ASCII 词按词边界匹配，中文按子串匹配；避免 Go 命中 Google、RAG 命中 storage。"""
+    if not needle:
+        return False
+    text = str(haystack or "").lower()
+    term = str(needle or "").lower()
+    if term.isascii():
+        return re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", text) is not None
+    return term in text
+
+
+def _domain_text(target_job: str, gaps: list, learning_plan: list, user_skills: list) -> str:
+    """把判断岗位领域要用的文本拼在一起：岗位名、缺口、学习路线、已有技能。"""
+    parts = [str(target_job or "")]
+    for gap in gaps or []:
+        parts.append(str((gap or {}).get("skill") or ""))
+    for stage in learning_plan or []:
+        if not isinstance(stage, dict):
+            continue
+        parts.append(str(stage.get("topic") or ""))
+        parts.extend(str(c) for c in stage.get("covers") or [])
+    for item in user_skills or []:
+        if isinstance(item, dict):
+            parts.append(str(item.get("skill") or ""))
+    return "\n".join(parts)
+
+
+def _looks_technical(text: str) -> bool:
+    return any(_contains_term(text, term) for term in _TECH_CONTEXT_TERMS)
+
+
+def strip_ungrounded_software_tech(
+    projects: list, target_job: str, gaps: list, learning_plan: list, user_skills: list
+) -> list[str]:
+    """非技术岗的项目里，移除没有任何岗位依据的软件开发技术。
+
+    判定口径只有两条，尽量少管：
+
+    1. 岗位/差距/学习路线/已有技能里出现任何技术岗信号 → 按技术岗处理，原样保留；
+    2. 非技术岗里，``tech_stack`` 的某一项属于软件开发技术、且没有在同样的文本里
+       出现过 → 移除。Excel、财务软件、统计软件等行业工具不在名单内，不受影响。
+
+    移除不是猜测：技术名来自固定名单，保留条件来自本轮真实数据。返回说明，供节点打印。
+    """
+    text = _domain_text(target_job, gaps, learning_plan, user_skills)
+    if _looks_technical(text):
+        return []
+
+    notes: list[str] = []
+    for project in projects or []:
+        kept: list[str] = []
+        removed: list[str] = []
+        for raw in project.get("tech_stack") or []:
+            name = str(raw or "").strip()
+            if not name:
+                continue
+            software = any(_contains_term(name, term) for term in _SOFTWARE_TECH_TERMS)
+            if software and not _contains_term(text, name):
+                removed.append(name)
+            else:
+                kept.append(name)
+        if not removed:
+            continue
+        project["tech_stack"] = kept
+        tail = "（已无技术栈，建议按行业工具补充）" if not kept else ""
+        notes.append(
+            f"项目「{project.get('name')}」的 tech_stack 含与目标岗位领域无关的"
+            f"软件开发技术 {removed}，已移除{tail}"
+        )
+    return notes
+
+
+def normalize_project_stages(projects: list, learning_plan: list) -> list[str]:
+    """把 ``stage`` 统一成「阶段 N」，并尽量对应到真实学习阶段。
+
+    优先级：原值里的数字合法 → 直接用；否则按 ``covers_gaps`` 与学习阶段
+    ``covers`` 的重合度取最高；再否则按项目顺序落到对应阶段。没有学习路线时不改。
+    """
+    stages: list[tuple[int, set[str]]] = []
+    for item in learning_plan or []:
+        if not isinstance(item, dict):
+            continue
+        try:
+            number = int(item.get("stage"))
+        except (TypeError, ValueError):
+            continue
+        stages.append((number, {str(c).strip() for c in item.get("covers") or [] if str(c).strip()}))
+    if not stages:
+        return []
+    valid = {number for number, _ in stages}
+
+    notes: list[str] = []
+    for index, project in enumerate(projects or []):
+        raw = str(project.get("stage") or "").strip()
+        match = re.search(r"\d+", raw)
+        chosen = int(match.group()) if match and int(match.group()) in valid else None
+        if chosen is None:
+            covered = {str(s).strip() for s in project.get("covers_gaps") or []}
+            scored = [(len(covered & covers), number) for number, covers in stages]
+            best_count, best_stage = max(scored, key=lambda pair: (pair[0], -pair[1]))
+            if best_count > 0:
+                chosen = best_stage
+        if chosen is None:
+            chosen = stages[min(index, len(stages) - 1)][0]
+
+        normalized = f"阶段 {chosen}"
+        if normalized == raw:
+            continue
+        project["stage"] = normalized
+        notes.append(f"项目「{project.get('name')}」的 stage 已由 {raw!r} 归一为 {normalized}")
+    return notes
 
 PROMPT = """你是一名项目实训导师，熟悉「{target_job}」所在行业的真实项目形态。
 请为一名想成为该岗位的大学生设计实战项目。
@@ -39,6 +182,20 @@ PROMPT = """你是一名项目实训导师，熟悉「{target_job}」所在行�
 （这是技术岗的示例；其他领域按该行业的真实项目形态类比，
 如临床护理个案、财务模拟核算、教学设计作品集、市场调研报告等。）
 
+【先判断岗位领域，再设计项目——这一条优先于下面的技术示例】
+- **技术岗**（开发、算法、测试、运维、数据、安全等）：项目可以是软件、服务或系统；
+  tech_stack 写实际使用的编程语言、框架与工具。
+- **非技术岗**（会计、财务、审计、护理、法律、教育、传媒、市场、人力、行政等）：
+  项目必须是该行业真实的工作任务与产出，例如财务报表与底稿、纳税申报模拟、
+  护理个案、法律意见书、教学设计、市场调研报告；
+  tech_stack 只写该行业实际使用的工具、软件与方法（Excel、财务软件、统计软件、
+  行业规范等），**禁止**出现 Python、Java、FastAPI、Docker、Git、数据库、接口、
+  代码仓库等软件开发技术，除非上面的能力差距里明确要求这项技术；
+  交付物写行业交付物（报告、底稿、方案、作品集、操作记录），
+  不要写"可交互系统""Web 应用""代码仓库"。不要因为上面的技术示例就照搬技术栈。
+  非技术岗也不要设计以 AI、大模型、编程为核心的项目，除非能力差距里明确出现这些技术；
+  项目主体必须是该行业的真实任务，行业工具只能作为辅助。
+
 【要求】
 1. 设计 2~3 个项目，难度递进，第 1 个最简单。
 2. 每个项目必须同时覆盖**至少 2 项**能力差距，覆盖得越多越好；
@@ -52,19 +209,24 @@ PROMPT = """你是一名项目实训导师，熟悉「{target_job}」所在行�
    照这个顺序来，**不要自己重排成"最能补缺口的排前面"**。
 5. covers_gaps 必须使用上面给出的能力差距里的技能原名，一字不差，
    一项技能写完整（写"Agent 与工作流编排"，不要拆成"Agent"、"工作流编排"）。
-   **只写状态为"明显不足"或"部分满足"的缺口**：状态"已满足"的技能他已经达标，
-   不是缺口，不要写进 covers_gaps。项目当然可以继续训练他已经会的技术，
+   **只写状态为"明显不足"、"部分满足"、"疑似具备"或"未验证"的缺口**：
+   只有状态"已满足"的技能他已经达标、且有直接证据，不是缺口，不要写进 covers_gaps。
+   项目当然可以继续训练他已经会的技术，
    那写在 tech_stack 里就行，不要用它来充"补了多少缺口"。
 6. name 只写项目名称本身，短一点、像项目名
    （如"AI 智能求职助手"），不要把阶段号、说明写进名字里。
 7. goal 写这个项目要达成什么、补哪些能力，**不要出现"阶段"两个字**；
-   阶段信息只写在 stage 字段里，stage 要和上面的学习路线对得上。
-8. tech_stack 写这个项目实际会用到的技术，必须包含 covers_gaps 里的技能。
-   只写技术名称（Python、FastAPI、Docker），不要把能力描述当技术写进来
-   （例如"类""类型注解""调试定位问题"都不是技术栈）。
-9. deliverable 写最终交付物，要具体可验收，
-   例如"一个能跑的 HTTP 服务 + GitHub 仓库 + README 部署说明 + Dockerfile"，
-   非技术领域按行业真实的交付形态（如一份完整的个案报告、一套核算底稿）。
+   阶段信息只写在 stage 字段里。stage **只能**写成"阶段 N"（如"阶段 1"），
+   N 必须是上面学习路线里真实存在的阶段号，不要写英文、解释或别的格式。
+8. tech_stack 写这个项目实际会用到的工具/技术，并包含 covers_gaps 里的相关技能。
+   技术岗写编程语言与框架；非技术岗写行业工具、软件与方法。
+   只写名称，不要把能力描述当工具写进来
+   （例如"类""类型注解""调试定位问题"都不是技术栈）；
+   不要写与目标岗位领域无关的编程技术。
+9. deliverable 写最终交付物，要具体可验收。
+   技术岗例如"一个能跑的 HTTP 服务 + 仓库 + README 部署说明 + Dockerfile"；
+   非技术岗按行业真实的交付形态写，例如"一套完整核算底稿 + 财务报表 + 分析说明"、
+   "一份护理个案报告"、"一份市场调研报告"，不要写代码仓库或可交互系统。
 10. 项目要做学生真正能做完的规模，不要设计成企业级系统。
 11. 全部用中文，专业术语保留原文（英文术语不翻译）。"""
 
@@ -91,7 +253,8 @@ def _format_gaps(gaps: list) -> str:
     if not gaps:
         return "（无）"
     return "\n".join(
-        f"- {g.get('skill')}｜状态 {g.get('status')}｜优先级 {g.get('priority')}｜{g.get('gap')}"
+        f"- {g.get('skill')}｜状态 {g.get('status')}｜优先级 {g.get('priority')}｜"
+        f"{g.get('gap')}{gap_source_hint(g)}"
         for g in gaps
     )
 
@@ -149,8 +312,19 @@ def normalize_gap_skills(gap_skills: list, vocabulary) -> tuple[list[str], list[
     return list(dict.fromkeys(mapping.values())), unmapped
 
 
+def resolve_job_domain(target_job: str, gap_skills: list[str] | None = None) -> str | None:
+    """目标岗位 → 知识库领域。岗位名认不出时，用规范技能名投票（仅在唯一领域时采用）。"""
+    try:
+        catalog = JobCatalog()
+    except Exception as exc:  # noqa: BLE001 - 领域解析失败只影响模板筛选，不中断流程
+        log("Project Agent", f"岗位目录不可用，本轮不按领域筛选项目模板：{exc}")
+        return None
+    return catalog.resolve_domain(target_job) or catalog.domain_for_skills(gap_skills or [])
+
+
 def _load_project_templates(gap_skills: list[str], learning_plan: list,
-                            student_levels: dict | None = None) -> str:
+                            student_levels: dict | None = None,
+                            domain: str | None = None) -> str:
     """从 Project 知识库检索匹配的项目模板，供 prompt 使用。
 
     与旧版的三点差别（对应验收报告 S3）：
@@ -181,7 +355,9 @@ def _load_project_templates(gap_skills: list[str], learning_plan: list,
 
     try:
         base = ProjectKnowledgeBase()
-        executable, blocked = base.recommend_for_user(combined, student_levels)
+        executable, blocked = base.recommend_for_user(
+            combined, student_levels, domain=domain
+        )
         if not executable and not blocked:
             return "（知识库中无可直接匹配的项目模板，请自行结合差距设计）"
 
@@ -193,8 +369,11 @@ def _load_project_templates(gap_skills: list[str], learning_plan: list,
             lines.append(
                 f"- {p['name']}（难度 {p['difficulty']}）：覆盖 "
                 f"{'、'.join(p.get('covers_skills', [])) or '—'}；前置 "
-                f"{'、'.join(p.get('prerequisites', [])) or '—'}；交付物 {p.get('deliverable', '—')}；"
-                f"验收 {len(p.get('acceptance_criteria', []))} 条；预计 {p.get('estimated_weeks', '—')} 周"
+                f"{'、'.join(p.get('prerequisites', [])) or '—'}；技术栈 "
+                f"{'、'.join(p.get('tech_stack', [])) or '—'}；阶段提示 "
+                f"{p.get('stage_hint', '—')}；交付物 {p.get('deliverable', '—')}；验收标准 "
+                f"{'；'.join(str(c) for c in p.get('acceptance_criteria') or [] if str(c).strip()) or '—'}；"
+                f"预计 {p.get('estimated_weeks', '—')} 周"
             )
         if blocked:
             lines.append("")
@@ -211,7 +390,8 @@ def _load_project_templates(gap_skills: list[str], learning_plan: list,
 
 
 def _blocked_templates(gap_skills: list[str], learning_plan: list,
-                       student_levels: dict | None) -> list[dict]:
+                       student_levels: dict | None,
+                       domain: str | None = None) -> list[dict]:
     """取"暂不推荐"的项目模板（失败返回空列表），供生成后兜底校验。
 
     ``gap_skills`` 同样要求是归一后的规范技能名，与 :func:`_load_project_templates` 一致。
@@ -225,7 +405,9 @@ def _blocked_templates(gap_skills: list[str], learning_plan: list,
     if not combined:
         return []
     try:
-        _, blocked = ProjectKnowledgeBase().recommend_for_user(combined, student_levels)
+        _, blocked = ProjectKnowledgeBase().recommend_for_user(
+            combined, student_levels, domain=domain
+        )
         return blocked
     except Exception:  # noqa: BLE001 - 校验辅助，失败不影响主流程
         return []
@@ -368,6 +550,51 @@ def _template_difficulty_rank(name, base: ProjectKnowledgeBase | None) -> int | 
     return None
 
 
+def _name_key(name: str) -> str:
+    """项目名的比较键：忽略大小写、空白与常见标点，只保留实质字符。"""
+    return re.sub(r"[\s，。、：；·\-—_/\\()（）\[\]【】\"'“”‘’!！?？]+", "", str(name or "").lower())
+
+
+def align_project_names(projects: list, base: ProjectKnowledgeBase | None) -> list[str]:
+    """把模型改写过的项目名对齐到知识库模板原名，返回改名说明。
+
+    只做三种确定性匹配：原名完全一致、去掉空白/标点后一致、唯一包含关系。
+    语义相近但字面不同的不改 —— 猜错名称会让下游的难度、验收标准与历史记录
+    全部对不上号，这比保留模型原名更糟。认不准就原样保留。
+    """
+    if base is None or not projects:
+        return []
+    templates = base.projects
+    exact = {t["name"] for t in templates}
+    by_key: dict[str, list[str]] = {}
+    for t in templates:
+        by_key.setdefault(_name_key(t["name"]), []).append(t["name"])
+
+    notes: list[str] = []
+    for project in projects:
+        raw = str(project.get("name") or "").strip()
+        if not raw or raw in exact:
+            continue
+        key = _name_key(raw)
+        if not key:
+            continue
+        target = None
+        same_key = by_key.get(key) or []
+        if len(same_key) == 1:
+            target = same_key[0]
+        else:
+            hits = [
+                name for name in exact
+                if key in _name_key(name) or _name_key(name) in key
+            ]
+            if len(hits) == 1:
+                target = hits[0]
+        if target and target != raw:
+            project["name"] = target
+            notes.append(f"项目「{raw}」与知识库模板只是写法不同，已对齐为「{target}」")
+    return notes
+
+
 def check_difficulty_order(projects: list, base: ProjectKnowledgeBase | None) -> list[str]:
     """难度递进的尽力校验：能按项目名找回知识库模板的，检查难度是否递增。
 
@@ -396,10 +623,15 @@ def unmet_gaps(gaps: list) -> list:
     """还没满足、需要项目来补的缺口。
 
     ``covers_gaps`` 的语义是"这个项目能帮我补上哪几个**尚未满足**的缺口"。
-    已满足的技能不属于缺口 —— 项目当然可以继续训练它（那是 ``covers_skills``，
-    训练技能），但不能拿它去充缺口覆盖度，否则"教你已经会的东西"的项目会排到前面。
+    已满足（且有直接证据）的技能不属于缺口 —— 项目当然可以继续训练它（那是
+    ``covers_skills``，训练技能），但不能拿它去充缺口覆盖度，否则"教你已经会的东西"
+    的项目会排到前面。等级达标但只有自述/跨技能推断的（``display_status`` 为
+    「未验证」「疑似具备」）仍算待补缺口 —— 它们需要可验证的产出。
     """
-    return [g for g in (gaps or []) if str(g.get("status") or "") != SATISFIED_STATUS]
+    return [
+        g for g in (gaps or [])
+        if str(g.get("display_status") or g.get("status") or "") != SATISFIED_STATUS
+    ]
 
 
 def order_projects_by_difficulty(projects: list, gaps: list,
@@ -485,21 +717,38 @@ def project_node(state: CareerState) -> dict:
             flush=True,
         )
 
+    # 领域过滤：会计岗不该看到 RAG 模板，AI 岗也不该看到会计实训。
+    # 岗位名认不出时用规范化后的缺口技能投票；仍认不出就不筛（宁可多给，不误挡）。
+    domain = resolve_job_domain(state.get("target_job", ""), match_skills)
+    if domain:
+        print(f"[Project Agent] 项目模板按领域筛选：{domain}", flush=True)
+
     prompt = PROMPT.format(
         target_job=state.get("target_job", "目标岗位"),
         gaps=_format_gaps(gaps),
         learning_plan=_format_learning_plan(learning_plan),
-        project_knowledge=_load_project_templates(match_skills, learning_plan, student_levels),
+        project_knowledge=_load_project_templates(
+            match_skills, learning_plan, student_levels, domain=domain
+        ),
     )
     plan = structured_invoke(prompt, ProjectPlan)
 
     projects = [p.model_dump() for p in plan.projects]
+    try:
+        base = ProjectKnowledgeBase()
+    except Exception:  # noqa: BLE001 - 校验辅助，失败不影响主流程
+        base = None
+
+    # 模型常把模板名改写成近义说法；先对齐成知识库原名，下游的难度排序、
+    # 验收标准与成长记录才能对得上。对齐后可能出现重名，所以再去重。
+    for note in align_project_names(projects, base):
+        print(f"[Project Agent] {note}", flush=True)
     projects = dedupe_by(projects, key="name")
     check_non_empty(projects, "Project Agent 的项目列表", minimum=1)
 
     # 兜底校验（先做重合度检查：它看的是模型原始写法的 covers_gaps，
     # 一旦被 align 改写成缺口原名就不好比对了）
-    blocked = _blocked_templates(match_skills, learning_plan, student_levels)
+    blocked = _blocked_templates(match_skills, learning_plan, student_levels, domain=domain)
     issues = check_blocked_projects(projects, blocked)
     if vocabulary is not None:
         # 先剔除"不属于本用户缺口"的技能名，再做回映射 —— 顺序反了映射阶段
@@ -507,10 +756,19 @@ def project_node(state: CareerState) -> dict:
         for note in drop_unlinked_covers_gaps(projects, project_gaps, vocabulary):
             print(f"[Project Agent] 提示：{note}", flush=True)
         issues.extend(align_covers_gaps(projects, project_gaps, vocabulary))
-    try:
-        base = ProjectKnowledgeBase()
-    except Exception:  # noqa: BLE001 - 校验辅助，失败不影响主流程
-        base = None
+
+    # 领域适配：非技术岗不保留凭空出现的软件开发技术；stage 统一成「阶段 N」。
+    # 这两步只改可判定的字段，不重写项目名称、目标与交付物。
+    for note in strip_ungrounded_software_tech(
+        projects,
+        state.get("target_job", ""),
+        gaps,
+        learning_plan,
+        state.get("user_skills") or [],
+    ):
+        print(f"[Project Agent] {note}", flush=True)
+    for note in normalize_project_stages(projects, learning_plan):
+        print(f"[Project Agent] {note}", flush=True)
 
     # 修复 2：把模型给出的项目顺序重排成"难度递进 → 高优先级缺口覆盖多的靠前"。
     # 放在 covers_gaps 定稿之后，才能按高优先级缺口覆盖数做次级排序。

@@ -15,7 +15,7 @@
 - ``get_current_user`` 校验 token 签名后**按主键查库**确认用户仍存在：
   JWT 是无状态的，签发后 24 小时内一直有效，用户被删除后其余业务接口不能
   继续认它（此前只有 ``/api/auth/me`` 查库）。
-- 注册成功时顺带触发一次旧业务数据迁移（见 ``backend/migration.py``）：
+- 注册不再自动认领旧 JSON 数据（见 ``scripts/migrate_legacy_plans.py``）：
   第一个注册的账号认领单用户时代留在数据根目录的 ``loop.json``/``growth.json``。
 """
 
@@ -43,7 +43,6 @@ from sqlalchemy.orm import Session
 
 from backend import config
 from backend.db import User, get_session
-from backend.migration import migrate_legacy_user_data
 
 __all__ = [
     "router", "get_current_user", "hash_password", "verify_password",
@@ -279,9 +278,7 @@ def register(
 ) -> dict:
     """注册新用户并**直接登录**（返回 token，注册后不用再输一次密码）。
 
-    注册成功时顺带触发一次旧数据迁移：如果这是**最早**的账号且数据根目录
-    还留着单用户时代的 ``loop.json``/``growth.json``，就认领过来（幂等、
-    不覆盖任何已有数据，见 ``backend/migration.py``）。
+    注册不再自动认领旧 JSON 数据：旧数据只通过迁移脚本显式导入。
     """
     ip = _client_ip(request)
     if _register_limiter.limited(ip):
@@ -299,10 +296,6 @@ def register(
     session.refresh(user)
     # 只数"成功建号"：422（校验失败）/ 409（重名）不消耗注册额度
     _register_limiter.record(ip)
-
-    report = migrate_legacy_user_data()
-    if report.get("migrated"):
-        logger.info("旧业务数据已迁给用户 %s：%s", user.id, report["files"])
     return _auth_response(user)
 
 

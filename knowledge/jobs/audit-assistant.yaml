@@ -1,0 +1,141 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 审计助理 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_audit_std_001   中国注册会计师协会公开的审计准则与考试大纲要点整理
+#                          https://www.cicpa.org.cn/ （访问日期 2026-11-10）
+#   source_audit_mof_001   财政部会计司公开的会计与内控规范要点整理
+#                          https://kjs.mof.gov.cn/ （访问日期 2026-11-10）
+#   source_audit_jd_001    公开招聘信息中审计助理/审计专员岗位的通用职责与要求
+#                          汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 标注的是"该要求来自
+#   哪类公开材料"，是概括而非逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: audit_assistant
+job_name: 审计助理
+
+aliases:
+  - 审计助理
+  - 审计专员
+  - 审计员
+  - 助理审计师
+  - 内审专员
+
+category: finance-accounting
+domain: accounting
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 审计助理在项目组指导下执行审计程序、收集与整理审计证据、编制工作底稿，并协助完成风险评估与客户沟通，交付可复核的底稿与问题清单。
+  core_tasks:
+    - {name: 执行审计程序, detail: 按程序表完成检查、函证、盘点、截止测试等基础程序并记录结果}
+    - {name: 收集与整理审计证据, detail: 核对凭证、合同、对账单等资料，按索引归入工作底稿}
+    - {name: 编制审计工作底稿, detail: 写清执行过程、样本选择、发现与结论，保证可追溯}
+    - {name: 参与风险评估, detail: 了解被审计单位业务与内控，整理风险点并对应到报表科目}
+    - {name: 协助客户沟通, detail: 按清单索取资料，确认差异事项并跟进补充}
+    - {name: 整理问题与整改建议, detail: 汇总审计发现，按影响程度分类并提出改进方向}
+  tools: [审计底稿模板, Excel, 财务软件, 函证与银行对账资料, 电子档案系统]
+  deliverables: [审计程序执行记录, 抽查与函证底稿, 审计发现清单, 风险评估底稿, 资料需求清单]
+  entry_requirements: [会计学/审计学等相关专业, 熟悉企业会计准则与审计基础知识, 熟练使用 Excel, 细致耐心并能适应出差与项目节奏, 初级会计或 CPA 科目通过者优先]
+  career_path:
+    - {name: 审计助理, detail: 能按程序完成基础审计工作并编制合格底稿}
+    - {name: 高级审计员, detail: 能独立负责科目或业务循环，指导助理并复核底稿}
+    - {name: 项目经理, detail: 能制定审计计划、控制风险与进度并对接客户}
+    - {name: 合伙人/内审负责人, detail: 能负责项目质量、团队与客户关系}
+
+skills:
+
+  - skill: 审计基础
+    importance: 5
+    level: 中级
+    reason: 理解审计目标、程序与意见类型，是执行所有具体程序的前提。
+    evidence:
+      - {source_id: source_audit_std_001, requirement_type: required, context: qualification,
+         note: '公开准则整理：理解审计目标、职业道德与审计意见的基本类型'}
+      - {source_id: source_audit_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：在项目组指导下执行审计程序并整理审计资料'}
+
+  - skill: 审计程序
+    importance: 5
+    level: 中级
+    reason: 审计助理的主要工作就是按程序获取证据，程序执行质量决定底稿能否支撑结论。
+    evidence:
+      - {source_id: source_audit_std_001, requirement_type: required, context: responsibility,
+         note: '公开准则整理：检查、观察、询问、函证、重新计算等程序的适用场景'}
+      - {source_id: source_audit_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成函证、盘点、截止测试等基础审计程序'}
+
+  - skill: 审计证据与底稿
+    importance: 5
+    level: 中级
+    reason: 证据是否充分适当、底稿是否可复核，直接决定项目质量与复核效率。
+    evidence:
+      - {source_id: source_audit_std_001, requirement_type: required, context: qualification,
+         note: '公开准则整理：审计证据的充分性与适当性，以及工作底稿的编制要求'}
+      - {source_id: source_audit_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：整理审计证据并按索引编制工作底稿'}
+
+  - skill: 会计准则
+    importance: 4
+    level: 中级
+    reason: 判断账务处理是否恰当、调整分录是否合理，都要回到准则依据。
+    evidence:
+      - {source_id: source_audit_mof_001, requirement_type: required, context: qualification,
+         note: '公开规范整理：熟悉企业会计准则的常用确认、计量与披露要求'}
+
+  - skill: 财务报表分析
+    importance: 4
+    level: 中级
+    reason: 通过趋势、结构与比率分析发现异常，是确定审计重点的常用手段。
+    evidence:
+      - {source_id: source_audit_std_001, requirement_type: required, context: qualification,
+         note: '公开准则整理：运用分析程序识别异常波动与潜在错报'}
+
+  - skill: 内部控制
+    importance: 4
+    level: 初级
+    reason: 了解业务流程与控制点，才能判断风险并设计针对性程序。
+    evidence:
+      - {source_id: source_audit_mof_001, requirement_type: required, context: qualification,
+         note: '公开规范整理：了解内部控制并与审计风险评估衔接'}
+
+  - skill: 风险评估
+    importance: 4
+    level: 中级
+    reason: 风险导向审计要求先识别重大错报风险，再决定程序的性质、时间与范围。
+    evidence:
+      - {source_id: source_audit_std_001, requirement_type: required, context: responsibility,
+         note: '公开准则整理：了解被审计单位及其环境并识别重大错报风险'}
+
+  - skill: Excel
+    importance: 4
+    level: 中级
+    reason: 抽样、汇总、对账与底稿数据整理大量依赖表格函数与透视表。
+    evidence:
+      - {source_id: source_audit_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Excel 进行数据整理与底稿编制'}
+
+  - skill: 财务软件
+    importance: 3
+    level: 初级
+    reason: 需要从财务软件导出账套、序时账与辅助核算数据用于审计分析。
+    evidence:
+      - {source_id: source_audit_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解用友/金蝶等财务软件、能导出账务数据者优先'}
+
+  - skill: 审计沟通
+    importance: 3
+    level: 初级
+    reason: 资料索取、差异确认与问题跟进都依赖清晰、有记录的沟通。
+    evidence:
+      - {source_id: source_audit_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：与客户沟通资料需求并跟进差异事项'}

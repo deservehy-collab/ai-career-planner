@@ -1,0 +1,265 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 设计技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/visual-designer.yaml 或
+#     knowledge/jobs/ui-designer.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 版式与构图
+  category: design
+  level_guides:
+    入门: 知道对齐、留白、层级与网格是版面的基本规则。
+    初级: 能按网格排出信息清楚的单页海报或长图。
+    中级: 能处理多信息层级版面，让重点在一眼内被看到。
+    高级: 能为品牌建立可复用的版式系统并指导他人执行。
+  prerequisites: []
+  typical_usage: 所有平面与界面设计的地基，决定信息能否被快速读懂。
+  common_pitfalls:
+    - 元素全靠目测摆放，没有对齐与间距规则。
+    - 主次不分，整页都在抢注意力。
+  learning_resources:
+    - {title: 'Material Design 3（布局与间距基础）', url: 'https://m3.material.io/'}
+  estimated_weeks: 3
+
+- skill: 色彩与视觉风格
+  category: design
+  level_guides:
+    入门: 知道色相、明度、饱和度与主辅色的区别。
+    初级: 能为一个主题选出一套协调的配色并说明理由。
+    中级: 能按品牌调性建立配色规范，控制对比度与可读性。
+    高级: 能定义整套视觉语言并保持跨物料一致。
+  prerequisites: []
+  typical_usage: 决定作品的第一印象，也直接影响文字可读性。
+  common_pitfalls:
+    - 配色只凭感觉，正文与背景对比度不足。
+    - 每个物料换一套颜色，品牌识别散掉。
+  learning_resources:
+    - {title: 'Microsoft 设计规范（色彩与无障碍对比）', url: 'https://learn.microsoft.com/design/'}
+  estimated_weeks: 3
+
+- skill: 品牌视觉规范
+  category: design
+  level_guides:
+    入门: 知道品牌规范包含标志、色彩、字体与使用规则。
+    初级: 能按已有规范制作符合要求的物料。
+    中级: 能整理标志用法、禁用示例与模板。
+    高级: 能建立并迭代一套完整的品牌视觉系统。
+  prerequisites: [色彩与视觉风格, 版式与构图]
+  typical_usage: 保证不同人做出的物料看起来像同一个品牌。
+  common_pitfalls:
+    - 标志随意拉伸、改色或加阴影。
+    - 规范只写"应该怎样"，没有反例和模板。
+  learning_resources:
+    - {title: 'Adobe 设计基础（品牌与视觉识别）', url: 'https://www.adobe.com/creativecloud/design.html'}
+  estimated_weeks: 3
+
+- skill: Photoshop
+  category: design
+  level_guides:
+    入门: 知道图层、选区、蒙版的基本用途。
+    初级: 能完成抠图、修图与简单合成。
+    中级: 能用图层样式、蒙版与调色完成商业级精修。
+    高级: 能建立高效工作流与可复用模板。
+  prerequisites: []
+  typical_usage: 图片精修、合成与物料输出的主力工具。
+  common_pitfalls:
+    - 直接在原图层修改，无法回溯。
+    - 输出分辨率与色彩模式不符合印刷要求。
+  learning_resources:
+    - {title: 'Adobe Photoshop 官方学习中心', url: 'https://helpx.adobe.com/photoshop/tutorials.html'}
+  estimated_weeks: 3
+
+- skill: Illustrator
+  category: design
+  level_guides:
+    入门: 知道矢量图与位图的区别，会用钢笔工具画基本形状。
+    初级: 能绘制标志与简单插画并输出矢量文件。
+    中级: 能完成字体排版、图标与复杂路径的规范化制作。
+    高级: 能建立符号库与可扩展的矢量视觉资产。
+  prerequisites: []
+  typical_usage: 标志、图标与需要无损缩放的图形都靠矢量工具。
+  common_pitfalls:
+    - 路径节点过多，文件难维护也难以印刷。
+    - 文字未转曲或未嵌入，交付后字体丢失。
+  learning_resources:
+    - {title: 'Adobe Illustrator 官方学习中心', url: 'https://helpx.adobe.com/illustrator/tutorials.html'}
+  estimated_weeks: 3
+
+- skill: 印刷与物料落地
+  category: design
+  level_guides:
+    入门: 知道出血、分辨率、CMYK 与纸张的基本概念。
+    初级: 能按印刷要求导出文件并检查关键参数。
+    中级: 能处理专色、工艺与打样反馈，预判成品效果。
+    高级: 能控制整套物料的成本、工艺与交期。
+  prerequisites: [Photoshop, Illustrator]
+  typical_usage: 设计稿要变成实物，参数错误会导致整批报废。
+  common_pitfalls:
+    - 忘记出血或把 RGB 文件直接交给印厂。
+    - 小字用四色叠印，套印不准时糊成一团。
+  learning_resources:
+    - {title: 'Adobe 印刷与输出基础', url: 'https://helpx.adobe.com/photoshop/using/printing.html'}
+  estimated_weeks: 2
+
+- skill: 设计需求沟通
+  category: design
+  level_guides:
+    入门: 知道接需求要先确认目标、受众与交付物。
+    初级: 能复述需求并列出需要确认的问题。
+    中级: 能把模糊需求拆成可评估的方案与排期。
+    高级: 能在业务目标与设计原则冲突时给出取舍建议。
+  prerequisites: []
+  typical_usage: 需求理解偏差是返工的第一大原因。
+  common_pitfalls:
+    - 不问目标直接开做，做完才发现方向不对。
+    - 只记录"要好看"，没有可验收的标准。
+  learning_resources:
+    - {title: 'Nielsen Norman Group（设计沟通与协作）', url: 'https://www.nngroup.com/'}
+  estimated_weeks: 2
+
+- skill: 设计文件管理
+  category: design
+  level_guides:
+    入门: 知道文件要按项目、版本与用途命名归档。
+    初级: 能按约定目录与命名规则交付源文件。
+    中级: 能维护组件、素材与导出物的版本关系。
+    高级: 能建立团队级资源库与交接规范。
+  prerequisites: []
+  typical_usage: 多人协作与后续改版都依赖文件能被找到、看懂。
+  common_pitfalls:
+    - 文件命名随意，最终版散落在桌面。
+    - 只交图片不交源文件，后续无法修改。
+  learning_resources:
+    - {title: 'Figma 官方帮助中心（文件与版本管理）', url: 'https://help.figma.com/'}
+  estimated_weeks: 2
+
+- skill: 交互设计基础
+  category: design
+  level_guides:
+    入门: 知道交互设计解决"用户如何完成任务"的问题。
+    初级: 能把一个任务拆成清晰的步骤与页面。
+    中级: 能设计状态、反馈与异常路径，减少用户困惑。
+    高级: 能建立交互模式规范并验证任务完成效率。
+  prerequisites: []
+  typical_usage: 界面不只是好看，还要让操作路径清楚、可预期。
+  common_pitfalls:
+    - 只画正常路径，不处理空状态与失败。
+    - 操作没有反馈，用户不知道是否成功。
+  learning_resources:
+    - {title: 'Nielsen Norman Group（交互设计基础）', url: 'https://www.nngroup.com/articles/'}
+  estimated_weeks: 3
+
+- skill: 用户界面规范
+  category: design
+  level_guides:
+    入门: 知道字号、间距、控件尺寸需要有统一规则。
+    初级: 能按平台规范使用常见控件。
+    中级: 能制定界面规范并处理多端适配。
+    高级: 能推动设计系统与研发落地保持一致。
+  prerequisites: [交互设计基础]
+  typical_usage: 规范不统一会让产品看起来像拼装的。
+  common_pitfalls:
+    - 同一功能在不同页面用不同控件。
+    - 只定义视觉，不定义交互状态。
+  learning_resources:
+    - {title: 'Material Design 3（组件与规范）', url: 'https://m3.material.io/'}
+    - {title: 'Apple 人机界面指南', url: 'https://developer.apple.com/design/human-interface-guidelines/'}
+  estimated_weeks: 3
+
+- skill: Figma
+  category: design
+  level_guides:
+    入门: 知道画板、图层、组件与自动布局的基本操作。
+    初级: 能用组件和样式完成一个页面的高保真设计。
+    中级: 能搭建组件变体与设计令牌，支持多人协作。
+    高级: 能维护设计系统并打通开发交付流程。
+  prerequisites: []
+  typical_usage: 界面设计、原型与协作交付的主流工具。
+  common_pitfalls:
+    - 全部手动画，没有组件导致改一处要改十处。
+    - 层级混乱，协作者找不到对应模块。
+  learning_resources:
+    - {title: 'Figma 官方帮助中心', url: 'https://help.figma.com/'}
+  estimated_weeks: 3
+
+- skill: 原型设计
+  category: design
+  level_guides:
+    入门: 知道原型用于演示流程而不是最终视觉。
+    初级: 能把关键页面连成可点击流程。
+    中级: 能用原型验证流程是否顺畅并收集反馈。
+    高级: 能用原型支撑需求评审与用户测试决策。
+  prerequisites: [Figma, 交互设计基础]
+  typical_usage: 在写代码前用低成本方式验证流程是否成立。
+  common_pitfalls:
+    - 原型做得过于精美，评审时大家只讨论颜色。
+    - 只连主流程，分支与异常无法演示。
+  learning_resources:
+    - {title: 'Figma 官方帮助中心（原型）', url: 'https://help.figma.com/'}
+  estimated_weeks: 2
+
+- skill: 设计组件库
+  category: design
+  level_guides:
+    入门: 知道组件库是为了复用一致的基础元素。
+    初级: 能整理按钮、输入框等基础组件。
+    中级: 能设计可配置的组件变体与使用规则。
+    高级: 能维护组件库版本并与前端实现对齐。
+  prerequisites: [Figma, 用户界面规范]
+  typical_usage: 降低重复劳动，保证多页面视觉一致。
+  common_pitfalls:
+    - 组件没有状态与尺寸变体，实际只能用一个场景。
+    - 组件库长期不维护，设计稿与线上不一致。
+  learning_resources:
+    - {title: 'Material Design 3（设计系统）', url: 'https://m3.material.io/'}
+  estimated_weeks: 3
+
+- skill: 可用性测试
+  category: design
+  level_guides:
+    入门: 知道可用性测试是观察真实用户完成任务。
+    初级: 能编写简单任务脚本并记录用户卡点。
+    中级: 能组织小样本测试并归纳主要问题。
+    高级: 能把测试结论转成设计改进与优先级。
+  prerequisites: [用户研究基础]
+  typical_usage: 用真实用户行为验证设计假设，而不是靠内部争论。
+  common_pitfalls:
+    - 引导用户说出"好用"，没有观察实际行为。
+    - 只测试一次，问题修复后没有复测。
+  learning_resources:
+    - {title: 'Nielsen Norman Group（可用性测试）', url: 'https://www.nngroup.com/articles/usability-testing-101/'}
+  estimated_weeks: 3
+
+- skill: 前端协作与交付
+  category: design
+  level_guides:
+    入门: 知道设计稿需要标注尺寸、间距与状态。
+    初级: 能提供开发可直接使用的标注与切图。
+    中级: 能与前端对齐响应式规则与交互细节。
+    高级: 能建立设计到开发的交付规范并减少返工。
+  prerequisites: [用户界面规范]
+  typical_usage: 交付质量决定还原度，标注不清楚就会反复确认。
+  common_pitfalls:
+    - 只交静态图，不说明悬停、禁用与空状态。
+    - 间距用目测数值，多端适配对不上。
+  learning_resources:
+    - {title: 'Figma 官方帮助中心（交付与检查）', url: 'https://help.figma.com/'}
+  estimated_weeks: 2
+
+- skill: 用户研究基础
+  category: design
+  level_guides:
+    入门: 知道用户研究用于了解目标用户与使用场景。
+    初级: 能做简单访谈并整理关键原话。
+    中级: 能设计问卷与访谈提纲，归纳用户需求。
+    高级: 能把研究结论转化为产品与设计决策依据。
+  prerequisites: []
+  typical_usage: 避免把设计建立在"我觉得用户会这样"的假设上。
+  common_pitfalls:
+    - 访谈问题带引导性，得到的答案没有信息量。
+    - 研究做完没有结论，变成一堆会议记录。
+  learning_resources:
+    - {title: 'Nielsen Norman Group（用户研究）', url: 'https://www.nngroup.com/articles/'}
+  estimated_weeks: 3

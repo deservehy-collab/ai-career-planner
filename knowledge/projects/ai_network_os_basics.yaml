@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：网络与操作系统基础排障（入门）
+name: 网络与操作系统基础排障
+domain: ai-application
+difficulty: beginner
+covers_skills: [计算机网络, 操作系统]
+prerequisites: []
+tech_stack: [命令行工具, curl, 系统监控工具]
+stage_hint: 学习路线前期，用真实故障练会定位而不是背概念
+deliverable: 一份排障手册：5 个典型故障的现象、排查命令、根因与修复
+acceptance_criteria:
+  - 能用 ping、curl、端口查看等命令区分网络不通与端口未监听
+  - 能读懂进程、内存与磁盘占用，定位卡顿来源
+  - 每个故障按"现象→假设→验证→结论"记录
+  - 手册里的命令可直接复制执行，不含占位符
+estimated_weeks: 2

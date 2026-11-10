@@ -1,0 +1,15 @@
+# Project 知识库 —— 中学教师：单元教学设计作品集（入门项目）
+name: 单元教学设计作品集
+domain: teaching
+difficulty: beginner
+covers_skills: [教学设计, 学科专业知识, 课件制作]
+prerequisites: [学科专业知识]
+tech_stack: [课程标准, 教材, PPT, 教案模板]
+stage_hint: 教师学习早期，用一个完整单元练习从课标到课时的拆解
+deliverable: 一个单元的课程纲要 + 3 份课时教案 + 配套课件，附设计说明
+acceptance_criteria:
+  - 单元目标可观察、可评价，与课程标准对应
+  - 课时之间形成递进，每节课的重难点与活动指向目标
+  - 课件信息清晰、字号可读，不替代板书与讲解
+  - 设计说明能解释为什么这样安排，而不是只贴模板
+estimated_weeks: 2

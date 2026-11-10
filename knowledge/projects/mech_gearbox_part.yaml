@@ -1,0 +1,15 @@
+# Project 知识库 —— 机械土木：减速箱零件建模与出图（入门）
+name: 减速箱零件建模与出图
+domain: mechanical-civil
+difficulty: beginner
+covers_skills: [机械制图, 三维建模, 公差与配合, 材料与加工工艺]
+prerequisites: []
+tech_stack: [SolidWorks / Creo, AutoCAD, 机械设计手册, 标准件库]
+stage_hint: 学习路线起点，从一个真实零件把图纸规范走通
+deliverable: 一套零件三维模型、零件图与技术要求说明
+acceptance_criteria:
+  - 图纸三视图完整，尺寸与公差标注符合国家标准
+  - 关键配合面标注公差与表面粗糙度，并说明选用理由
+  - 材料与热处理有依据，能与加工工艺对应
+  - 模型修改后图纸同步更新，无遗留旧尺寸
+estimated_weeks: 3

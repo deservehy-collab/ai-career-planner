@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：Linux 与 SQL 数据服务实训（入门）
+name: Linux 与 SQL 数据服务实训
+domain: ai-application
+difficulty: beginner
+covers_skills: [Linux, SQL]
+prerequisites: []
+tech_stack: [Linux, SQLite, 命令行工具]
+stage_hint: 学习路线前期，把数据放进数据库并从命令行查出来
+deliverable: 一台可用的 Linux 环境、一个建好表的数据文件，以及一组可复跑的查询脚本
+acceptance_criteria:
+  - 能在命令行完成目录浏览、文件权限与进程查看
+  - 能写出建表语句并导入一批测试数据
+  - 能用筛选、聚合与关联查询回答至少 5 个业务问题
+  - 查询脚本带注释，换一份数据仍能直接运行
+estimated_weeks: 2

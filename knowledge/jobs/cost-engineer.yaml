@@ -1,0 +1,133 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 工程造价员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_cost_std_001   建设工程工程量清单计价规范、工程量计算规范等公开文件
+#                         要点整理
+#                         https://www.mohurd.gov.cn/ （访问日期 2026-11-10）
+#   source_eng_jd_001     公开招聘信息中工程造价/预算员岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: cost_engineer
+job_name: 工程造价员
+
+aliases:
+  - 工程造价员
+  - 造价员
+  - 预算员
+  - 工程造价
+  - 造价工程师
+
+category: mechanical-civil
+domain: mechanical-civil
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 工程造价员依据施工图完成工程量计算与清单计价，编制招标控制价、投标报价与结算资料，跟踪变更签证并对项目成本做过程管控。
+  core_tasks:
+    - {name: 识图与算量, detail: 读建筑与结构图，按计算规则提取工程量}
+    - {name: 编制清单, detail: 按规范列项并准确描述项目特征}
+    - {name: 组价与调价, detail: 套用定额、调整人材机价格，形成完整报价}
+    - {name: 参与招投标, detail: 编制商务标并响应招标文件要求}
+    - {name: 处理变更与结算, detail: 审核签证、变更与索赔，编制结算书}
+    - {name: 做成本分析, detail: 对比目标成本与实际支出，提出纠偏建议}
+  tools: [广联达 / 斯维尔, Excel, AutoCAD, 计价定额与信息价, 合同文本]
+  deliverables: [工程量计算书, 招标控制价, 投标报价文件, 结算书, 成本分析报告]
+  entry_requirements: [工程造价/工程管理/土木工程等相关专业, 能读懂施工图, 掌握清单计价规则, 熟练使用造价软件与 Excel, 细心且能承受周期性赶工]
+  career_path:
+    - {name: 造价员, detail: 能独立完成算量与清单编制}
+    - {name: 造价工程师, detail: 能负责项目全过程造价管理}
+    - {name: 造价主管, detail: 能统筹多项目成本与团队复核}
+    - {name: 成本总监, detail: 能建立企业成本管控体系}
+
+skills:
+
+  - skill: 工程识图
+    importance: 5
+    level: 高级
+    reason: 算量从读图开始，看错一处后面全部作废。
+    evidence:
+      - {source_id: source_cost_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：工程量计算应以经审查的施工图为准'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：能熟练识读建筑与结构施工图'}
+
+  - skill: 工程计量
+    importance: 5
+    level: 高级
+    reason: 工程量直接决定金额，规则用错会导致系统性偏差。
+    evidence:
+      - {source_id: source_cost_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：分部分项工程量的计算规则与扣减关系'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责工程量计算与复核'}
+
+  - skill: 清单计价
+    importance: 5
+    level: 中级
+    reason: 清单与计价成果是招投标和结算的共同依据。
+    evidence:
+      - {source_id: source_cost_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：工程量清单编制、项目特征描述与计价程序'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：编制清单、控制价与投标报价'}
+
+  - skill: 造价软件
+    importance: 5
+    level: 中级
+    reason: 实际算量与组价都在软件里完成，操作不熟效率跟不上节点。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用广联达等造价软件'}
+
+  - skill: 定额与取费
+    importance: 4
+    level: 中级
+    reason: 定额换算与取费程序错一步，报价就整体失真。
+    evidence:
+      - {source_id: source_cost_std_001, requirement_type: required, context: qualification,
+         note: '规范整理：定额套用、换算与费用计取规则'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责套价、调价与费用计取'}
+
+  - skill: 招投标与合同管理
+    importance: 4
+    level: 中级
+    reason: 招标文件与合同条款直接约束报价与结算方式。
+    evidence:
+      - {source_id: source_cost_std_001, requirement_type: required, context: responsibility,
+         note: '规范整理：招标控制价、投标报价与合同价款的确定方式'}
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：参与投标文件编制与合同价款管理'}
+
+  - skill: 施工工艺基础
+    importance: 4
+    level: 初级
+    reason: 工序不同造价构成就不同，不懂工艺会套错定额。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解施工工艺与现场做法者优先'}
+
+  - skill: 成本控制
+    importance: 4
+    level: 中级
+    reason: 过程成本失控，结算再精细也补不回来。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟踪项目成本并做偏差分析'}
+
+  - skill: 工程文档与技术交底
+    importance: 3
+    level: 初级
+    reason: 计算书、签证与结算资料的完整性决定能否顺利计价与回款。
+    evidence:
+      - {source_id: source_eng_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：整理造价资料并配合审计'}

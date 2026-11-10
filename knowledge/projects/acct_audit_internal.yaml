@@ -1,0 +1,15 @@
+# Project 知识库 —— 会计：审计底稿与内控检查（高级综合项目）
+name: 审计底稿与内控检查
+domain: accounting
+difficulty: advanced
+covers_skills: [审计基础, 内部控制, 财务报表分析]
+prerequisites: [会计准则, 财务报表分析, 审计基础]
+tech_stack: [审计底稿模板, Excel, 内部控制矩阵]
+stage_hint: 学习路线后期，用一家模拟企业完成从风险评估到内控建议的完整练习
+deliverable: 一套审计与内控资料：审计程序表、抽查底稿、问题清单、内控缺陷说明及整改建议
+acceptance_criteria:
+  - 能围绕报表认定设计审计程序，抽查样本与结论对应
+  - 底稿有索引、证据与结论，能支撑最终意见
+  - 能识别资金、采购、报销流程中的关键控制缺陷
+  - 整改建议具体到责任岗位与执行动作，不停留在原则口号
+estimated_weeks: 4

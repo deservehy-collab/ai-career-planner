@@ -1,0 +1,75 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 数据分析技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/data-analyst.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 统计学基础
+  category: data-analysis
+  level_guides:
+    入门: 知道均值、中位数、比例等基本统计量，能读懂简单的统计图表。
+    初级: 能计算常用描述统计量，理解抽样、分布与相关性的基本含义。
+    中级: 能选择合适的统计方法回答业务问题，识别样本偏差与常见统计陷阱。
+    高级: 能设计实验与假设检验方案，解释置信区间与显著性对决策的意义。
+  prerequisites: []
+  typical_usage: 数据分析、A/B 实验与业务判断的底层方法基础。
+  common_pitfalls:
+    - 用均值描述长尾分布，结论被极端值带偏。
+    - 把相关当因果，忽略混杂因素。
+    - 样本量不足就下结论，波动被当成趋势。
+  learning_resources:
+    - {title: 'Khan Academy 统计与概率', url: 'https://www.khanacademy.org/math/statistics-probability'}
+  estimated_weeks: 3
+
+- skill: 数据清洗
+  category: data-analysis
+  level_guides:
+    入门: 知道数据可能存在缺失、重复与格式不一致，能发现明显异常。
+    初级: 能在 Excel 中处理缺失值、去重、拆分合并字段与统一格式。
+    中级: 能用 SQL 或 Python 批量清洗数据，记录清洗规则与影响范围。
+    高级: 能设计可复用的数据质量规则与校验流程，保证口径稳定可追溯。
+  prerequisites: [Excel, SQL]
+  typical_usage: 分析前的必要环节，决定后续结论是否可信。
+  common_pitfalls:
+    - 直接删缺失值，样本结构被悄悄改变。
+    - 清洗规则不记录，别人无法复现。
+    - 同一指标多种口径混用，报表对不上。
+  learning_resources:
+    - {title: 'pandas 官方入门文档', url: 'https://pandas.pydata.org/docs/user_guide/10min.html'}
+  estimated_weeks: 3
+
+- skill: 指标体系
+  category: data-analysis
+  level_guides:
+    入门: 知道指标要能反映业务目标，粗懂转化率、留存率等常见指标。
+    初级: 能按业务环节拆分指标，写清指标口径、公式与数据来源。
+    中级: 能搭建分层指标体系，区分结果指标与过程指标并定义优先级。
+    高级: 能建立指标治理机制，统一口径并让指标随业务变化迭代。
+  prerequisites: [业务分析]
+  typical_usage: 经营看板、增长分析与跨部门对齐目标的共同语言。
+  common_pitfalls:
+    - 指标越多越好，看板堆满却没人用。
+    - 同名指标口径不同，部门各说各话。
+    - 只定指标不定责任人与更新频率。
+  learning_resources:
+    - {title: 'GrowingIO 增长知识库', url: 'https://www.growingio.com/'}
+  estimated_weeks: 3
+
+- skill: 分析报告
+  category: data-analysis
+  level_guides:
+    入门: 知道报告要写清背景、数据来源、结论与建议。
+    初级: 能把分析结果整理成结构清晰的文档，图表与文字对应。
+    中级: 能围绕业务问题组织论证，区分事实、推断与建议。
+    高级: 能用报告推动决策与行动，跟踪结论落地效果。
+  prerequisites: [数据可视化, 业务分析]
+  typical_usage: 把分析结果交付给业务方与管理层，是分析价值的最终出口。
+  common_pitfalls:
+    - 报告全是图表，没有结论和建议。
+    - 结论超出数据能支撑的范围，过度推断。
+    - 不写数据口径与时间范围，读者无法判断可信度。
+  learning_resources:
+    - {title: '国家统计局', url: 'https://www.stats.gov.cn/'}
+  estimated_weeks: 2

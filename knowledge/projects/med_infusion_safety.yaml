@@ -1,0 +1,15 @@
+# Project 知识库 —— 医药护理：静脉输液与用药安全情景演练（进阶）
+name: 静脉输液与用药安全情景演练
+domain: healthcare
+difficulty: intermediate
+covers_skills: [静脉输液与给药, 无菌操作与院感防控, 护患沟通, 急救与心肺复苏, 护理评估]
+prerequisites: [基础护理操作, 无菌操作与院感防控]
+tech_stack: [输液流程单, 用药核对表, 情景演练脚本, 急救流程卡]
+stage_hint: 在基础操作之上，处理输液中常见风险与突发反应
+deliverable: 一份情景演练脚本与演练复盘报告
+acceptance_criteria:
+  - 三查七对在脚本中明确到每一步
+  - 至少设计输液反应、渗漏与滴速异常三类情景及处置
+  - 处置顺序符合规范，急救环节有明确分工
+  - 复盘指出演练中暴露的操作问题并给出改进项
+estimated_weeks: 3

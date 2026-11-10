@@ -1,0 +1,15 @@
+# Project 知识库 —— 中学教师：学情分析与分层作业设计（中级项目）
+name: 学情分析与分层作业设计
+domain: teaching
+difficulty: intermediate
+covers_skills: [学情分析, 命题与作业设计, 教育心理学]
+prerequisites: [学科专业知识, 教学设计, 教育心理学]
+tech_stack: [Excel, 双向细目表, 作业设计模板]
+stage_hint: 学会备课之后，练习根据真实数据判断学生卡点并布置有针对性的作业
+deliverable: 一份班级学情分析报告 + 一套分层作业 + 命题说明与批改反馈方案
+acceptance_criteria:
+  - 用成绩与错题数据定位共性薄弱点与个别学生卡点
+  - 作业分基础、提升、拓展三层，每层对应不同学习目标
+  - 题目与课堂目标对应，难度分布有依据
+  - 给出批改与反馈方式，能让不同层次学生知道下一步怎么做
+estimated_weeks: 2

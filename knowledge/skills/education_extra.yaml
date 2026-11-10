@@ -1,0 +1,178 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 教育咨询与教研技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/course-advisor.yaml 或
+#     knowledge/jobs/teaching-researcher.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 课程体系理解
+  category: teaching
+  level_guides:
+    入门: 知道课程按学段、学科与难度分层，能说出所售课程的基本结构。
+    初级: 能向用户说明课程目标、内容模块与适合人群。
+    中级: 能根据学员基础与目标匹配课程组合，说明先后顺序与理由。
+    高级: 能参与课程体系设计与优化，用学员结果验证课程价值。
+  prerequisites: []
+  typical_usage: 课程咨询、学员规划与课程产品设计的基础。
+  common_pitfalls:
+    - 只背课程名称，说不清课程解决什么问题。
+    - 不看学员基础就推最高价课程，信任迅速流失。
+    - 课程更新后信息不同步，承诺与实际不符。
+  learning_resources:
+    - {title: '中华人民共和国教育部', url: 'https://www.moe.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 学员需求分析
+  category: teaching
+  level_guides:
+    入门: 知道需求分析要先了解学员现状、目标与约束条件。
+    初级: 能用结构化问题了解学员基础、时间安排与学习目标。
+    中级: 能区分表面诉求与真实需求，判断课程是否真的适合对方。
+    高级: 能建立需求画像与匹配规则，提升咨询效率与转化质量。
+  prerequisites: [咨询沟通]
+  typical_usage: 咨询接待与学习方案设计的第一步。
+  common_pitfalls:
+    - 一上来就讲课程，不先问学员情况。
+    - 把"想提分"当成唯一需求，忽略时间与基础约束。
+    - 为了成交夸大课程效果，后续退费与投诉增加。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 2
+
+- skill: 学习规划
+  category: teaching
+  level_guides:
+    入门: 知道学习规划要拆成阶段目标、内容与时间安排。
+    初级: 能根据学员目标排出周计划，明确每次课的任务。
+    中级: 能结合基础与考试节点制定阶段计划，并设置检查点。
+    高级: 能设计个性化学习路径，依据学习数据动态调整计划。
+  prerequisites: [学情分析]
+  typical_usage: 把课程咨询结果落成可执行的学习安排，提升续费与效果。
+  common_pitfalls:
+    - 计划排得太满，学员第一周就放弃。
+    - 只有总目标没有阶段检查点，进度失控。
+    - 计划不与课程内容对应，执行时对不上。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 2
+
+- skill: 咨询沟通
+  category: teaching
+  level_guides:
+    入门: 知道咨询要倾听、提问、复述与确认，避免打断对方。
+    初级: 能用清晰、礼貌的语言介绍课程，回答常见问题。
+    中级: 能处理犹豫与异议，围绕学员需求给出有依据的建议。
+    高级: 能建立咨询流程与话术体系，在合规前提下提升转化与满意度。
+  prerequisites: [教育心理学]
+  typical_usage: 课程顾问接待、电话咨询与家长沟通的核心能力。
+  common_pitfalls:
+    - 只讲产品不听需求，答非所问。
+    - 过度承诺效果或制造焦虑，短期成交长期失信。
+    - 不记录沟通要点，后续跟进断层。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 2
+
+- skill: 销售转化
+  category: teaching
+  level_guides:
+    入门: 知道转化是把合适课程推荐给合适学员并完成报名。
+    初级: 能完成课程介绍、报价与报名流程，准确记录信息。
+    中级: 能识别决策关键点，处理价格与效果异议并推动成交。
+    高级: 能优化咨询到报名的全流程，用数据提升转化率与续费率。
+  prerequisites: [咨询沟通, 学员需求分析]
+  typical_usage: 课程顾问的核心业绩能力，连接学员需求与课程产品。
+  common_pitfalls:
+    - 把转化等同于硬推销，忽视匹配度。
+    - 报价含糊或隐藏费用，签约后纠纷不断。
+    - 只关注首单，不做后续服务与续费。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 3
+
+- skill: 学员关系维护
+  category: teaching
+  level_guides:
+    入门: 知道报名后要跟进学习进度，及时回应学员问题。
+    初级: 能按节点回访，记录学习情况与反馈。
+    中级: 能处理学习波动与不满，协调教师与家长形成支持。
+    高级: 能建立学员生命周期运营机制，用服务数据提升续费与转介绍。
+  prerequisites: [咨询沟通]
+  typical_usage: 续费、转介绍与口碑积累，是教育服务长期经营的关键。
+  common_pitfalls:
+    - 报名后失联，学员遇到问题无人响应。
+    - 回访只问续费，不关心学习效果。
+    - 承诺的服务不兑现，口碑迅速下滑。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 2
+
+- skill: 课程标准解读
+  category: teaching
+  level_guides:
+    入门: 知道课程标准规定学科目标、内容与学业质量要求。
+    初级: 能找出课程标准中与本学科、本学段相关的目标与内容要求。
+    中级: 能把课程标准转化为单元目标与教学重点，说明依据。
+    高级: 能系统解读课程标准的变化，指导教师调整教学与评价。
+  prerequisites: [学科专业知识]
+  typical_usage: 教研、备课与命题的上位依据，保证教学不偏离方向。
+  common_pitfalls:
+    - 只看教材不看课标，教学目标凭经验设定。
+    - 把课标条目直接抄成教学目标，无法落地。
+    - 不关注课标修订，沿用旧要求。
+  learning_resources:
+    - {title: '中华人民共和国教育部', url: 'https://www.moe.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 教材分析
+  category: teaching
+  level_guides:
+    入门: 知道教材按单元组织，包含知识、活动与练习。
+    初级: 能梳理一个单元的知识结构与重难点。
+    中级: 能分析教材编排逻辑，判断内容取舍与补充需求。
+    高级: 能建立教材与课标、考试、学情的对应关系，指导校本化实施。
+  prerequisites: [课程标准解读]
+  typical_usage: 备课、单元设计与教研活动的共同基础。
+  common_pitfalls:
+    - 逐页讲教材，缺少单元整体结构。
+    - 不区分重点与难点，平均用力。
+    - 教材与本地学情不匹配却生搬硬套。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 3
+
+- skill: 课程研发
+  category: teaching
+  level_guides:
+    入门: 知道课程研发要从目标、内容、活动与评价四部分设计。
+    初级: 能按模板开发一节课或一个专题的教学材料。
+    中级: 能独立开发单元课程，保证目标、活动与评价一致。
+    高级: 能主导课程体系研发，组织试用、修订与质量评估。
+  prerequisites: [教材分析, 教学设计]
+  typical_usage: 校本课程、专题课程与教研成果的落地载体。
+  common_pitfalls:
+    - 活动热闹但目标不清，学生学不到东西。
+    - 评价与目标脱节，无法判断课程是否有效。
+    - 开发完不试用不修订，课程停在纸面。
+  learning_resources:
+    - {title: '国家中小学智慧教育平台', url: 'https://basic.smartedu.cn/'}
+  estimated_weeks: 4
+
+- skill: 校本研修设计
+  category: teaching
+  level_guides:
+    入门: 知道校本研修是围绕学校教学问题开展的教师学习活动。
+    初级: 能按主题组织一次听课评课或专题研讨。
+    中级: 能设计"问题—学习—实践—反思"的研修流程，明确产出。
+    高级: 能规划学期研修体系，用课堂改进与学生表现评估研修效果。
+  prerequisites: [教学反思与研究, 课程研发]
+  typical_usage: 教研员与教研组长组织教师专业发展的主要工作方式。
+  common_pitfalls:
+    - 研修变成听讲座，缺少实践与跟进。
+    - 主题脱离课堂真实问题，教师参与度低。
+    - 活动结束没有产出与改进记录。
+  learning_resources:
+    - {title: '中国教研网', url: 'https://www.zgjiaoyan.com/'}
+  estimated_weeks: 3

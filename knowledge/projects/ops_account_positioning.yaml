@@ -1,0 +1,15 @@
+# Project 知识库 —— 新媒体运营：账号定位与内容选题库（入门项目）
+name: 账号定位与内容选题库
+domain: operations
+difficulty: beginner
+covers_skills: [内容策划, 竞品分析, 文案写作]
+prerequisites: [文案写作]
+tech_stack: [Excel/飞书表格, 竞品账号拆解表, 选题库模板]
+stage_hint: 运营学习早期，先想清楚为谁做、做什么，再开始稳定更新
+deliverable: 一份账号定位说明 + 30 条选题库 + 5 个竞品拆解表
+acceptance_criteria:
+  - 能写清目标用户、账号价值与差异化定位，不停留在"做美食/做职场"
+  - 选题库按栏目分类，每条有目标用户与内容形式
+  - 竞品拆解覆盖选题、形式、更新频率与互动表现
+  - 能从中选出 5 条作为首周发布计划并说明理由
+estimated_weeks: 2

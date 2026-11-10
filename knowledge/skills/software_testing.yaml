@@ -1,0 +1,109 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 软件测试技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/software-test-engineer.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 软件测试基础
+  category: software-testing
+  level_guides:
+    入门: 知道测试的目的是发现缺陷、验证软件符合需求，了解测试与调试的区别。
+    初级: 能说出单元、集成、系统、验收测试的区别，会写简单的测试计划。
+    中级: 能根据需求设计测试策略，说明测试范围、环境与准入准出条件。
+    高级: 能建立质量保障体系，把测试左移并与发布流程结合。
+  prerequisites: []
+  typical_usage: 软件质量保障的入门能力，也是所有测试岗位的共同基础。
+  common_pitfalls:
+    - 把测试等同于"点一遍看能不能用"。
+    - 不写测试范围与退出条件，测到哪算哪。
+    - 只测正常流程，不设计异常与边界。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（软件评测师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 2
+
+- skill: 测试用例设计
+  category: software-testing
+  level_guides:
+    入门: 知道一条用例应包含前置条件、步骤、输入与预期结果。
+    初级: 能用等价类、边界值方法为简单功能设计用例。
+    中级: 能组合等价类、边界值、场景法覆盖复杂业务，控制用例冗余。
+    高级: 能建立用例评审与复用机制，用风险驱动测试设计。
+  prerequisites: [软件测试基础]
+  typical_usage: 把需求转成可执行、可复核的测试步骤，是测试执行的前提。
+  common_pitfalls:
+    - 用例只写操作步骤，没有明确的预期结果。
+    - 用例之间大量重复，维护成本高。
+    - 只覆盖正常输入，遗漏边界与异常组合。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（软件评测师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 功能测试
+  category: software-testing
+  level_guides:
+    入门: 能按用例在页面上执行操作并记录实际结果。
+    初级: 能独立完成一个模块的功能测试，区分缺陷与需求理解偏差。
+    中级: 能设计并执行端到端功能场景，覆盖权限、状态与数据一致性。
+    高级: 能规划版本测试范围与回归策略，对发布质量给出判断。
+  prerequisites: [软件测试基础, 测试用例设计]
+  typical_usage: 验证产品功能是否符合需求，是测试工作量的主要部分。
+  common_pitfalls:
+    - 只测页面展示，不检查数据落库与状态流转。
+    - 回归范围拍脑袋，改一处只测一处。
+    - 发现问题不区分严重程度，缺陷优先级混乱。
+  learning_resources:
+    - {title: '中国计算机技术职业资格网（软件评测师）', url: 'https://www.ruankao.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 接口测试
+  category: software-testing
+  level_guides:
+    入门: 知道接口测试是直接验证服务输入输出，能看懂请求与响应。
+    初级: 能用 Postman 或脚本调用接口，校验状态码与关键字段。
+    中级: 能设计正常、异常、鉴权与边界场景，做接口自动化与数据准备。
+    高级: 能建立接口测试规范与持续集成流水线，覆盖契约与性能基线。
+  prerequisites: [软件测试基础, SQL]
+  typical_usage: 前后端分离与微服务架构下，验证服务契约与业务逻辑的主要手段。
+  common_pitfalls:
+    - 只校验状态码，不校验业务字段与数据一致性。
+    - 测试数据互相污染，用例顺序一变就失败。
+    - 接口变更后不同步更新用例，测试形同虚设。
+  learning_resources:
+    - {title: 'Postman Learning Center', url: 'https://learning.postman.com/docs/'}
+  estimated_weeks: 3
+
+- skill: 自动化测试
+  category: software-testing
+  level_guides:
+    入门: 知道自动化测试是用脚本重复执行测试，适合稳定的回归场景。
+    初级: 能用一种语言写简单脚本，操作页面或调用接口并断言结果。
+    中级: 能搭建可维护的自动化框架，封装公共操作并接入持续集成。
+    高级: 能设计分层自动化策略与质量门禁，平衡覆盖率与维护成本。
+  prerequisites: [测试用例设计, Python, Git]
+  typical_usage: 回归测试、持续集成与发布前的自动化质量检查。
+  common_pitfalls:
+    - 为了自动化而自动化，不稳定的场景也强行脚本化。
+    - 用例之间强依赖，失败后无法定位是产品问题还是脚本问题。
+    - 只写不管，脚本长期不维护直到全部失效。
+  learning_resources:
+    - {title: 'Playwright Python 官方文档', url: 'https://playwright.dev/python/docs/intro'}
+  estimated_weeks: 4
+
+- skill: 缺陷管理
+  category: software-testing
+  level_guides:
+    入门: 知道缺陷要记录复现步骤、实际结果与预期结果。
+    初级: 能提交要素齐全的缺陷单，并按严重程度与优先级分类。
+    中级: 能跟踪缺陷生命周期，推动开发修复并做回归验证。
+    高级: 能分析缺陷分布与根因，推动流程改进与质量度量。
+  prerequisites: [软件测试基础]
+  typical_usage: 测试与开发协作的核心流程，决定问题能否被准确修复。
+  common_pitfalls:
+    - 缺陷描述含糊，开发无法复现。
+    - 把多个问题写进一张单，修复与验证都对不上。
+    - 只提单不跟踪，缺陷长期挂起无人处理。
+  learning_resources:
+    - {title: 'Atlassian Jira 缺陷管理指南', url: 'https://www.atlassian.com/software/jira/guides'}
+  estimated_weeks: 2

@@ -1,0 +1,15 @@
+# Project 知识库 —— AI 应用：数据结构与算法刷题与复盘（进阶）
+name: 数据结构与算法刷题与复盘
+domain: ai-application
+difficulty: intermediate
+covers_skills: [数据结构与算法, Python]
+prerequisites: [Python]
+tech_stack: [Python, 刷题平台]
+stage_hint: 学习路线中期，按专题整理题解与复杂度分析
+deliverable: 一份专题题解集：每题含思路、代码、复杂度与错因复盘
+acceptance_criteria:
+  - 覆盖数组、哈希、栈队列、树与图等基础专题
+  - 每道题能说清时间与空间复杂度，而不是只给出答案
+  - 错题记录包含最初的错误思路与修正点
+  - 同一类题能总结出可迁移的解题模板
+estimated_weeks: 3

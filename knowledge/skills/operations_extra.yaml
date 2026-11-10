@@ -1,0 +1,127 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 电商与市场推广技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/ecommerce-operator.yaml 或
+#     knowledge/jobs/marketing-specialist.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 电商平台运营
+  category: operations
+  level_guides:
+    入门: 知道主流电商平台的基本规则、店铺结构与交易流程。
+    初级: 能完成商品上架、信息维护与日常店铺检查。
+    中级: 能独立负责店铺日常运营，协调商品、活动、客服与数据复盘。
+    高级: 能制定店铺年度运营策略，统筹流量、转化与利润目标。
+  prerequisites: []
+  typical_usage: 淘宝、京东、抖音电商等平台店铺的日常经营与增长。
+  common_pitfalls:
+    - 不熟悉平台规则，商品被下架或店铺被扣分。
+    - 只盯流量不看转化与利润，越卖越亏。
+    - 商品信息不完整，影响搜索与转化。
+  learning_resources:
+    - {title: '淘宝规则中心', url: 'https://rule.taobao.com/'}
+  estimated_weeks: 3
+
+- skill: 商品运营
+  category: operations
+  level_guides:
+    入门: 知道商品标题、主图、详情页与价格影响用户购买决策。
+    初级: 能按规范完成商品信息维护，做基础的价格与库存检查。
+    中级: 能根据数据优化商品结构、定价与卖点表达，打造主推款。
+    高级: 能规划商品生命周期与品类矩阵，联动供应链与营销节奏。
+  prerequisites: [电商平台运营, 运营数据分析]
+  typical_usage: 商品从选品、上架到动销与淘汰的全周期管理。
+  common_pitfalls:
+    - 标题堆关键词但不通顺，影响搜索与信任。
+    - 主图与详情页夸大宣传，引发退货与投诉。
+    - 只看销量不看毛利与库存周转。
+  learning_resources:
+    - {title: '淘宝规则中心', url: 'https://rule.taobao.com/'}
+  estimated_weeks: 3
+
+- skill: 活动策划
+  category: operations
+  level_guides:
+    入门: 知道促销活动由目标、人群、玩法、预算与节奏构成。
+    初级: 能按模板写出活动方案，明确时间、优惠规则与物料清单。
+    中级: 能独立策划平台大促或店铺活动，协调资源并跟踪执行。
+    高级: 能设计活动组合与全年节奏，用数据评估投入产出并迭代。
+  prerequisites: [内容策划]
+  typical_usage: 平台大促、店铺活动与拉新促活的方案设计与执行。
+  common_pitfalls:
+    - 优惠规则复杂到用户看不懂，活动转化反而下降。
+    - 只策划不预热，活动当天没有流量。
+    - 活动结束不复盘，下一次继续踩同样的坑。
+  learning_resources:
+    - {title: '巨量引擎官网', url: 'https://www.oceanengine.com/'}
+  estimated_weeks: 2
+
+- skill: 客服与售后
+  category: operations
+  level_guides:
+    入门: 知道客服要及时响应，售后要按平台规则处理退换货。
+    初级: 能使用快捷话术回答常见问题，规范记录工单。
+    中级: 能处理投诉与纠纷，平衡用户体验与店铺成本。
+    高级: 能建立客服话术库与服务质量指标，用售后数据反推产品与运营改进。
+  prerequisites: [平台规则与合规]
+  typical_usage: 店铺咨询、订单跟进、退换货与投诉处理。
+  common_pitfalls:
+    - 回复慢或机械复制，用户直接流失。
+    - 不按平台时限处理售后，引发平台介入与扣分。
+    - 只解决单次问题，不沉淀高频问题与改进建议。
+  learning_resources:
+    - {title: '淘宝规则中心', url: 'https://rule.taobao.com/'}
+  estimated_weeks: 2
+
+- skill: 市场调研
+  category: operations
+  level_guides:
+    入门: 知道调研要明确目标人群、问题与信息用途。
+    初级: 能通过公开资料与竞品页面收集信息并整理成表。
+    中级: 能设计问卷或访谈提纲，完成样本收集与基础分析。
+    高级: 能设计完整调研方案，把结论转化为定位与推广决策。
+  prerequisites: [竞品分析, Excel]
+  typical_usage: 新品立项、市场进入与推广策略制定前的信息收集。
+  common_pitfalls:
+    - 问题设计有引导性，结论早已写好。
+    - 样本集中在熟人圈，代表性不足。
+    - 收集了大量资料却没有结论和行动建议。
+  learning_resources:
+    - {title: '国家统计局', url: 'https://www.stats.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 市场推广策划
+  category: operations
+  level_guides:
+    入门: 知道推广要回答"对谁、说什么、在哪说、怎么衡量"。
+    初级: 能按目标写出推广方案，列出渠道、内容与预算。
+    中级: 能组合内容、投放与活动设计推广节奏，设置可衡量的目标。
+    高级: 能制定整合营销方案，协调品牌与效果目标并做投入产出评估。
+  prerequisites: [市场调研, 文案写作]
+  typical_usage: 新品上市、节点营销与持续获客的推广方案设计。
+  common_pitfalls:
+    - 目标写成"提升曝光"，没有可衡量的结果指标。
+    - 渠道全铺但没有主次，预算被摊薄。
+    - 推广与产品、客服脱节，流量来了接不住。
+  learning_resources:
+    - {title: '巨量引擎官网', url: 'https://www.oceanengine.com/'}
+  estimated_weeks: 3
+
+- skill: 品牌传播
+  category: operations
+  level_guides:
+    入门: 知道品牌是用户对产品的整体印象，传播要一致。
+    初级: 能识别品牌的核心信息与目标人群，保持内容调性统一。
+    中级: 能策划品牌内容与传播节点，协调多渠道表达一致的信息。
+    高级: 能建立品牌资产与传播策略，处理舆情并长期经营用户心智。
+  prerequisites: [内容策划, 市场推广策划]
+  typical_usage: 品牌定位落地、内容传播与用户心智建设。
+  common_pitfalls:
+    - 每次传播换个说法，用户记不住品牌。
+    - 只追热点不看品牌调性，短期流量伤害长期形象。
+    - 出现负面舆情时回应迟缓或口径不一。
+  learning_resources:
+    - {title: '中国大学MOOC', url: 'https://www.icourse163.org/'}
+  estimated_weeks: 3

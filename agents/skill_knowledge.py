@@ -1,4 +1,4 @@
-"""Skill 知识库查询模块（结构化 YAML，非向量）。
+"""Skill 知识库查询模块（结构化 YAML）。
 
 设计要点
 --------
@@ -23,6 +23,27 @@ import yaml
 # 与 agents/utils.py 的 SKILL_LEVELS 保持口径一致
 SKILL_LEVELS = ("入门", "初级", "中级", "高级")
 SKILL_LEVEL_STD = "level_guides"
+
+#: 单个技能最多带几条学习资源进提示词。资源是给模型"安排学什么"的参考，
+#: 不是要它逐条罗列；条数太多会挤占上下文，且容易让模型照抄成书目清单。
+MAX_RESOURCES_PER_SKILL = 4
+
+
+def _resource_lines(raw: object) -> list[str]:
+    """学习资源 → 「标题（链接）」列表；缺标题或链接的条目直接跳过。"""
+    if not isinstance(raw, list):
+        return []
+    lines: list[str] = []
+    for entry in raw:
+        if not isinstance(entry, dict):
+            continue
+        title = str(entry.get("title") or "").strip()
+        url = str(entry.get("url") or "").strip()
+        if title and url:
+            lines.append(f"{title}（{url}）")
+        if len(lines) >= MAX_RESOURCES_PER_SKILL:
+            break
+    return lines
 
 DEFAULT_SKILL_DIR = Path(__file__).resolve().parent.parent / "knowledge" / "skills"
 
@@ -147,5 +168,8 @@ class SkillKnowledgeBase:
                 text = str(guides.get(lv, "")).strip()
                 if text:
                     lines.append(f"- {lv}：{text}")
+            resources = _resource_lines(item.get("learning_resources"))
+            if resources:
+                lines.append(f"- 学习资源：{'；'.join(resources)}")
             blocks.append("\n".join(lines))
         return "\n\n".join(blocks)

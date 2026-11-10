@@ -1,0 +1,140 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 财务分析 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_finance_std_001  财政部管理会计应用指引与全面预算相关公开材料要点整理
+#                           https://kjs.mof.gov.cn/ （访问日期 2026-11-10）
+#   source_finance_jd_001   公开招聘信息中财务分析/财务BP/经营分析岗位的通用职责
+#                           与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: financial_analyst
+job_name: 财务分析
+
+aliases:
+  - 财务分析
+  - 财务分析师
+  - 财务BP
+  - 财务分析专员
+  - 管理会计
+  - 经营分析
+
+category: finance-accounting
+domain: accounting
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 财务分析负责把账务数据转成经营语言，通过预算跟踪、成本与利润分析、财务建模和经营看板，解释差异并向业务与管理层提供决策建议。
+  core_tasks:
+    - {name: 编制经营分析报告, detail: 对比预算与实际，拆解收入、成本、费用与利润的变动原因}
+    - {name: 跟踪预算执行, detail: 汇总部门预算执行数据，预警偏差并推动业务解释与调整}
+    - {name: 搭建财务模型, detail: 建立三表联动与假设驱动的预测模型，做敏感性分析}
+    - {name: 分析成本与毛利, detail: 按产品、客户或项目拆解成本结构，定位毛利变化来源}
+    - {name: 设计经营看板, detail: 选取关键指标并做可视化，支持月度经营会与管理决策}
+    - {name: 支持业务决策, detail: 参与定价、投放、投资等方案测算并给出财务建议}
+  tools: [Excel, 财务软件, BI 工具, 预算管理系统, 经营分析模板]
+  deliverables: [月度经营分析报告, 预算执行跟踪表, 财务预测模型, 经营指标看板, 专项测算与建议]
+  entry_requirements: [会计学/财务管理/金融等相关专业, 熟悉财务报表与成本核算, Excel 建模能力强, 具备业务理解与沟通能力, 中级会计职称或 CPA 优先]
+  career_path:
+    - {name: 财务分析专员, detail: 能完成月度数据整理、差异分析与基础测算}
+    - {name: 财务分析师, detail: 能独立负责业务线分析、预算跟踪与模型搭建}
+    - {name: 财务BP, detail: 能深入业务、参与决策并推动经营改进}
+    - {name: 财务分析负责人, detail: 能搭建分析体系、带团队并支撑公司级经营决策}
+
+skills:
+
+  - skill: 财务报表分析
+    importance: 5
+    level: 高级
+    reason: 三大报表的结构、质量与勾稽关系是一切经营分析的基础。
+    evidence:
+      - {source_id: source_finance_std_001, requirement_type: required, context: qualification,
+         note: '公开规范整理：能编制并分析三大报表，解释主要变动'}
+      - {source_id: source_finance_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责月度财务报表分析与经营数据解读'}
+
+  - skill: 预算管理
+    importance: 4
+    level: 中级
+    reason: 预算跟踪与差异分析是财务分析岗位的固定动作。
+    evidence:
+      - {source_id: source_finance_std_001, requirement_type: required, context: responsibility,
+         note: '公开规范整理：组织预算编制、执行跟踪与差异分析'}
+      - {source_id: source_finance_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：跟踪预算执行并输出偏差分析'}
+
+  - skill: 成本核算
+    importance: 4
+    level: 中级
+    reason: 毛利与成本结构分析需要理解成本归集与分配口径。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉成本核算方法，能分析产品毛利与成本结构'}
+
+  - skill: Excel
+    importance: 5
+    level: 高级
+    reason: 数据整理、透视分析、模型搭建与看板制作都高度依赖 Excel。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：精通 Excel 函数、透视表与图表，能独立搭建分析表'}
+
+  - skill: 财务软件
+    importance: 3
+    level: 中级
+    reason: 需要从财务系统取数、核对科目与辅助核算数据。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉用友/金蝶等财务软件取数者优先'}
+
+  - skill: 会计准则
+    importance: 4
+    level: 中级
+    reason: 分析口径与调整事项需要准则依据，避免把会计处理差异当成经营变化。
+    evidence:
+      - {source_id: source_finance_std_001, requirement_type: required, context: qualification,
+         note: '公开规范整理：熟悉企业会计准则与常用会计政策'}
+
+  - skill: 财务建模
+    importance: 4
+    level: 中级
+    reason: 预算预测、投资测算与情景分析都需要可复用的财务模型。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：搭建财务预测模型并做敏感性分析'}
+
+  - skill: 经营分析
+    importance: 5
+    level: 高级
+    reason: 岗位核心产出是把财务结果翻译成业务原因与改进行动。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：输出月度经营分析，定位收入利润变动原因'}
+      - {source_id: source_finance_std_001, requirement_type: required, context: responsibility,
+         note: '公开规范整理：结合业务驱动因素开展经营分析与决策支持'}
+
+  - skill: 业务分析
+    importance: 4
+    level: 中级
+    reason: 理解业务流程与关键指标，才能判断数字背后的真实原因。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：理解业务模式，能与业务部门共同分析问题'}
+
+  - skill: 数据可视化
+    importance: 3
+    level: 中级
+    reason: 经营看板与汇报材料需要清晰表达指标与趋势。
+    evidence:
+      - {source_id: source_finance_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：能用图表清晰呈现经营指标者优先'}

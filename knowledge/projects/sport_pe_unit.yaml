@@ -1,0 +1,15 @@
+# Project 知识库 —— 体育：单元教学设计与课堂安全（入门）
+name: 单元教学设计与课堂安全
+domain: sports
+difficulty: beginner
+covers_skills: [体育教学法, 体育课程标准解读, 体育课堂组织与安全, 运动技能示范]
+prerequisites: []
+tech_stack: [课程标准, 教案模板, 场地器材, 安全预案模板]
+stage_hint: 学习路线起点，把一个项目的单元课上完整
+deliverable: 一份单元教学计划、课时教案与课堂安全预案
+acceptance_criteria:
+  - 单元目标对应课程标准的具体要求
+  - 每课时有学习目标、重难点、练习密度与评价方式
+  - 场地队形与器材检查写在教案里，风险点有应对措施
+  - 技能教学有分解示范与常见错误纠正手段
+estimated_weeks: 2

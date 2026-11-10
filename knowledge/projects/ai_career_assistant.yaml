@@ -9,6 +9,7 @@
 # ═══════════════════════════════════════════════════════════════════════════
 
 name: AI 求职规划助手
+domain: ai-application
 difficulty: advanced
 covers_skills: [Python, RAG, Agent, 后端 API 开发, 测试与效果评测, Docker]
 prerequisites: [Python, RAG, Agent, 后端 API 开发]

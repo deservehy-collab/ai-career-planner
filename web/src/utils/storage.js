@@ -3,10 +3,12 @@
  *
  * 画像**不做后端持久化**（后端没有画像接口），由前端保存、每次请求携带。
  * 两个键分开存，语义不同、不要混：
- *   career-agent:profile      —— 用户自述：major / grade / skills(字符串数组) / projects / target_job
+ *   career-agent:profile      —— 用户自述：major / grade / skills / projects /
+ *                                targetJob，外加 jdText（本次粘贴的招聘要求原文）
  *   career-agent:last-skills  —— 最近一次分析返回的**结构化能力表** [{skill, level, evidence}]
  *
  * 后者是提交任务完成时 `profile_skills` 的来源（让"升级预览"与下一轮真实判定同一基线）。
+ * 前者的 jdText 会随 `next-round` 一起回传，好让下一轮沿用同一份岗位要求，不必重粘。
  */
 
 export const PROFILE_KEY = 'career-agent:profile'

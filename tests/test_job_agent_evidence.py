@@ -6,7 +6,7 @@
   必须打**消费方模块**的属性 —— `agents/job_agent.py` 用的是
   `from agents.llm import structured_invoke`，改 `agents.llm` 里的名字无效。
 - **检索后端**：本节点不调用检索器，证据由 state 直接注入，无需 fake 后端。
-  全程不连接 Ollama / Chroma。
+  全程不连接 Ollama。
 
 注意：`job_node` 沿用既有的 `check_non_empty(minimum=3)` 约束，因此每个用例
 至少要凑够 3 项技能（`run_job` 会自动补足填充项）。
@@ -220,8 +220,8 @@ class TestEvidenceDrivenJobAgent(unittest.TestCase):
         values = [item["importance"] for item in out.values()]
         self.assertEqual(values, sorted(values, reverse=True))
 
-    def test_skill_gaps_structure_is_unchanged(self):
-        """把新的 job_requirements 灌进 assessment_node，skill_gaps 仍是原八字段。"""
+    def test_skill_gaps_structure_keeps_original_fields(self):
+        """新证据字段是**追加**的：原有八字段一个不少，下游旧消费方不受影响。"""
         items = list(run_job([req("Python"), req("向量数据库"), req("Kubernetes")]).values())
 
         def fake_assess(prompt, schema):
@@ -244,7 +244,9 @@ class TestEvidenceDrivenJobAgent(unittest.TestCase):
         self.assertEqual(
             set(gaps[0]),
             {"skill", "status", "supported_by", "current_level", "required_level",
-             "importance", "priority", "gap"},
+             "importance", "priority", "gap",
+             "display_status", "verification", "evidence_kind",
+             "evidence_ref", "evidence_note"},
         )
         self.assertEqual(gaps[0]["current_level"], "中级")  # 学生水平仍来自 user_skills
 

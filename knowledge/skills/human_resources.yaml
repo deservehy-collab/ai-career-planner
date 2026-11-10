@@ -1,0 +1,200 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 人力资源技能（v1）
+# 说明：
+#   - 技能名必须出现在 knowledge/jobs/hr-specialist.yaml 或
+#     knowledge/jobs/compensation-specialist.yaml 里。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 招聘与面试
+  category: human-resources
+  level_guides:
+    入门: 知道招聘流程包含需求确认、发布、筛选、面试与录用，能整理简历。
+    初级: 能按岗位说明书筛选简历、安排面试并做好记录。
+    中级: 能设计结构化面试问题，独立完成初面判断匹配度。
+    高级: 能搭建招聘渠道组合与面试官培训机制，控制招聘周期与质量。
+  prerequisites: []
+  typical_usage: 人力资源岗最日常的工作，决定用人部门能否及时补到合适的人。
+  common_pitfalls:
+    - 只看关键词筛简历，不核对岗位真实要求。
+    - 面试问题随机发挥，不同候选人标准不一致。
+  learning_resources:
+    - {title: '人力资源和社会保障部（职业标准与就业政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 劳动法与用工合规
+  category: human-resources
+  level_guides:
+    入门: 知道劳动合同、试用期、工时与解除的基本规则。
+    初级: 能按法定要求准备劳动合同与入职材料，识别明显违规做法。
+    中级: 能处理常见用工争议，判断补偿与解除程序是否合规。
+    高级: 能建立用工合规制度并应对仲裁、监察等外部检查。
+  prerequisites: []
+  typical_usage: 入职、转正、调岗、离职全流程都要落在法定规则内。
+  common_pitfalls:
+    - 试用期随意延长或约定超期。
+    - 口头调岗调薪，没有书面变更记录。
+  learning_resources:
+    - {title: '国家法律法规数据库（劳动合同法）', url: 'https://flk.npc.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 员工关系管理
+  category: human-resources
+  level_guides:
+    入门: 知道员工关系工作包括入离职手续、沟通与活动组织。
+    初级: 能独立办理入离职手续并维护员工档案。
+    中级: 能处理员工投诉、异动沟通，识别离职风险信号。
+    高级: 能建立员工沟通与保留机制，降低关键岗位流失率。
+  prerequisites: [劳动法与用工合规]
+  typical_usage: 让员工从入职到离职的每个节点都有明确流程与记录。
+  common_pitfalls:
+    - 离职面谈走过场，真实原因没有记录。
+    - 员工诉求只口头回应，没有书面跟踪。
+  learning_resources:
+    - {title: '人力资源和社会保障部（劳动关系政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 薪酬核算
+  category: human-resources
+  level_guides:
+    入门: 知道薪酬由基本工资、绩效、补贴与扣款构成。
+    初级: 能按考勤与绩效数据算出应发、实发工资。
+    中级: 能独立完成月度薪酬核算，核对异常并解释差异。
+    高级: 能设计薪酬结构与调薪规则，保证内部公平与外部竞争力。
+  prerequisites: [Excel]
+  typical_usage: 每月固定交付，算错一次就会影响所有人对制度的信任。
+  common_pitfalls:
+    - 考勤、绩效与薪酬三套数据口径不一致。
+    - 只算应发，不核对社保公积金与个税扣缴。
+  learning_resources:
+    - {title: '人力资源和社会保障部（工资与社保政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 社保公积金实操
+  category: human-resources
+  level_guides:
+    入门: 知道五险一金的险种、缴费基数与缴纳比例的基本概念。
+    初级: 能办理增员、减员与基数调整等常规申报。
+    中级: 能处理补缴、转移、待遇申领等异常业务。
+    高级: 能按城市政策差异设计缴纳方案并控制合规风险。
+  prerequisites: []
+  typical_usage: 入职与离职节点都要及时办理，断缴会直接影响员工待遇。
+  common_pitfalls:
+    - 缴费基数按最低标准随意申报。
+    - 离职减员不及时，产生多缴与退费纠纷。
+  learning_resources:
+    - {title: '人力资源和社会保障部（社会保险政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 人力资源数据分析
+  category: human-resources
+  level_guides:
+    入门: 能统计在编人数、招聘完成率、离职率等基础指标。
+    初级: 能用表格做出月度人力报表并解释变化。
+    中级: 能建立招聘、绩效、流失的分析口径并定位问题环节。
+    高级: 能用数据支撑编制规划与人工成本决策。
+  prerequisites: [Excel]
+  typical_usage: 把"感觉人不够/留不住"变成可核对的数据结论。
+  common_pitfalls:
+    - 各月报表口径不同，趋势无法比较。
+    - 只看离职率，不看离职结构与关键岗位。
+  learning_resources:
+    - {title: '人力资源和社会保障部（统计与就业数据）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 人事系统操作
+  category: human-resources
+  level_guides:
+    入门: 知道人事系统里组织、员工、合同、考勤等模块的用途。
+    初级: 能在系统中完成员工信息录入与常规查询。
+    中级: 能维护组织架构、批量导入数据并核对系统与台账一致性。
+    高级: 能推动系统流程配置与数据治理，支撑报表自动化。
+  prerequisites: []
+  typical_usage: 员工信息、合同与考勤都以系统为准，台账只是备份。
+  common_pitfalls:
+    - 系统与手工台账两套数据长期不一致。
+    - 组织调整后不更新系统，审批流走错人。
+  learning_resources:
+    - {title: '人力资源和社会保障部（人力资源服务规范）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 培训组织与实施
+  category: human-resources
+  level_guides:
+    入门: 知道培训需要需求、计划、实施与评估四个环节。
+    初级: 能组织一场入职培训并做好签到与反馈收集。
+    中级: 能按岗位能力差距设计培训计划并跟踪效果。
+    高级: 能建立课程体系与内部讲师机制，评估培训投入产出。
+  prerequisites: []
+  typical_usage: 新员工入职与岗位能力补强都依赖培训落地。
+  common_pitfalls:
+    - 只统计培训场次，不评估是否改变行为。
+    - 需求来自拍脑袋，课程与岗位问题无关。
+  learning_resources:
+    - {title: '人力资源和社会保障部（职业培训政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 绩效考核
+  category: human-resources
+  level_guides:
+    入门: 知道绩效管理包含目标、过程跟踪、评价与反馈。
+    初级: 能按考核表收集数据并汇总评分。
+    中级: 能设计可衡量的考核指标，组织绩效面谈。
+    高级: 能把绩效结果与调薪、晋升衔接，处理考核争议。
+  prerequisites: []
+  typical_usage: 把岗位目标转成可衡量的指标，支撑调薪与晋升决策。
+  common_pitfalls:
+    - 指标全是主观打分，缺少可核对的数据来源。
+    - 只有考核没有反馈，员工不知道为什么被扣分。
+  learning_resources:
+    - {title: '人力资源和社会保障部（企业人力资源管理师标准）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 薪酬调研
+  category: human-resources
+  level_guides:
+    入门: 知道薪酬调研用于了解同岗位市场水平。
+    初级: 能收集公开招聘薪资并整理成对比表。
+    中级: 能按岗位、城市与经验分层比较，判断薪酬竞争力。
+    高级: 能设计薪酬带宽与年度调薪策略。
+  prerequisites: [Excel]
+  typical_usage: 招聘定价与年度调薪都要有外部参照。
+  common_pitfalls:
+    - 直接用招聘广告的薪资区间当市场值。
+    - 忽略岗位职责差异，跨岗位硬比。
+  learning_resources:
+    - {title: '人力资源和社会保障部（工资指导价位）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 个税计算
+  category: human-resources
+  level_guides:
+    入门: 知道综合所得按年度累计预扣，有专项附加扣除。
+    初级: 能按累计预扣法计算月度个税。
+    中级: 能处理年终奖、劳务报酬等不同所得的计税差异。
+    高级: 能在合规前提下设计薪酬发放节奏并应对汇算清缴问题。
+  prerequisites: [薪酬核算]
+  typical_usage: 每月工资表必须算准个税，年度汇算时还要能解释差异。
+  common_pitfalls:
+    - 把专项附加扣除漏算或重复算。
+    - 年终奖与工资合并方式选择错误。
+  learning_resources:
+    - {title: '国家税务总局（个人所得税政策）', url: 'https://www.chinatax.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 激励方案设计
+  category: human-resources
+  level_guides:
+    入门: 知道奖金、提成、股权等激励形式的基本区别。
+    初级: 能按既定规则算出提成或奖金金额。
+    中级: 能针对销售、研发等岗位设计差异化激励方案。
+    高级: 能把激励与公司目标、预算约束结合并评估长期效果。
+  prerequisites: [绩效考核, 薪酬调研]
+  typical_usage: 解决"干多干少一个样"，把激励和可衡量的结果绑定。
+  common_pitfalls:
+    - 激励规则复杂到员工算不明白。
+    - 只激励短期数字，导致动作变形。
+  learning_resources:
+    - {title: '人力资源和社会保障部（工资分配政策）', url: 'https://www.mohrss.gov.cn/'}
+  estimated_weeks: 4

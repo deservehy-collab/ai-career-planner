@@ -1,0 +1,144 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 软件测试工程师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_test_std_001    中国计算机技术职业资格网公开的软件评测师考试大纲要点整理
+#                          https://www.ruankao.org.cn/ （访问日期 2026-11-10）
+#   source_test_std_002    中国软件评测中心公开的测试基础与质量保障材料要点整理
+#                          http://www.cstc.org.cn/ （访问日期 2026-11-10）
+#   source_test_jd_001     公开招聘信息中软件测试/测试开发/QA 岗位的通用职责与要求
+#                          汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: software_test_engineer
+job_name: 软件测试工程师
+
+aliases:
+  - 软件测试工程师
+  - 测试工程师
+  - 软件测试
+  - 测试开发工程师
+  - QA工程师
+  - 测试专员
+
+category: engineering
+domain: software-testing
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 软件测试工程师根据需求设计测试方案与用例，执行功能与接口测试，记录并跟踪缺陷，并通过自动化与持续集成守住版本质量。
+  core_tasks:
+    - {name: 分析需求并制定测试计划, detail: 明确测试范围、环境、数据与准入准出条件}
+    - {name: 设计并评审测试用例, detail: 用等价类、边界值与场景法覆盖正常、异常和边界}
+    - {name: 执行功能与回归测试, detail: 按用例验证功能、权限、状态与数据一致性}
+    - {name: 执行接口测试, detail: 校验请求响应、业务字段、鉴权与异常处理}
+    - {name: 提交与跟踪缺陷, detail: 写清复现步骤与预期结果，推动修复并回归验证}
+    - {name: 维护自动化测试, detail: 编写稳定脚本并接入持续集成，减少重复回归成本}
+  tools: [Postman, pytest, Playwright/Selenium, Jira/缺陷平台, Git, Linux, SQL]
+  deliverables: [测试计划, 测试用例集, 缺陷报告与跟踪记录, 接口/自动化测试脚本, 测试报告与质量结论]
+  entry_requirements: [计算机相关专业, 熟悉软件测试流程与用例设计方法, 掌握至少一种脚本语言, 了解接口与数据库基础, 细致耐心并具备沟通推动能力]
+  career_path:
+    - {name: 测试助理/初级测试, detail: 能按用例执行功能测试并提交规范缺陷}
+    - {name: 测试工程师, detail: 能独立负责模块测试、接口测试与回归策略}
+    - {name: 测试开发工程师, detail: 能搭建自动化框架并接入持续集成}
+    - {name: 测试负责人, detail: 能规划质量体系、发布门禁与团队分工}
+
+skills:
+
+  - skill: 软件测试基础
+    importance: 5
+    level: 中级
+    reason: 理解测试目标、层次与流程，才能设计有效的测试方案。
+    evidence:
+      - {source_id: source_test_std_001, requirement_type: required, context: qualification,
+         note: '公开大纲整理：掌握软件测试基本概念、过程与测试类型'}
+      - {source_id: source_test_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉软件测试流程与常见测试方法'}
+
+  - skill: 测试用例设计
+    importance: 5
+    level: 中级
+    reason: 用例质量直接决定缺陷发现率与回归覆盖。
+    evidence:
+      - {source_id: source_test_std_001, requirement_type: required, context: responsibility,
+         note: '公开大纲整理：掌握等价类、边界值、场景法等用例设计方法'}
+      - {source_id: source_test_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：根据需求设计并评审测试用例'}
+
+  - skill: 功能测试
+    importance: 5
+    level: 中级
+    reason: 功能验证是测试岗位最主要的工作内容。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：执行功能测试与版本回归，输出测试结果'}
+
+  - skill: 接口测试
+    importance: 4
+    level: 中级
+    reason: 前后端分离架构下，接口测试是验证服务逻辑与数据一致性的关键手段。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：使用工具或脚本完成接口测试与断言'}
+      - {source_id: source_test_std_002, requirement_type: required, context: qualification,
+         note: '公开材料整理：理解接口协议、请求响应与接口测试要点'}
+
+  - skill: 自动化测试
+    importance: 4
+    level: 中级
+    reason: 自动化回归与质量门禁能显著降低重复测试成本。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：掌握至少一种自动化测试工具或框架者优先'}
+      - {source_id: source_test_std_002, requirement_type: required, context: qualification,
+         note: '公开材料整理：理解自动化测试的适用场景与维护成本'}
+
+  - skill: 缺陷管理
+    importance: 4
+    level: 初级
+    reason: 缺陷描述与跟踪质量决定问题能否被准确修复。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：提交缺陷并跟踪修复与回归验证'}
+
+  - skill: SQL
+    importance: 4
+    level: 初级
+    reason: 测试数据准备、数据校验与问题定位都需要查询数据库。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：会使用 SQL 进行测试数据准备与结果校验'}
+
+  - skill: Linux
+    importance: 3
+    level: 初级
+    reason: 测试环境部署、日志查看与问题排查常在 Linux 服务器上完成。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉 Linux 常用命令与日志查看者优先'}
+
+  - skill: Python
+    importance: 4
+    level: 初级
+    reason: 编写接口与 UI 自动化脚本、处理测试数据都需要编程能力。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：掌握 Python 等至少一种脚本语言'}
+
+  - skill: Git
+    importance: 3
+    level: 初级
+    reason: 测试脚本与用例需要版本管理，并与研发共用代码仓库。
+    evidence:
+      - {source_id: source_test_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：了解 Git 基本操作者优先'}

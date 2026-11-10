@@ -1,0 +1,15 @@
+# Project 知识库 —— 农林环境：水质采样与检测报告（入门）
+name: 水质采样与检测报告
+domain: agriculture-environment
+difficulty: beginner
+covers_skills: [采样与现场记录, 水质与大气检测, 仪器分析, 实验室质量控制, 检测报告编制]
+prerequisites: []
+tech_stack: [采样器, pH 计, 分光光度计, 检测报告模板, 质控记录表]
+stage_hint: 学习路线起点，从一次采样做到一份可复核的报告
+deliverable: 一份采样记录、原始检测记录与检测报告
+acceptance_criteria:
+  - 采样点位、时间、容器与保存条件记录完整
+  - 标准曲线与质控样结果满足方法要求
+  - 报告与原始记录逐项对应，无手改痕迹
+  - 判定所引用的标准写明名称、编号与限值
+estimated_weeks: 2

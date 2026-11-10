@@ -1,0 +1,15 @@
+# Project 知识库 —— 软件测试：接口自动化测试（进阶）
+name: 接口自动化测试
+domain: software-testing
+difficulty: intermediate
+covers_skills: [接口测试, 自动化测试, Python, SQL]
+prerequisites: [接口测试, Python]
+tech_stack: [Python, requests, pytest, SQL]
+stage_hint: 学习路线中期，把手工接口验证沉淀成可重复执行的测试
+deliverable: 一套接口自动化测试脚本与测试数据准备说明
+acceptance_criteria:
+  - 用例覆盖成功、参数缺失、越权与异常状态码
+  - 断言不只检查状态码，还校验关键业务字段
+  - 测试数据可重复准备与清理，不污染环境
+  - 失败时输出请求、响应与断言差异，便于定位
+estimated_weeks: 3

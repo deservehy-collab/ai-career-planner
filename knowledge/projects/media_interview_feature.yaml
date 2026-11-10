@@ -1,0 +1,15 @@
+# Project 知识库 —— 传媒：人物采访与深度稿（进阶）
+name: 人物采访与深度稿
+domain: media-language
+difficulty: intermediate
+covers_skills: [采访与信息核实, 查证与资料检索, 稿件编辑与校对, 摄影与素材处理, 新媒体内容运营]
+prerequisites: [内容策划, 文案写作]
+tech_stack: [采访录音与转写工具, 公开资料库, 图片处理软件, 内容管理系统]
+stage_hint: 在会写的基础上，学会用一手信源支撑一篇有分量的稿子
+deliverable: 一篇深度稿、采访提纲与信源核实记录
+acceptance_criteria:
+  - 采访提纲按主题分层，问题能追问到具体细节
+  - 关键事实与数据至少两个来源交叉印证
+  - 引语与受访者原意一致，未断章取义
+  - 配图与正文相关且来源合法，稿末有信源说明
+estimated_weeks: 3

@@ -1,0 +1,15 @@
+# Project 知识库 —— 法务：购销合同审查与台账（入门）
+name: 购销合同审查与台账
+domain: legal-public
+difficulty: beginner
+covers_skills: [合同法与公司法基础, 合同审查, 法律检索, 证据整理与归档]
+prerequisites: []
+tech_stack: [合同管理系统, 国家法律法规数据库, 合同审查清单, Office 套件]
+stage_hint: 学习路线起点，把一份合同从初审做到归档
+deliverable: 一份合同审查意见、修改稿与合同台账
+acceptance_criteria:
+  - 主体资格、标的、价款、交付与违约条款逐项核对并留痕
+  - 修改意见写明依据条款与业务影响，不只是一句"建议修改"
+  - 附件与主合同一致，签署页与用印信息完整
+  - 台账记录签署日期、履行节点与到期提醒
+estimated_weeks: 2

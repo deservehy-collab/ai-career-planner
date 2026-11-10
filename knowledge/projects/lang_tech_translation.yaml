@@ -1,0 +1,15 @@
+# Project 知识库 —— 语言服务：技术文档英译与术语库（高阶）
+name: 技术文档英译与术语库
+domain: media-language
+difficulty: advanced
+covers_skills: [英汉互译, 翻译策略与文体, 术语管理, 计算机辅助翻译, 审校与质量检查, 行业知识, 查证与资料检索]
+prerequisites: [英汉互译, 术语管理]
+tech_stack: [Trados / memoQ, 术语库, 翻译记忆库, 对照审校清单]
+stage_hint: 按商业项目流程完成一次完整交付，重点在一致性与可复核
+deliverable: 一份译文、术语表、审校记录与质量自检报告
+acceptance_criteria:
+  - 术语在全文与术语表之间完全一致，多义术语有取舍说明
+  - 长句与被动语态处理符合中文技术文档表达习惯
+  - 数字、单位、型号与标签零错漏，可逐条对照原文
+  - 审校记录按错误等级分类，并说明修订依据
+estimated_weeks: 4

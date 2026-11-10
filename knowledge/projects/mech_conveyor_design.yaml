@@ -1,0 +1,15 @@
+# Project 知识库 —— 机械土木：输送机构结构设计与校核（进阶）
+name: 输送机构结构设计与校核
+domain: mechanical-civil
+difficulty: intermediate
+covers_skills: [机械原理与结构设计, 三维建模, 公差与配合, 装配与调试, BOM 与图纸管理, 有限元分析基础]
+prerequisites: [机械制图, 材料与加工工艺]
+tech_stack: [SolidWorks / Creo, ANSYS, 标准件库, 装配工装]
+stage_hint: 从功能需求出发，完成一套可装配、可校核的结构方案
+deliverable: 一份结构设计方案、装配图、BOM 与关键件校核报告
+acceptance_criteria:
+  - 机构选型有运动与受力分析依据，能说明关键参数
+  - 装配图标注配合与定位方式，无干涉
+  - 关键件做静力校核，边界条件与载荷说明清楚
+  - BOM 与图纸版本一致，装配顺序可执行
+estimated_weeks: 5

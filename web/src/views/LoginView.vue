@@ -40,7 +40,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <AuthShell title="登录账号" subtitle="你的画像、成长记录和任务清单都还在。">
+  <AuthShell title="登录账号">
     <form @submit.prevent="onSubmit">
       <AuthField
         id="login-username"

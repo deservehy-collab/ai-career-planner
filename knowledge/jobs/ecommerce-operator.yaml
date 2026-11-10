@@ -1,0 +1,141 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 电商运营 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_ecom_std_001    商务部公开的电子商务发展报告与平台经营规范要点整理
+#                          http://www.mofcom.gov.cn/ （访问日期 2026-11-10）
+#   source_ecom_std_002    淘宝规则中心、抖音电商规则中心公开的平台规则要点整理
+#                          https://rule.taobao.com/ （访问日期 2026-11-10）
+#   source_ecom_jd_001     公开招聘信息中电商运营/店铺运营/平台运营岗位的通用职责
+#                          与要求汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#
+#   本文件用于技能词表、岗位画像与项目领域过滤。evidence 是公开材料的概括，
+#   不是逐字原文；需要逐字依据时请粘贴具体 JD。
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: ecommerce_operator
+job_name: 电商运营
+
+aliases:
+  - 电商运营
+  - 电商运营专员
+  - 店铺运营
+  - 电商店长
+  - 平台运营
+
+category: operations
+domain: operations
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 电商运营负责店铺日常经营，围绕商品、流量、活动、客服与数据复盘开展工作，在平台规则内提升店铺转化与利润。
+  core_tasks:
+    - {name: 维护店铺日常运营, detail: 检查商品、价格、库存、评价与店铺指标，处理异常}
+    - {name: 管理商品与详情, detail: 负责商品上架、标题主图、详情页与商品结构优化}
+    - {name: 策划并执行活动, detail: 设计店铺活动与平台大促方案，协调资源并跟踪执行}
+    - {name: 分析运营数据, detail: 跟踪流量、转化、客单与复购，定位问题并调整策略}
+    - {name: 处理客服与售后, detail: 按平台规则处理咨询、退换货与纠纷，维护店铺评分}
+    - {name: 跟进平台规则, detail: 关注规则变化，避免违规下架与扣分}
+  tools: [平台商家后台, 生意参谋/数据罗盘, Excel, 客服工作台, 内容与投放工具]
+  deliverables: [店铺运营计划, 商品优化记录, 活动方案与复盘, 运营数据日报/周报, 售后问题清单]
+  entry_requirements: [电子商务/市场营销/管理类等相关专业, 熟悉主流电商平台规则, 具备数据分析与活动策划能力, 沟通协调能力强, 有店铺实操经验优先]
+  career_path:
+    - {name: 电商运营助理, detail: 能完成商品维护、数据整理与日常检查}
+    - {name: 电商运营专员, detail: 能独立负责店铺日常运营与活动执行}
+    - {name: 电商运营主管, detail: 能制定店铺策略、管理团队并对经营结果负责}
+    - {name: 电商负责人, detail: 能统筹多平台、多店铺与供应链协同}
+
+skills:
+
+  - skill: 电商平台运营
+    importance: 5
+    level: 中级
+    reason: 理解平台流量机制与店铺结构，是开展一切运营动作的基础。
+    evidence:
+      - {source_id: source_ecom_std_001, requirement_type: required, context: qualification,
+         note: '公开报告整理：理解电子商务平台经营模式与店铺运营基本流程'}
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责电商平台店铺的日常运营与维护'}
+
+  - skill: 商品运营
+    importance: 5
+    level: 中级
+    reason: 商品是转化的核心，标题、主图、价格与结构直接影响销量与利润。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责商品上架、详情优化与商品结构管理'}
+
+  - skill: 活动策划
+    importance: 4
+    level: 中级
+    reason: 平台大促与店铺活动是拉新促活的主要抓手。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：策划并执行店铺活动与平台大促方案'}
+
+  - skill: 运营数据分析
+    importance: 5
+    level: 中级
+    reason: 流量、转化、客单与复购的变化需要数据定位原因。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：分析店铺数据并输出运营优化建议'}
+
+  - skill: 平台规则与合规
+    importance: 4
+    level: 中级
+    reason: 违规会直接导致下架、扣分甚至关店，规则是运营的底线。
+    evidence:
+      - {source_id: source_ecom_std_002, requirement_type: required, context: qualification,
+         note: '公开规则整理：了解商品发布、交易与售后相关的平台规则'}
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉平台规则，保证店铺合规经营'}
+
+  - skill: 内容策划
+    importance: 3
+    level: 初级
+    reason: 内容场与搜索场联动，内容质量影响商品曝光与转化。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：配合内容与直播团队完成商品内容策划者优先'}
+
+  - skill: 投放优化
+    importance: 3
+    level: 初级
+    reason: 付费流量需要控制成本与投产比，避免只花钱不产出。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：了解平台推广工具并跟踪投放效果者优先'}
+
+  - skill: 用户增长
+    importance: 3
+    level: 初级
+    reason: 拉新、复购与会员运营决定店铺的长期增长。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与会员与老客运营、提升复购者优先'}
+
+  - skill: 客服与售后
+    importance: 3
+    level: 初级
+    reason: 售后体验直接影响店铺评分、复购与平台流量。
+    evidence:
+      - {source_id: source_ecom_std_002, requirement_type: required, context: responsibility,
+         note: '公开规则整理：按平台时限与规则处理退换货和纠纷'}
+      - {source_id: source_ecom_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：协调客服处理售后问题并维护店铺评分'}
+
+  - skill: 竞品分析
+    importance: 3
+    level: 初级
+    reason: 了解竞品价格、卖点与活动，才能调整自身策略。
+    evidence:
+      - {source_id: source_ecom_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：跟踪竞品动态并输出对比分析者优先'}

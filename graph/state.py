@@ -7,8 +7,7 @@ class CareerState(TypedDict, total=False):
     # ---- 输入 ----
     user_profile: dict  # 学生个人信息（专业/年级/自述技能/项目经历）
     target_job: str  # 目标岗位
-    target_company: str  # 可选：限定岗位知识库检索的公司（不填则按跨公司概览检索）
-    jd_source_id: str  # 可选：精确匹配某一份真实 JD（优先级高于 target_company）
+    jd_text: str  # 可选：用户当场粘贴的招聘要求原文，本次岗位要求的唯一依据
     growth_events: list  # 可选：新学习成果 / 新项目经历（阶段五输入），缺省视为无新成果
 
     # ---- Profile Agent ----
@@ -23,13 +22,33 @@ class CareerState(TypedDict, total=False):
     skill_updates: list  # 逐项等级变化 [{skill, from, to, reason, source}]
     growth_diff: dict  # 等级 / 缺口 / 匹配率的前后差异
 
-    # ---- Retrieval Agent（RAG 岗位知识库，只描述岗位，不是学生能力）----
-    job_evidence: list  # 检索到的岗位证据 [{company_slug, skill, requirement_type, context, note, ...}]
-    retrieval_status: str  # matched / not_mentioned / no_source / ambiguous
-    retrieval_diagnostics: dict  # 检索诊断：命中路径、样本范围、失败原因等
+    # ---- Retrieval Agent（依据整理：只描述岗位要什么，不是学生能力）----
+    # provenance：user_pasted（你粘的原话）/ official_digest（内置画像登记的资料摘要）
+    job_evidence: list  # 岗位依据逐句记录 [{skill, note, provenance, source_id, ...}]
+    retrieval_status: str  # user_pasted / official_digest / no_source
+    retrieval_diagnostics: dict  # 依据整理诊断：句数、过滤掉的短句、空原文原因、coverage 等
 
     # ---- Job Agent ----
     job_requirements: list  # 岗位要求 [{skill, importance, level, reason}]
+    # 岗位画像：核心工作任务 / 工具 / 交付物 / 入行门槛 / 成长台阶，每条带来源。
+    # 由 job_node 使用或生成；服务层负责按用户缓存，工作流本身不写盘。
+    job_profile: dict | None
+    job_profile_warnings: list
+    job_profile_origin: str  # cache / knowledge_base / generated / unavailable
+    enable_job_profile: bool  # 服务层置 True 时允许首次生成；只读分析可关掉
+    # 岗位要求本身的依据强度，供"目标结局"代码判定使用（不由模型自述）
+    job_requirements_basis: str  # user_pasted / knowledge_base / model_only
+    job_requirements_grounded: bool
+
+    # ---- 计划快照（下一轮沿用上一轮的岗位依据，不重新推断）----
+    # 由服务层从 loop.json 的轮次快照注入；存在时 retrieval / job 节点直接复用，
+    # 不再翻原文、也不再让模型重写岗位要求 —— 同一份计划必须绑定同一套要求。
+    snapshot_job_evidence: list
+    snapshot_retrieval_status: str
+    snapshot_retrieval_diagnostics: dict
+    snapshot_job_requirements: list
+    snapshot_job_requirements_basis: str
+    snapshot_job_requirements_grounded: bool
 
     # ---- Assessment Agent ----
     skill_gaps: list  # 能力差距

@@ -11,15 +11,17 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, Field, StringConstraints
+from pydantic import BaseModel, Field, StringConstraints, model_validator
 
 from backend import config
 
 __all__ = [
     "UserProfileRequest", "AnalyzeRequest", "CompleteTaskRequest",
+    "AttachEvidenceRequest",
     "NextRoundRequest", "ManualGrowthEventRequest", "EvidenceText",
+    "WithdrawPendingRequest", "VoidGrowthEventRequest", "LlmChannelRequest",
 ]
 
 
@@ -60,8 +62,12 @@ class AnalyzeRequest(BaseModel):
     """``POST /api/analyze`` 的请求体。
 
     对应 ``workflow.invoke`` 的输入：画像 + 目标岗位 + 可选成长事件。
-    阶段四的可选入口目标（``target_company`` / ``jd_source_id``）只在传了值时才
-    写进 state —— 不传时保持阶段二以来「跨公司概览」的默认行为，逐字段不变。
+
+    ``jd_text``
+    -----------
+    用户**当场粘贴**的招聘要求原文。传了它，岗位要求就以这段原文为唯一依据
+    （见 ``agents.user_jd``），每条要求都能反查到原话的第几句。不传时岗位要求
+    全是模型推断，前端会如实标灰并**不给**匹配度百分比。
     """
 
     user_profile: UserProfileRequest
@@ -73,8 +79,18 @@ class AnalyzeRequest(BaseModel):
         max_length=config.GROWTH_EVENTS_MAX_ITEMS,
         description="本轮新完成的学习/项目成果；直接透传给 growth_node，由业务层校验",
     )
-    target_company: str | None = Field(default=None, description="限定公司（可选）")
-    jd_source_id: str | None = Field(default=None, description="精确匹配某份真实 JD（可选，优先级最高）")
+    jd_text: str | None = Field(
+        default=None,
+        max_length=config.JD_TEXT_MAX_CHARS,
+        description="用户粘贴的招聘要求原文，本次岗位要求的唯一依据",
+    )
+    new_plan: bool = Field(
+        default=False,
+        description=(
+            "已有轮次时是否明确把本次分析另存为新的一轮计划。"
+            "默认 False = 只预览，不新建轮次；旧轮次与任务原样保留"
+        ),
+    )
 
     def to_state(self) -> dict:
         """转成 ``CareerState`` 的输入子集。"""
@@ -83,17 +99,25 @@ class AnalyzeRequest(BaseModel):
             "target_job": self.target_job,
             "growth_events": [dict(item) for item in self.growth_events],
         }
-        if self.target_company:
-            state["target_company"] = self.target_company
-        if self.jd_source_id:
-            state["jd_source_id"] = self.jd_source_id
+        if self.jd_text and self.jd_text.strip():
+            state["jd_text"] = self.jd_text.strip()
         return state
 
 
 class CompleteTaskRequest(BaseModel):
-    """``POST /api/tasks/{task_id}/complete`` 的请求体。"""
+    """``POST /api/tasks/{task_id}/complete`` 的请求体。
 
-    evidence: EvidenceText = Field(description="完成证据：具体做了什么、有什么产出")
+    **点提交即完成**：``evidence`` 与 ``note`` 都是可选的。
+
+    - 不填 ``evidence`` → 记成 ``self_report``（自述完成）。技能照既有规则升级，
+      但评估只算"未验证"；之后可以再补凭证。
+    - 填了 ``evidence`` → 记成 ``growth``（附凭证），才算直接证据。
+    - ``note`` 是心得，单独保存，**不并入 evidence、也不当凭证**。
+    """
+
+    evidence: EvidenceText | None = Field(
+        default=None, description="可选：完成凭证（链接/产出/截图说明），填了才算直接证据"
+    )
     profile_skills: list[dict[str, Any]] | None = Field(
         default=None,
         description=(
@@ -102,6 +126,68 @@ class CompleteTaskRequest(BaseModel):
             "不传则退回成长历史基线，预览会比真实判定更严格。"
         ),
     )
+    note: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True, max_length=config.NOTE_MAX_CHARS),
+    ] | None = Field(default=None, description="可选：心得笔记（写不写都能完成）")
+
+    @model_validator(mode="after")
+    def check_total_length(self):
+        total = len(self.evidence or "") + len(self.note or "")
+        if total > config.EVIDENCE_MAX_LENGTH:
+            raise ValueError(
+                f"证据与心得笔记的合计不能超过 {config.EVIDENCE_MAX_LENGTH} 字"
+            )
+        return self
+
+
+class AttachEvidenceRequest(BaseModel):
+    """``POST /api/tasks/{task_id}/evidence`` 的请求体：给已完成任务补凭证。"""
+
+    evidence: EvidenceText = Field(description="补上的凭证：链接、产出或截图说明")
+
+
+class ClearTasksRequest(BaseModel):
+    """``POST /api/tasks/clear`` 的请求体（整体可选）。
+
+    ``drop_pending_events`` 默认 False：清单里如果有**还没进成长历史**的打卡成果，
+    服务层会拒绝清空并回 ``needs_confirmation``，前端必须让用户确认后才带着
+    ``true`` 重试 —— 那些成果是真实进度，不能在一次"清理界面"里被顺手冲掉。
+    """
+
+    drop_pending_events: bool = Field(
+        default=False,
+        description="确认连同尚未记进成长历史的打卡成果一起删除",
+    )
+
+
+class WithdrawPendingRequest(BaseModel):
+    """``POST /api/growth/pending/withdraw`` 的请求体：撤回一条待处理成果。
+
+    只撤回 ``loop.json`` 里那条完成记录（任务退回待完成），不碰成长历史。
+    """
+
+    task_id: str = Field(
+        min_length=1,
+        max_length=64,
+        description="任务 ID，例如 r001-l01",
+    )
+    round_no: int | None = Field(default=None, ge=1, description="可选：限定轮次")
+
+
+class VoidGrowthEventRequest(BaseModel):
+    """``POST /api/growth/history/void`` 的请求体：作废一条已入账成果。
+
+    不删原记录，只追加一条调整记录并重算能力表。``entry_index`` /
+    ``event_index`` 来自 ``GET /api/growth/history`` 返回数组的下标。
+    """
+
+    entry_index: int = Field(ge=0, description="历史条目下标（0 开始）")
+    event_index: int = Field(ge=0, description="条目内成果下标（0 开始）")
+    reason: Annotated[
+        str,
+        StringConstraints(strip_whitespace=True, min_length=2, max_length=200),
+    ] = Field(description="作废原因，会写进调整记录")
 
 
 class NextRoundRequest(BaseModel):
@@ -115,6 +201,11 @@ class NextRoundRequest(BaseModel):
 
     user_profile: UserProfileRequest | None = None
     target_job: str | None = Field(default=None, max_length=config.TARGET_JOB_MAX_CHARS)
+    jd_text: str | None = Field(
+        default=None,
+        max_length=config.JD_TEXT_MAX_CHARS,
+        description="沿用上一轮的招聘要求原文；不传则这一轮没有原文依据",
+    )
 
 
 class ManualGrowthEventRequest(BaseModel):
@@ -125,6 +216,7 @@ class ManualGrowthEventRequest(BaseModel):
 
     字段上限与任务证据同一套口径（evidence 直接复用 :data:`EvidenceText`，
     也是 5000 字）—— loop.json 是全量读-改-写的，无界写入会拖慢所有后续查询。
+    ``evidence`` 可选：不填就是自述成果，升级照规则走，但评估按未验证处理。
     """
 
     kind: str = Field(description="成果类型，learning|project")
@@ -134,5 +226,16 @@ class ManualGrowthEventRequest(BaseModel):
         max_length=config.MANUAL_SKILLS_MAX_ITEMS,
         description="成果关联技能",
     )
-    evidence: EvidenceText = Field(description="成果证据（具体学了/做了什么）")
+    evidence: EvidenceText | None = Field(
+        default=None, description="可选：成果凭证（具体学了/做了什么，有产出再填）"
+    )
     target_job: str | None = Field(default=None, max_length=config.TARGET_JOB_MAX_CHARS, description="目标岗位（可选，首次建任务时用）")
+
+
+class LlmChannelRequest(BaseModel):
+    """``PUT /api/status/llm-channel`` 的请求体：切换模型通道。
+
+    非法值由 Literal 直接拦成 422，业务层不用再校验。
+    """
+
+    channel: Literal["local", "cloud"] = Field(description="目标通道，local|cloud")

@@ -3,7 +3,7 @@
 证据驱动（阶段二）
 ------------------
 除 ``target_job`` 外，本节点还读取 Retrieval Agent 写入的 ``job_evidence`` 与
-``retrieval_status``，把真实检索证据作为**事实来源**注入提示词，并为每条岗位
+``retrieval_status``，把原文依据作为**事实来源**注入提示词，并为每条岗位
 要求标注来源：
 
 - ``evidence_status``  supported / partially_supported / model_supplement
@@ -28,9 +28,22 @@
 
 降级
 ----
-没有索引、没有匹配证据或检索报错时，``job_evidence`` 为空 —— 岗位要求照常生成，
+没有粘贴原文、或原文一句都没切出来时，``job_evidence`` 为空 —— 岗位要求照常生成，
 但每条都标记为 ``model_supplement`` + ``importance_basis = "model_generated"``，
 系统本身可判定"这条没有 JD 依据"，不再只靠终端提示。
+
+用户自带原文（``provenance == "user_pasted"`` 的证据）
+-----------------------------------------------------
+用户当场粘贴招聘要求时，``retrieval_agent`` 会把原文逐句切成证据送进来（见
+``agents/user_jd``）。这些句子与内置资料走**同一套**归属与等级判定，只有两点不同：
+
+- 多一层字面兜底（``_skill_appears_in``）：技能名在原话里逐字出现就判 ``supported``，
+  不依赖模型是否老实填 ``evidence_refs``；
+- 条数下限放宽到 1：一份广告本来就只写了两条要求是常态，不该为凑数把原文没提的
+  能力编进来，也不该因此让整次分析失败。
+
+每条要求都带 ``source_notes``（支撑它的原文句子），前端据此做逐条反显 ——
+用户能不能一眼看出"这条是广告里写的"还是"模型自己加的"，全靠这个字段。
 """
 
 import re
@@ -38,8 +51,17 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
+from agents.external_sources import OFFICIAL_PROVENANCE
+from agents.job_catalog import JobCatalog
+from agents.job_profile import (
+    builtin_profile,
+    format_profile_block,
+    generate_job_profile,
+    validate_profile,
+)
 from agents.llm import structured_invoke
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
+from agents.user_jd import USER_JD_PROVENANCE
 from agents.utils import (
     SKILL_LEVELS,
     check_non_empty,
@@ -87,8 +109,15 @@ _JD_LEVEL_WORDS = (
 PROMPT = """你是一名资深招聘专家，长期负责「{job}」岗位的招聘与用人标准制定。
 请分析这个岗位，拆解出它真正要求的核心技能。
 
-【岗位知识库检索证据】
+【岗位依据材料】
 {evidence_block}
+
+【岗位画像（程序整理的岗位工作事实，优先作为拆解依据）】
+{profile_block}
+
+【岗位知识库·规范技能表（人工整理）】
+{catalog_block}
+{basis_note}
 
 【岗位定位】先判断岗位所属领域，再按**该领域的真实用人标准**拆解：
 - 如果是"大模型 / AI 应用开发"类岗位：它是把大模型能力落地成产品的**工程岗**，
@@ -124,11 +153,29 @@ PROMPT = """你是一名资深招聘专家，长期负责「{job}」岗位的招
    不要把每项都写成 5，最多 2 项可以是 5。
 6. level 是该岗位对这项技能的推荐能力等级（入门/初级/中级/高级）。
 7. reason 用一句话说明这项技能在岗位里具体用来做什么。
-8. evidence_refs 只能填上面【岗位知识库检索证据】里出现过的编号（如 E01、E02），
+8. evidence_refs 只能填上面【岗位依据材料】里出现过的编号（如 E01、E02），
    可以填多个；名称和证据里的技能不一样、但语义相关的也可以引用。
    确实找不到能支撑该项的证据时，填 ["无"]。
    **不得编造编号、公司名或原文**；上面没有证据时，所有项都填 ["无"]。
-9. 全部用中文，技能名称保留英文原文（如 Python、FastAPI、Docker）。"""
+9. 全部用中文，技能名称保留英文原文（如 Python、FastAPI、Docker）。
+10. **岗位画像里列出的核心工作任务、工具和交付物，要在技能要求中有对应项。**
+    画像里没有的能力不要硬塞（尤其别给非技术岗加编程语言）；画像本身与证据
+    冲突时，以用户提供的招聘原文为准。
+11. 上面【岗位知识库·规范技能表】是该岗位的人工整理结果：优先从中选择，
+    skill 必须与表中名称**逐字一致**；不要用近义词另造一个已在表里的技能。
+    表外确实需要的技能可以补充，但不要为了凑数重复表内条目。"""
+
+# 用户自带原文时的附加规矩。放在【岗位依据材料】后面，**覆盖**下面【岗位定位】
+# 那套 AI 岗分类清单 —— 用户粘的是新媒体运营时，还硬要凑齐"RAG 检索增强"
+# 这类条目，就是拿内置资料的口味冒充人家的岗位要求。
+_USER_JD_NOTE = """【本次的规矩】
+上面【用户提供的招聘要求原文】就是用户手头这个岗位的**原话**，是本次唯一的事实依据：
+- 岗位要求**只能**从这些原话里得出。原文没提的能力一律不要列，哪怕你认为这类岗位
+  通常应当要求它（这种"通常应当"请一律不要写进来）。
+- 每一项都必须用 evidence_refs 引用支撑它的编号；找不到支撑原话的，就不要列这一项。
+- 下面【岗位定位】里那份分类清单和【岗位知识库·规范技能表】**本次都不适用**：
+  不能因为表里有某项就把它加进来；原文用词与规范名不同时，保留原文说法。
+- 重要性 importance 按原话的措辞强弱判断：写着"必须/精通/熟练"的比"优先/加分/了解"的高。"""
 
 
 class JobRequirement(BaseModel):
@@ -188,9 +235,46 @@ def get_vocabulary() -> SkillVocabulary | None:
     return _vocabulary
 
 
+# ── 岗位目录（惰性，读不到就当作没有知识库岗位）────────────────────────
+_job_catalog: JobCatalog | None = None
+_job_catalog_unavailable = False
+
+
+def get_job_catalog() -> JobCatalog | None:
+    """取岗位目录；不可用时返回 None，本节点退回只按岗位名与模型判断。"""
+    global _job_catalog, _job_catalog_unavailable
+    if _job_catalog is None and not _job_catalog_unavailable:
+        try:
+            _job_catalog = JobCatalog()
+        except Exception as exc:
+            _job_catalog_unavailable = True
+            print(
+                f"[Job Agent] 警告：岗位目录不可用，跳过知识库技能对齐"
+                f"（{type(exc).__name__}: {exc}）",
+                flush=True,
+            )
+    return _job_catalog
+
+
 # ── 纯函数工具 ──────────────────────────────────────────────────────────
 def _normalize_skill_name(name) -> str:
     return str(name or "").strip().lower().replace(" ", "")
+
+
+def _skill_appears_in(skill_name, sentence: str) -> bool:
+    """技能名是否在这句原文里逐字出现（忽略大小写与空格）。
+
+    只认字面出现，不做语义联想 —— 这一层的全部价值就是"程序能自己确认"，
+    一旦开始猜，它跟模型引用就没区别了。含 "/" 的名称拆开各算（"LangChain/LangGraph"）。
+    """
+    name = _normalize_skill_name(skill_name)
+    if not name:
+        return False
+    haystack = _normalize_skill_name(sentence)
+    variants = {name} | {
+        _normalize_skill_name(part) for part in str(skill_name or "").split("/") if part.strip()
+    }
+    return any(variant and variant in haystack for variant in variants)
 
 
 def evidence_ref(index: int) -> str:
@@ -292,23 +376,231 @@ def dedupe_by_canonical(requirements: list, merged: list) -> list:
     return result
 
 
+def profile_skill_names(profile: dict | None) -> list[str]:
+    """岗位 YAML 的规范技能名（保序去重）。"""
+    names: list[str] = []
+    for item in (profile or {}).get("skills") or []:
+        name = str(item.get("skill") or "").strip()
+        if name and name not in names:
+            names.append(name)
+    return names
+
+
+def format_catalog_skills_block(profile: dict | None) -> str:
+    """把岗位知识库的技能表压成提示词里的一段。"""
+    if not profile:
+        return "（本次未匹配到岗位知识库的规范技能表，请按岗位名称与证据自行判断。）"
+    lines: list[str] = []
+    for item in profile.get("skills") or []:
+        name = str(item.get("skill") or "").strip()
+        if not name:
+            continue
+        meta: list[str] = []
+        importance = item.get("importance")
+        if isinstance(importance, int):
+            meta.append(f"重要度 {importance}")
+        level = str(item.get("level") or "").strip()
+        if level:
+            meta.append(f"建议 {level}")
+        reason = str(item.get("reason") or "").strip()
+        suffix = f"（{'，'.join(meta)}）" if meta else ""
+        lines.append(f"- {name}{suffix}{'：' + reason if reason else ''}")
+    return "\n".join(lines) or "（岗位知识库没有可用的规范技能名。）"
+
+
+def rewrite_to_profile_skills(
+    requirements: list, profile: dict | None, rewritten: list | None = None
+) -> list:
+    """把能唯一归一的模型用词改写成本岗位的规范技能名。
+
+    只在本岗位启用 ``ground_requirements`` 时调用：AI 岗等有招聘原文证据的
+    岗位保留模型原词，避免把原文里的具体说法悄悄换成另一个技能名。
+    """
+    if not profile or not profile.get("ground_requirements"):
+        return requirements
+    allowed = set(profile_skill_names(profile))
+    if not allowed:
+        return requirements
+    by_name = {
+        str(item.get("skill") or "").strip(): item
+        for item in profile.get("skills") or []
+        if str(item.get("skill") or "").strip()
+    }
+    result = []
+    for req in requirements:
+        name = str(req.get("skill") or "").strip()
+        canonical = _resolve_canonical(name)
+        if canonical in allowed and _normalize_skill_name(canonical) != _normalize_skill_name(name):
+            if rewritten is not None:
+                rewritten.append(f"{name}→{canonical}")
+            source = by_name.get(canonical) or {}
+            req = {**req, "skill": canonical, "profile_grounded": True}
+            if isinstance(source.get("importance"), int):
+                req["importance"] = max(1, min(5, source["importance"]))
+            if str(source.get("level") or "") in SKILL_LEVELS:
+                req["level"] = source["level"]
+        result.append(req)
+    return result
+
+
+def restrict_to_profile_skills(
+    requirements: list, profile: dict | None, dropped: list | None = None
+) -> list:
+    """只保留能落到本岗位规范技能上的要求。
+
+    ``ground_requirements: true`` 的岗位以人工技能表为准。小模型很容易把
+    "飞书""抖音后台""Python"这类工具或表外能力塞进来，进而让学习计划去教
+    运营岗学 Python —— 这类表外项在这里丢弃，缺的规范技能由 merge 补全。
+    """
+    if not profile or not profile.get("ground_requirements"):
+        return requirements
+    allowed = set(profile_skill_names(profile))
+    if not allowed:
+        return requirements
+    result = []
+    for req in requirements:
+        name = str(req.get("skill") or "").strip()
+        canonical = _resolve_canonical(name)
+        if name in allowed or canonical in allowed:
+            result.append(req)
+        elif dropped is not None:
+            dropped.append(name)
+    return result
+
+
+def merge_profile_skills(
+    requirements: list, profile: dict | None, added: list | None = None
+) -> list:
+    """把模型漏掉的规范技能按知识库补全。
+
+    只在岗位 YAML 显式声明 ``ground_requirements: true`` 时生效。补进来的条目
+    带有知识库的 importance / level / reason，来源由 :func:`apply_profile_basis`
+    标为岗位画像，不冒充招聘原文。
+    """
+    if not profile or not profile.get("ground_requirements"):
+        return requirements
+
+    existing: set[str] = set()
+    for req in requirements:
+        canonical = _resolve_canonical(req.get("skill"))
+        existing.add(canonical or _normalize_skill_name(req.get("skill")))
+
+    result = list(requirements)
+    for item in profile.get("skills") or []:
+        name = str(item.get("skill") or "").strip()
+        if not name or name in existing:
+            continue
+        canonical = _resolve_canonical(name) or name
+        if canonical in existing:
+            continue
+        try:
+            importance = int(item.get("importance") or 3)
+        except (TypeError, ValueError):
+            importance = 3
+        level = str(item.get("level") or "初级")
+        if level not in SKILL_LEVELS:
+            level = "初级"
+        result.append({
+            "skill": name,
+            "importance": max(1, min(5, importance)),
+            "level": level,
+            "reason": str(item.get("reason") or "岗位知识库中的规范技能要求"),
+            "evidence_refs": [],
+            "profile_grounded": True,
+        })
+        existing.add(canonical)
+        if added is not None:
+            added.append(name)
+    return result
+
+
+def apply_profile_basis(requirements: list) -> list:
+    """知识库补全的条目：没有招聘原文证据时，评级来源如实标为岗位画像。"""
+    for req in requirements:
+        grounded = req.pop("profile_grounded", False)
+        if grounded and req.get("evidence_status") == "model_supplement":
+            req["importance_basis"] = "profile_skill_importance"
+            req["level_basis"] = {"origin": "profile_level", "quote": None, "by_company": {}}
+    return requirements
+
+
+def resolve_requirements_basis(from_user_jd: bool, catalog_profile, requirements: list) -> tuple[str, bool]:
+    """判定岗位要求本身有没有可靠依据，以及能否据此宣布目标达成。
+
+    用户原文路径：要求必须全部能在原文里找到；模型补充项由
+    ``_attach_evidence`` 标成 ``model_supplement``，有一项就不算全可靠。
+    内置岗位画像路径：技能表由知识库限定并补全，可视为可靠。
+    两者都没有（如"护士"这类目录外岗位且没粘原文）：只能算模型推断。
+    """
+    supplement = [
+        str(req.get("skill") or "").strip()
+        for req in requirements
+        if req.get("evidence_status") == "model_supplement"
+    ]
+    if from_user_jd:
+        return "user_pasted", not supplement
+    if catalog_profile is not None:
+        return "knowledge_base", True
+    return "model_only", False
+
+
 def format_evidence_block(evidence: list, retrieval_status: str | None) -> str:
-    """把检索证据整理成提示词里的一段。编号由程序给出，模型只能引用这些编号。"""
+    """把证据整理成提示词里的一段。编号由程序给出，模型只能引用这些编号。
+
+    三种来源分开呈现，因为它们的可信度与用途完全不同：用户当场粘贴的原文是
+    **这个岗位本身的说法**，内置资料摘要是**同类岗位的整理稿**，剩下那档留给
+    历史遗留的知识库条目。混在一起，模型分不清哪句能当事实。
+    """
     if not evidence:
         return (
             f"（本轮岗位知识库检索状态：{retrieval_status or '未提供'}，没有可用证据。"
             "所有 evidence_refs 一律填 [\"无\"]，岗位要求按你自己的判断拆解。）"
         )
-    lines = []
+
+    user_lines: list[str] = []
+    official_lines: list[str] = []
+    kb_lines: list[str] = []
     for index, item in enumerate(evidence):
-        lines.append(
-            f"{evidence_ref(index)}｜公司：{item.get('company_slug') or '未标注'}"
-            f"｜技能：{item.get('skill')}"
-            f"｜要求性质：{item.get('requirement_type')}"
-            f"｜章节：{item.get('context')}"
-            f"｜原文：{item.get('note')}"
+        ref = evidence_ref(index)
+        provenance = item.get("provenance")
+        if provenance == USER_JD_PROVENANCE:
+            user_lines.append(f"{ref}｜原文：{item.get('note')}")
+        elif provenance == OFFICIAL_PROVENANCE:
+            official_lines.append(
+                f"{ref}｜技能：{item.get('skill')}"
+                f"｜要求性质：{item.get('requirement_type') or '未标注'}"
+                f"｜出处：{item.get('source_id')}"
+                f"｜资料原句：{item.get('note')}"
+            )
+        else:
+            kb_lines.append(
+                f"{ref}｜公司：{item.get('company_slug') or '未标注'}"
+                f"｜技能：{item.get('skill')}"
+                f"｜要求性质：{item.get('requirement_type')}"
+                f"｜章节：{item.get('context')}"
+                f"｜原文：{item.get('note')}"
+            )
+
+    parts: list[str] = []
+    if user_lines:
+        parts.append(
+            "【用户提供的招聘要求原文】以下每一条都是该岗位招聘广告里的原话，逐字摘自原文。\n"
+            "本次分析**只以这些原话为事实依据**：不要引入原文里没提到的技能，"
+            "也不要用下面内置知识库的条目顶替。\n" + "\n".join(user_lines)
         )
-    return "\n".join(lines)
+    if official_lines:
+        parts.append(
+            "【内置资料摘要｜不是这家公司的原话】以下每条都出自仓库里人工整理的"
+            "公开标准或招聘要求整理稿，能回查到同一句话，但它们是**同类岗位的通行说法**。\n"
+            "引用编号即可；表述时按「同类岗位通行要求」理解，"
+            "不要写成「该招聘岗位明确要求的原文」。\n" + "\n".join(official_lines)
+        )
+    if kb_lines:
+        parts.append(
+            "【内置岗位知识库证据】来自同类岗位的历史整理，仅供参考。\n"
+            + "\n".join(kb_lines)
+        )
+    return "\n\n".join(parts)
 
 
 def _attach_evidence(requirement: dict, evidence: list, rejected: list) -> dict:
@@ -336,12 +628,31 @@ def _attach_evidence(requirement: dict, evidence: list, rejected: list) -> dict:
         else []
     )
 
+    # 2.5) 用户原文这一路的兜底规则：技能名在这句原话里**逐字出现**就直接归属。
+    # 小模型经常不按要求填 evidence_refs，若只信它的引用，一份写得明明白白的原文
+    # 会被整体标成"无依据"、匹配度归零 —— 模型偷懒的代价不该由用户承担。
+    text_indexes = [
+        i
+        for i, item in enumerate(evidence)
+        if item.get("provenance") == USER_JD_PROVENANCE
+        and _skill_appears_in(requirement.get("skill"), str(item.get("note") or ""))
+    ]
+
+    # 用户原文这一路**不收模型自报的编号**。实测：3B 模型会把"Python"这种它自己
+    # 想到的技能挂到压根没提它的句子上，还给出 E01/E06 这种合法但无关的编号 ——
+    # 而"每条要求都能反查到原话"正是这一路存在的理由，宁可少认一条也不能认错。
+    from_user_jd = any(item.get("provenance") == USER_JD_PROVENANCE for item in evidence)
+
     # 规则层能定就完全用规则层的（模型那几条是冗余的）；否则才用模型引用
     if rule_indexes:
         indexes = rule_indexes
         exact_name = _normalize_skill_name(requirement.get("skill")) == _normalize_skill_name(canonical)
         status = "supported" if exact_name else "partially_supported"
-    elif model_indexes:
+    elif text_indexes:
+        # 原话里逐字写着这个技能 —— 这是能有的最强依据
+        indexes = text_indexes
+        status = "supported"
+    elif model_indexes and not from_user_jd:
         indexes = model_indexes
         status = "partially_supported"
     else:
@@ -354,6 +665,7 @@ def _attach_evidence(requirement: dict, evidence: list, rejected: list) -> dict:
             "evidence_status": "model_supplement",
             "evidence_refs": [],
             "source_companies": [],
+            "source_notes": [],
             "importance_basis": "model_generated",
             "level_basis": {"origin": "model_inferred", "quote": None, "by_company": {}},
         }
@@ -405,6 +717,9 @@ def _attach_evidence(requirement: dict, evidence: list, rejected: list) -> dict:
         "source_companies": sorted(
             {item.get("company_slug") for item in picked if item.get("company_slug")}
         ),
+        # 支撑本条要求的**原文句子**。前端逐条反显靠它 —— 用户要能一眼看出
+        # 这条要求是从广告里哪句话来的，还是模型自己加的。
+        "source_notes": [item.get("note") for item in picked if item.get("note")],
         "importance_basis": importance_basis,
         "level_basis": level_basis,
     }
@@ -423,9 +738,134 @@ def job_node(state: CareerState) -> dict:
     evidence = list(state.get("job_evidence") or [])
     retrieval_status = state.get("retrieval_status")
 
+    # 岗位目录：能认出岗位时，把人工整理的规范技能表注入提示词，并在模型
+    # 漏项时补全。认不出（如"护士"）就完全退回原来的模型判断路径。
+    catalog = get_job_catalog()
+    catalog_profile = None
+    if catalog is not None:
+        try:
+            catalog_profile = catalog.resolve_profile(target_job)
+        except Exception as exc:  # noqa: BLE001 - 目录问题只降级
+            print(
+                f"[Job Agent] 警告：岗位目录查询失败，跳过知识库技能对齐"
+                f"（{type(exc).__name__}: {exc}）",
+                flush=True,
+            )
+
+    # 岗位画像：缓存 → 知识库人工画像 → 模型生成（仅在允许时）。
+    # 任何一步失败都只降级，不让整次岗位分析失败 —— 技能要求仍可照常产出。
+    profile_warnings = list(state.get("job_profile_warnings") or [])
+    cached_profile = state.get("job_profile")
+    profile = None
+    profile_origin = "unavailable"
+
+    if cached_profile:
+        try:
+            profile = validate_profile(cached_profile)
+            profile_origin = "cache"
+        except Exception as exc:  # noqa: BLE001 - 坏缓存只降级，不中断分析
+            profile_warnings.append(
+                f"注入的岗位画像结构不合法，已忽略（{type(exc).__name__}: {exc}）"
+            )
+
+    if profile is None and catalog_profile is not None:
+        profile = builtin_profile(catalog_profile, target_job)
+        if profile is not None:
+            profile_origin = "knowledge_base"
+            print(
+                f"[Job Agent] 使用岗位知识库中的人工整理画像："
+                f"{catalog_profile.get('job_name') or target_job}",
+                flush=True,
+            )
+
+    # 只有认得出的岗位才允许模型补画像：陌生岗位（如"护士"）没有知识库依据，
+    # 生成出来的画像会把猜测包装成事实，所以保持 "unavailable" 让下游如实提示。
+    if (
+        profile is None
+        and catalog_profile is not None
+        and state.get("enable_job_profile")
+    ):
+        try:
+            profile, generated_warnings = generate_job_profile(
+                target_job, evidence, retrieval_status
+            )
+            profile_warnings.extend(generated_warnings)
+            profile_origin = "generated"
+        except Exception as exc:  # noqa: BLE001 - 画像失败不阻断六阶段
+            profile_warnings.append(
+                f"岗位画像生成失败，本次退回只按岗位名称与证据分析（{exc}）"
+            )
+
+    for warning in profile_warnings:
+        print(f"[Job Agent] 警告：{warning}", flush=True)
+
+    # 下一轮沿用上一轮快照：岗位要求是同一份 JD 拆出来的，不能因为模型这次
+    # 换了个说法就让"同一目标"的门槛悄悄漂移。快照不合法时退回正常生成路径。
+    snapshot_requirements = state.get("snapshot_job_requirements")
+    if snapshot_requirements:
+        reused: list[dict] = []
+        for req in snapshot_requirements:
+            if not isinstance(req, dict):
+                continue
+            skill = str(req.get("skill") or "").strip()
+            if not skill:
+                continue
+            item = dict(req)
+            item["skill"] = skill
+            try:
+                item["importance"] = max(1, min(5, int(item.get("importance") or 3)))
+            except (TypeError, ValueError):
+                item["importance"] = 3
+            if item.get("level") not in SKILL_LEVELS:
+                item["level"] = "初级"
+            reused.append(item)
+
+        if reused:
+            reused.sort(key=lambda r: r["importance"], reverse=True)
+            evidence = [
+                item for item in (state.get("job_evidence") or [])
+                if isinstance(item, dict)
+            ]
+            from_user_jd = any(
+                item.get("provenance") == USER_JD_PROVENANCE for item in evidence
+            )
+            snapshot_basis = str(state.get("snapshot_job_requirements_basis") or "").strip()
+            if snapshot_basis in ("user_pasted", "knowledge_base", "model_only"):
+                snapshot_grounded = bool(state.get("snapshot_job_requirements_grounded"))
+            else:
+                snapshot_basis, snapshot_grounded = resolve_requirements_basis(
+                    from_user_jd, catalog_profile, reused
+                )
+            print(
+                f"[Job Agent] 本轮沿用上一轮保存的 {len(reused)} 条岗位要求快照，"
+                f"未重新调用模型拆解",
+                flush=True,
+            )
+            log("Job Agent")
+            return check_update(
+                {
+                    "job_requirements": reused,
+                    "job_profile": profile,
+                    "job_profile_warnings": profile_warnings,
+                    "job_profile_origin": profile_origin,
+                    "job_requirements_basis": snapshot_basis,
+                    "job_requirements_grounded": snapshot_grounded,
+                },
+                "Job Agent",
+            )
+        profile_warnings.append("上一轮的岗位要求快照不可用，本次重新生成岗位要求")
+
+    # 用户自带原文时，岗位要求只能从原文来；此时一份广告本来就只写了 2 条要求
+    # 是可能的，不该为了凑够 3 条把没提的能力编进来，更不该因此让整次分析崩掉。
+    from_user_jd = any(item.get("provenance") == USER_JD_PROVENANCE for item in evidence)
+    requirement_floor = 1 if from_user_jd else MIN_REQUIREMENTS
+
     prompt = PROMPT.format(
         job=target_job,
         evidence_block=format_evidence_block(evidence, retrieval_status),
+        profile_block=format_profile_block(profile),
+        catalog_block=format_catalog_skills_block(catalog_profile),
+        basis_note=_USER_JD_NOTE if from_user_jd else "",
     )
     analysis = structured_invoke(prompt, JobAnalysis)
 
@@ -438,6 +878,17 @@ def job_node(state: CareerState) -> dict:
 
     # 模型经常把同一个技能列两遍（如 Git），先按原样名字去重
     requirements = dedupe_by(requirements, key="skill")
+
+    # 非原文路径下，把模型用的近义词改写成本岗位的规范技能名。用户粘了原文时
+    # 不改写：原文怎么说就怎么保留，避免把原话悄悄换成另一个技能名。
+    rewritten: list[str] = []
+    if not from_user_jd:
+        requirements = rewrite_to_profile_skills(requirements, catalog_profile, rewritten)
+        if rewritten:
+            print(
+                f"[Job Agent] 已按岗位知识库对齐技能名：{sorted(set(rewritten))}",
+                flush=True,
+            )
 
     # 再把"岗位能力分类标签"和"同一个技能的不同说法"清掉。
     # 两步都可能减少条数，所以先试算，清理后仍够 3 条才采用，否则整条回退 ——
@@ -465,11 +916,33 @@ def job_node(state: CareerState) -> dict:
             flush=True,
         )
 
-    check_non_empty(requirements, "Job Agent 的岗位技能列表", minimum=MIN_REQUIREMENTS)
+    # 知识库岗位：表外项丢弃、漏掉的规范技能补全。用户原文路径不动 ——
+    # 原文没有的能力不能因为知识库里有就加进来，原文有的也不能被表限制掉。
+    added: list[str] = []
+    dropped_extras: list[str] = []
+    if not from_user_jd:
+        requirements = restrict_to_profile_skills(requirements, catalog_profile, dropped_extras)
+        if dropped_extras:
+            print(
+                f"[Job Agent] 已丢弃知识库技能表之外的项：{sorted(set(dropped_extras))}",
+                flush=True,
+            )
+        requirements = merge_profile_skills(requirements, catalog_profile, added)
+        if added:
+            print(
+                f"[Job Agent] 已按岗位知识库补全模型漏项：{added}",
+                flush=True,
+            )
+
+    check_non_empty(requirements, "Job Agent 的岗位技能列表", minimum=requirement_floor)
 
     # 回填证据来源（会覆盖 importance / level，所以必须排在排序之前）
     rejected: list[str] = []
     requirements = [_attach_evidence(req, evidence, rejected) for req in requirements]
+    requirements = apply_profile_basis(requirements)
+    requirements_basis, requirements_grounded = resolve_requirements_basis(
+        from_user_jd, catalog_profile, requirements
+    )
     if rejected:
         print(
             f"[Job Agent] 警告：模型提出了本轮不存在的证据编号，已丢弃 {sorted(set(rejected))}",
@@ -480,4 +953,14 @@ def job_node(state: CareerState) -> dict:
     requirements.sort(key=lambda r: r["importance"], reverse=True)
 
     log("Job Agent")
-    return check_update({"job_requirements": requirements}, "Job Agent")
+    return check_update(
+        {
+            "job_requirements": requirements,
+            "job_profile": profile,
+            "job_profile_warnings": profile_warnings,
+            "job_profile_origin": profile_origin,
+            "job_requirements_basis": requirements_basis,
+            "job_requirements_grounded": requirements_grounded,
+        },
+        "Job Agent",
+    )

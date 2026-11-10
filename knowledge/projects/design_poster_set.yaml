@@ -1,0 +1,15 @@
+# Project 知识库 —— 设计：品牌宣传物料设计（入门）
+name: 品牌宣传物料设计
+domain: design
+difficulty: beginner
+covers_skills: [版式与构图, 色彩与视觉风格, Photoshop, 图片设计]
+prerequisites: []
+tech_stack: [Photoshop, Illustrator, 品牌色卡, 物料尺寸模板]
+stage_hint: 学习路线起点，围绕一次活动完成海报与社交图两类物料
+deliverable: 海报、社交平台方图与竖图各一套，附设计说明
+acceptance_criteria:
+  - 版面有明确视觉重点，信息层级一眼可分辨
+  - 配色符合给定品牌色，正文与背景对比清晰
+  - 图片无拉伸变形，输出尺寸符合各渠道要求
+  - 源文件分层清晰，能被他人修改
+estimated_weeks: 2

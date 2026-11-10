@@ -1,0 +1,177 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Skill 知识库 —— 会计技能（v1）
+# 说明：
+#   - 技能名必须与 knowledge/jobs/accountant.yaml 完全一致。
+#   - prerequisites 只能引用本知识库中真实存在的规范技能。
+#   - level_guides 四档（入门/初级/中级/高级）必须完整。
+# ═══════════════════════════════════════════════════════════════════════════
+
+- skill: 会计准则
+  category: accounting
+  level_guides:
+    入门: 知道会计六大要素与借贷记账法，能看懂一张最简单的记账凭证。
+    初级: 能按常用准则处理常见业务的分录，理解权责发生制与历史成本。
+    中级: 能独立判断收入确认、资产减值、折旧摊销等常见业务的准则适用。
+    高级: 能处理复杂交易与准则差异，能为账务处理方案提供准则依据。
+  prerequisites: []
+  typical_usage: 日常账务处理、报表编制与审计判断的共同规则基础。
+  common_pitfalls:
+    - 把收付实现制与权责发生制混用，导致收入费用跨期错配。
+    - 只记分录不看业务实质，遇到特殊交易就套错科目。
+    - 忽视准则更新，继续沿用旧口径处理新业务。
+  learning_resources:
+    - {title: '财政部会计司', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 4
+
+- skill: 财务报表分析
+  category: accounting
+  level_guides:
+    入门: 知道资产负债表、利润表、现金流量表各自反映什么。
+    初级: 能读懂三张表的主要项目，会计算毛利率、净利率等基础指标。
+    中级: 能编制三大报表并进行趋势、结构与同行业对比分析，解释主要变动。
+    高级: 能结合业务与现金流判断报表质量，识别异常并形成分析结论。
+  prerequisites: [会计准则, Excel]
+  typical_usage: 月度经营分析、年度报告与信贷/投资尽调中的核心能力。
+  common_pitfalls:
+    - 只算比率不看业务，指标好看但现金流持续为负。
+    - 不统一口径就做同比，把口径变化当成经营变化。
+    - 只看利润表，忽略应收、存货与现金流风险。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 纳税申报
+  category: accounting
+  level_guides:
+    入门: 知道增值税、企业所得税等主要税种的纳税义务人与申报周期。
+    初级: 能在电子税务局完成常见税种的申报表填写与缴款。
+    中级: 能独立完成增值税、企业所得税等申报，处理进项抵扣与税会差异。
+    高级: 能结合业务做税务筹划与风险排查，应对汇算清缴与税务核查。
+  prerequisites: [会计准则]
+  typical_usage: 企业按期完成税务申报与缴纳，避免滞纳金与合规风险。
+  common_pitfalls:
+    - 申报期限记错或漏报，产生滞纳金与信用扣分。
+    - 进项发票未及时认证，导致可抵扣税额损失。
+    - 税会差异不调整，汇算清缴时出现大额补税。
+  learning_resources:
+    - {title: '国家税务总局', url: 'https://www.chinatax.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 财务软件
+  category: accounting
+  level_guides:
+    入门: 知道用友/金蝶等财务软件的基本模块与账套概念。
+    初级: 能在财务软件中录入凭证、查询明细账与科目余额表。
+    中级: 能独立完成月末结账、报表出具与常见异常处理。
+    高级: 能配置账套与权限、迁移历史数据，并为团队制定操作规范。
+  prerequisites: [会计准则, Excel]
+  typical_usage: 日常记账、结账与出报表的主要工作平台。
+  common_pitfalls:
+    - 凭证摘要与辅助核算填得不规范，后期查账困难。
+    - 结账前不核对银行账与往来账，错误被结进下期。
+    - 权限分配过宽，任何人都能改历史凭证。
+  learning_resources:
+    - {title: '用友网络官网', url: 'https://www.yonyou.com/'}
+  estimated_weeks: 2
+
+- skill: Excel
+  category: accounting
+  level_guides:
+    入门: 会录入数据、设置格式、做简单求和与排序筛选。
+    初级: 会用 VLOOKUP、IF、SUMIF 等常用函数与数据透视表。
+    中级: 能搭建对账表、费用汇总与预算执行表，会用条件格式做异常提示。
+    高级: 能设计可复用的报表模板与自动化流程，保证数据口径一致。
+  prerequisites: []
+  typical_usage: 对账、汇总、报表与预算分析中最通用的数据处理工具。
+  common_pitfalls:
+    - 合并单元格与多行表头导致无法筛选和透视。
+    - 数值存成文本，求和结果悄悄变少。
+    - 手工复制粘贴多套表格，口径不一致且容易出错。
+  learning_resources:
+    - {title: 'Microsoft Excel 帮助与学习', url: 'https://support.microsoft.com/zh-cn/excel'}
+  estimated_weeks: 2
+
+- skill: 审计基础
+  category: accounting
+  level_guides:
+    入门: 知道审计是独立检查财务报表是否公允，了解审计意见类型。
+    初级: 能看懂审计程序表，按清单准备凭证、合同与银行对账单。
+    中级: 能配合完成函证、盘点、截止测试等程序，整理审计底稿。
+    高级: 能识别重大错报风险，设计并执行针对性审计程序。
+  prerequisites: [会计准则, 财务报表分析]
+  typical_usage: 配合内外部审计、准备资料与底稿，以及内部稽核工作。
+  common_pitfalls:
+    - 只提供资料不理解审计目的，来回补材料效率低。
+    - 底稿缺少索引与结论，复核时无法追溯。
+    - 对异常样本不追问，错过真正的错报线索。
+  learning_resources:
+    - {title: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/'}
+  estimated_weeks: 3
+
+- skill: 成本核算
+  category: accounting
+  level_guides:
+    入门: 知道直接材料、直接人工与制造费用的基本构成。
+    初级: 能按品种法归集生产费用并计算单位成本。
+    中级: 能根据生产特点选择品种法/分批法/分步法，完成成本分配与差异分析。
+    高级: 能设计成本核算体系，结合业务改进成本控制与定价决策。
+  prerequisites: [会计准则, Excel]
+  typical_usage: 制造与贸易企业核算产品成本、毛利与存货价值。
+  common_pitfalls:
+    - 费用分配标准随意，成本在不同产品间被扭曲。
+    - 在制品与完工产品划分不清，存货金额失真。
+    - 只算成本不做差异分析，问题无法反馈到生产环节。
+  learning_resources:
+    - {title: '财政部管理会计应用指引', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 预算管理
+  category: accounting
+  level_guides:
+    入门: 知道预算包括收入、成本费用与资金计划，理解预算的作用。
+    初级: 能汇总各部门预算数据，编制简单的费用预算表。
+    中级: 能组织年度预算编制，跟踪执行并做差异分析。
+    高级: 能把预算与经营目标、滚动预测结合，推动资源调整。
+  prerequisites: [成本核算, 财务报表分析]
+  typical_usage: 年度经营计划、费用控制与部门绩效跟踪。
+  common_pitfalls:
+    - 预算由财务闭门造车，业务部门不认账。
+    - 只编不跟踪，年底才发现大幅超支。
+    - 差异分析只写数字不写原因，无法指导行动。
+  learning_resources:
+    - {title: '财政部管理会计应用指引', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 3
+
+- skill: 内部控制
+  category: accounting
+  level_guides:
+    入门: 知道内控的目标是保证资产安全、信息真实与合规经营。
+    初级: 能识别报销、付款、采购流程中的关键控制点。
+    中级: 能梳理业务流程与风险点，提出不相容岗位分离与审批控制建议。
+    高级: 能设计并评估内控体系，推动缺陷整改与制度落地。
+  prerequisites: [审计基础]
+  typical_usage: 资金与票据风险防范、流程规范与审计整改。
+  common_pitfalls:
+    - 一个人同时管钱、管账、管审批，缺少基本制衡。
+    - 制度写在墙上，实际业务仍靠口头审批。
+    - 只查问题不跟进整改，同类风险反复出现。
+  learning_resources:
+    - {title: '财政部内部控制规范', url: 'https://kjs.mof.gov.cn/'}
+  estimated_weeks: 2
+
+- skill: 出纳实务
+  category: accounting
+  level_guides:
+    入门: 知道现金、银行存款日记账的登记规则与票据种类。
+    初级: 能办理收付款、登记日记账并完成日常对账。
+    中级: 能独立管理银行账户、票据与资金计划，处理未达账项。
+    高级: 能优化资金收付流程与账户结构，兼顾效率与风险控制。
+  prerequisites: [会计准则]
+  typical_usage: 现金与银行收付、票据保管与资金日报。
+  common_pitfalls:
+    - 日记账与银行流水长期不核对，未达账项越积越多。
+    - 票据与印鉴由同一人保管，资金风险集中。
+    - 收付款缺少审批依据，事后难以追责。
+  learning_resources:
+    - {title: '国家税务总局', url: 'https://www.chinatax.gov.cn/'}
+  estimated_weeks: 1

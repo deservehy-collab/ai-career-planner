@@ -41,6 +41,12 @@ DEFAULT_STORE_NAME = "growth.json"
 
 SCHEMA_VERSION = 1
 
+#: 用户作废成果时追加的调整记录类型。正常成长记录没有 kind 字段（保持向后兼容）。
+ENTRY_KIND_ADJUSTMENT = "adjustment"
+#: 完成后再补凭证时追加的验证记录类型：只覆盖证据类型，不新增升级。
+ENTRY_KIND_VERIFICATION = "verification"
+_STRONG_EVIDENCE_KINDS = ("project", "growth")
+
 # ── 加载状态 ────────────────────────────────────────────────────────────
 STATUS_OK = "ok"
 STATUS_EMPTY = "empty"                     # 文件不存在，首次运行
@@ -146,6 +152,34 @@ def _now(now: datetime | None = None) -> str:
     return (now or datetime.now()).isoformat(timespec="seconds")
 
 
+def voided_index(entries) -> tuple[set[tuple[int, int]], set[str]]:
+    """汇总所有调整记录里的作废引用。
+
+    返回 ``(refs, fingerprints)``：
+    - ``refs`` 是 ``(历史条目下标, 事件下标)`` 的集合；
+    - ``fingerprints`` 是这些被作废事件对应的指纹。没有指纹的成果（被前置拦下、
+      重复或非法）在作废时也会补算一个，避免下一轮又把它自动排进待办。
+    """
+    refs: set[tuple[int, int]] = set()
+    fingerprints: set[str] = set()
+    for entry in entries or []:
+        if not isinstance(entry, dict) or entry.get("kind") != ENTRY_KIND_ADJUSTMENT:
+            continue
+        for item in entry.get("voided") or []:
+            if not isinstance(item, dict):
+                continue
+            try:
+                entry_index = int(item.get("entry_index"))
+                event_index = int(item.get("event_index"))
+            except (TypeError, ValueError):
+                continue
+            refs.add((entry_index, event_index))
+            fingerprint = str(item.get("fingerprint") or "").strip()
+            if fingerprint:
+                fingerprints.add(fingerprint)
+    return refs, fingerprints
+
+
 class GrowthStore:
     """``runs/growth.json`` 的读写入口。目录可注入，默认项目下的 ``runs/``。"""
 
@@ -218,29 +252,160 @@ class GrowthStore:
         """历史里出现过的**全部**成果指纹。
 
         遍历所有历史条目的所有事件 —— 只查最近一条会漏掉更早的重复提交。
+        被用户作废的成果仍然算"已处理"（它的指纹在调整记录里），否则下一轮会
+        自动把同一条成果重新入账，作废就失去了意义。
         """
         payload = data if data is not None else self.load().data
-        seen: set[str] = set()
-        for entry in payload.get("history") or []:
+        refs, fingerprints = voided_index(payload.get("history") or [])
+        seen: set[str] = set(fingerprints)
+        for entry_index, entry in enumerate(payload.get("history") or []):
             if not isinstance(entry, dict):
                 continue
-            for event in entry.get("events") or []:
-                if isinstance(event, dict):
-                    fingerprint = str(event.get("fingerprint") or "").strip()
-                    if fingerprint:
-                        seen.add(fingerprint)
+            for event_index, event in enumerate(entry.get("events") or []):
+                if not isinstance(event, dict):
+                    continue
+                if (entry_index, event_index) in refs:
+                    continue
+                fingerprint = str(event.get("fingerprint") or "").strip()
+                if fingerprint:
+                    seen.add(fingerprint)
         return seen
 
     # ── 恢复已确认的能力 ────────────────────────────────────────────────
     def latest_skills(self, data: dict | None = None) -> list[dict]:
-        """最近一次已确认的 ``user_skills_after``；没有历史时回落到 baseline。"""
+        """最近一次已确认的 ``user_skills_after``；没有历史时回落到 baseline。
+
+        调整记录的空能力表是**有效结果**（作废后可能一项不剩），不能像普通
+        空快照那样跳过 —— 否则界面会回显作废前的能力。
+
+        旧版本的记录没有 ``evidence_kind``：凡是出现在历史 ``level_changes``
+        里的技能，补标为 ``growth``（升级确实由成长事件产生）；其余按
+        ``self_report`` 保守处理，不凭空把自述当成项目证据。
+        """
         payload = data if data is not None else self.load().data
         for entry in reversed(payload.get("history") or []):
-            if isinstance(entry, dict) and isinstance(entry.get("user_skills_after"), list):
-                if entry["user_skills_after"]:
-                    return [dict(s) for s in entry["user_skills_after"]]
+            if not isinstance(entry, dict) or not isinstance(entry.get("user_skills_after"), list):
+                continue
+            if entry["user_skills_after"]:
+                return self._backfill_evidence_kind(
+                    payload, [dict(s) for s in entry["user_skills_after"]]
+                )
+            if entry.get("kind") == ENTRY_KIND_ADJUSTMENT:
+                return []
         baseline = payload.get("baseline") or {}
-        return [dict(s) for s in (baseline.get("user_skills") or [])]
+        return self._backfill_evidence_kind(
+            payload, [dict(s) for s in (baseline.get("user_skills") or [])]
+        )
+
+    @staticmethod
+    def _backfill_evidence_kind(payload: dict, skills: list[dict]) -> list[dict]:
+        """给旧记录里的技能补证据类型；新记录已有的字段原样保留。"""
+        growth_refs: dict[str, str] = {}
+        for entry in payload.get("history") or []:
+            if not isinstance(entry, dict):
+                continue
+            for change in entry.get("level_changes") or []:
+                if not isinstance(change, dict):
+                    continue
+                key = pair_key(change.get("skill"))
+                if key and key not in growth_refs:
+                    growth_refs[key] = str(change.get("source") or "").strip()
+
+        for item in skills:
+            if not isinstance(item, dict):
+                continue
+            if item.get("evidence_kind") in ("growth", "project", "self_report"):
+                continue
+            key = pair_key(item.get("skill"))
+            if key in growth_refs:
+                item["evidence_kind"] = "growth"
+                if growth_refs[key]:
+                    item.setdefault("evidence_ref", growth_refs[key])
+            else:
+                item["evidence_kind"] = "self_report"
+        return skills
+
+    # ── 完成后再补凭证：只覆盖证据类型，不新增升级 ────────────────────
+    def find_verification(self, task_id: str, data: dict | None = None) -> dict | None:
+        """历史里是否已有针对这条任务的验证记录。"""
+        payload = data if data is not None else self.load().data
+        wanted = str(task_id or "").strip()
+        if not wanted:
+            return None
+        for entry in payload.get("history") or []:
+            if not isinstance(entry, dict):
+                continue
+            if entry.get("kind") == ENTRY_KIND_VERIFICATION and str(
+                entry.get("task_id") or ""
+            ).strip() == wanted:
+                return entry
+        return None
+
+    def build_verification_entry(
+        self,
+        data: dict,
+        task_id: str,
+        title: str,
+        skills: list | None,
+        evidence: str,
+        target_job: str | None = None,
+        now: datetime | None = None,
+    ) -> dict | None:
+        """为"完成后补凭证"构造一条验证记录；找不到对应历史成果时返回 None。
+
+        这条记录**不新增升级**：``level_changes`` 为空，只把同一成果涉及的技能
+        的 ``evidence_kind`` 从 ``self_report`` 覆盖成 ``growth``，并重算
+        ``user_skills_after``。原历史一条不改，``latest_skills`` 自然取到新快照。
+        """
+        history = [entry for entry in (data.get("history") or []) if isinstance(entry, dict)]
+        key_skills: set[str] = set()
+        matched_title = ""
+        for entry in history:
+            if entry.get("kind") in (ENTRY_KIND_ADJUSTMENT, ENTRY_KIND_VERIFICATION):
+                continue
+            for event in entry.get("events") or []:
+                if not isinstance(event, dict):
+                    continue
+                if str(event.get("title") or "").strip() != str(title or "").strip():
+                    continue
+                matched_title = str(event.get("title") or "").strip()
+                key_skills.update(
+                    pair_key(s) for s in (event.get("skills") or []) if pair_key(s)
+                )
+        if not key_skills:
+            return None
+        wanted = {pair_key(s) for s in (skills or []) if pair_key(s)}
+        if wanted:
+            key_skills &= wanted
+        if not key_skills:
+            return None
+
+        before = [dict(item) for item in self.latest_skills(data) if isinstance(item, dict)]
+        after: list[dict] = []
+        changed = 0
+        for item in before:
+            updated = dict(item)
+            if pair_key(updated.get("skill")) in key_skills:
+                updated["evidence"] = evidence
+                updated["evidence_kind"] = "growth"
+                updated["evidence_ref"] = matched_title or title
+                changed += 1
+            after.append(updated)
+
+        return {
+            "kind": ENTRY_KIND_VERIFICATION,
+            "at": _now(now),
+            "task_id": task_id,
+            "target_job": str(target_job or ""),
+            "events": [],
+            "level_changes": [],
+            "user_skills_before": before,
+            "user_skills_after": after,
+            "blocked_upgrades": [],
+            "voided_event_indices": [],
+            # 没有任何技能需要翻证据类型时，这条记录没有意义
+            "changed_skills": changed,
+        }
 
     def baseline_skills(self, data: dict | None = None) -> list[dict]:
         payload = data if data is not None else self.load().data
@@ -284,13 +449,23 @@ class GrowthStore:
                     "skill": str(raw_skill.get("skill") or "").strip(),
                     "level": raw_skill.get("level"),
                     "evidence": str(raw_skill.get("evidence") or "").strip(),
+                    "evidence_kind": str(raw_skill.get("evidence_kind") or "").strip(),
+                    "evidence_ref": str(raw_skill.get("evidence_ref") or "").strip(),
                 }
                 order.append(key)
                 return
-            # 同键再次出现：只升等级，证据保持第一次出现的那份
+            # 同键再次出现：只升等级，证据保持第一次出现的那份；
+            # 但如果等级来自更强的证据源（项目/成长），不能还把证据标成自述。
             current = merged[key]
             if level_rank(raw_skill.get("level")) > level_rank(current.get("level")):
                 current["level"] = raw_skill.get("level")
+                raw_kind = str(raw_skill.get("evidence_kind") or "").strip()
+                if raw_kind in ("project", "growth") and current.get("evidence_kind") not in (
+                    "project", "growth"
+                ):
+                    current["evidence_kind"] = raw_kind
+                    current["evidence"] = str(raw_skill.get("evidence") or "").strip()
+                    current["evidence_ref"] = str(raw_skill.get("evidence_ref") or "").strip()
 
         stored = self.latest_skills(loaded_result.data)
         for item in stored:

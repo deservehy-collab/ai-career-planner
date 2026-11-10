@@ -1,0 +1,15 @@
+# Project 知识库 —— 人力资源：薪酬核算与个税申报（中级）
+name: 薪酬核算与个税申报
+domain: human-resources
+difficulty: intermediate
+covers_skills: [薪酬核算, 社保公积金实操, 个税计算, Excel]
+prerequisites: [Excel]
+tech_stack: [Excel, 薪酬核算表, 个税计算公式, 社保缴费明细]
+stage_hint: 在基础人事事务之上，练习把考勤、绩效与扣缴算成一张准确的工资表
+deliverable: 一份 20 人规模的月度工资表与个税申报核对说明
+acceptance_criteria:
+  - 应发、扣款、实发三列可逐项追溯到考勤与绩效数据
+  - 社保公积金按基数与比例正确计算，异常人员单独说明
+  - 个税按累计预扣法计算，与申报口径一致
+  - 表格使用函数而非手工填写，改数据可自动重算
+estimated_weeks: 3

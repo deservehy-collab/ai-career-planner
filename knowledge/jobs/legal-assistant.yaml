@@ -1,0 +1,127 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 法务助理 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_law_std_001    国家法律法规数据库中民法典合同编、公司法等相关公开
+#                         条文要点整理
+#                         https://flk.npc.gov.cn/ （访问日期 2026-11-10）
+#   source_law_jd_001     公开招聘信息中法务助理/法务专员岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: legal_assistant
+job_name: 法务助理
+
+aliases:
+  - 法务助理
+  - 法务专员
+  - 法务
+  - 合同管理专员
+  - 法律事务助理
+
+category: legal-public
+domain: legal-public
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 法务助理负责合同初审与归档、法律检索与资料整理，协助处理纠纷材料与合规事务，为业务部门提供基础法律支持并做好风险提示。
+  core_tasks:
+    - {name: 初审合同, detail: 核对主体、条款与附件，按清单标注风险点}
+    - {name: 法律检索, detail: 按问题查找法规与案例，整理检索结论}
+    - {name: 起草文书, detail: 撰写函件、协议与内部说明材料}
+    - {name: 管理合同档案, detail: 建立台账，跟踪签署、履行与到期}
+    - {name: 协助争议处理, detail: 整理证据材料，配合律师推进程序}
+    - {name: 提示合规风险, detail: 汇总业务中的常见法律问题并给出处理建议}
+  tools: [国家法律法规数据库, 裁判文书网, 合同管理系统, Office 套件, 电子签平台]
+  deliverables: [合同审查意见, 检索报告, 法律文书, 合同台账, 风险提示清单]
+  entry_requirements: [法学相关专业, 熟悉合同法与公司法基础, 文字表达准确, 检索与整理能力强, 通过法律职业资格考试者优先]
+  career_path:
+    - {name: 法务助理, detail: 能完成合同初审与资料整理}
+    - {name: 法务专员, detail: 能独立处理常规合同与纠纷事务}
+    - {name: 法务主管, detail: 能负责合规体系与重大项目管理}
+    - {name: 法务总监, detail: 能统筹公司法律与合规战略}
+
+skills:
+
+  - skill: 合同法与公司法基础
+    importance: 5
+    level: 高级
+    reason: 判断合同效力与主体责任都靠它，基础不牢给出的意见会误导业务。
+    evidence:
+      - {source_id: source_law_std_001, requirement_type: required, context: qualification,
+         note: '条文整理：合同的订立、效力、履行与违约责任'}
+      - {source_id: source_law_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉合同法、公司法等民商事法律'}
+
+  - skill: 合同审查
+    importance: 5
+    level: 中级
+    reason: 合同是法务最日常的交付，审查质量直接影响公司风险敞口。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责合同起草、审核与修订'}
+
+  - skill: 法律检索
+    importance: 5
+    level: 中级
+    reason: 所有结论都要有依据，检索不准等于没有依据。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：针对业务问题开展法律检索并输出结论'}
+
+  - skill: 法律文书写作
+    importance: 4
+    level: 中级
+    reason: 函件、协议与说明材料是法务对外表达的主要形式。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：起草法律函件与协议文本'}
+
+  - skill: 企业合规基础
+    importance: 4
+    level: 初级
+    reason: 合规风险往往在业务前端产生，法务助理是最早接触的人。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：协助开展合规检查与制度梳理'}
+
+  - skill: 证据整理与归档
+    importance: 4
+    level: 初级
+    reason: 争议一旦发生，能不能举证取决于平时有没有整理好。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：整理诉讼与仲裁材料并管理证据'}
+
+  - skill: 诉讼与仲裁程序
+    importance: 3
+    level: 初级
+    reason: 期限与程序错误会直接导致权利丧失，助理需要盯住节点。
+    evidence:
+      - {source_id: source_law_std_001, requirement_type: required, context: qualification,
+         note: '条文整理：民事诉讼与仲裁程序的基本规则'}
+      - {source_id: source_law_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：协助处理诉讼、仲裁事务者优先'}
+
+  - skill: 法律风险提示
+    importance: 3
+    level: 初级
+    reason: 把风险说清楚并给出可行方案，业务才会采纳法务意见。
+    evidence:
+      - {source_id: source_law_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：向业务部门提示法律风险并提出建议'}
+
+  - skill: 信息安全与保密
+    importance: 3
+    level: 初级
+    reason: 合同与诉讼材料多为敏感信息，泄露会造成实质损失。
+    evidence:
+      - {source_id: source_law_std_001, requirement_type: required, context: qualification,
+         note: '条文整理：商业秘密与个人信息保护的相关要求'}

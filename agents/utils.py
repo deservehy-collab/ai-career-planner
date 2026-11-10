@@ -49,8 +49,12 @@ def normalize_level(value) -> str:
 def resolve_canonical(name, vocabulary) -> str | None:
     """把技能名归一成词表里的**规范技能名**，只有唯一命中才采用。
 
-    为什么必须要求"唯一"：模型很容易把岗位能力分类标签（如"Agent 与工作流编排"）
-    或别名写法（如"后端服务"）当成技能名。名字里同时沾到多个规范技能时不能猜，
+    判定顺序：字面命中优先于别名命中。像"审计程序"这种完整规范名，会同时
+    字面命中自己、又通过"审计"这个别名沾到"审计基础"；此时必须取字面命中的
+    那一个，否则新增技能名一多，原本能识别的名字会集体变成"有歧义"。
+
+    字面命中多于一个、没有字面命中时别名多于一个，仍一律返回 None：模型很容易
+    把岗位能力分类标签当成技能名，名字里同时沾到多个规范技能时不能猜，
     否则会把"大模型调用与提示词工程"这类含混说法错判成某一个具体技能。
 
     未命中或有歧义一律返回 None，交给调用方显式处理（记录、告警、降级），
@@ -62,9 +66,30 @@ def resolve_canonical(name, vocabulary) -> str | None:
     if not text or vocabulary is None:
         return None
     matches = vocabulary.match_detailed(text)
+    literal = [name for name, kind in matches if kind == "literal"]
+    if literal:
+        return literal[0] if len(literal) == 1 else None
     if len(matches) != 1:
         return None
     return matches[0][0]
+
+
+def canonical_matches(name, vocabulary) -> list[str]:
+    """词表能沾上边的规范技能名列表（保序去重）。
+
+    与 :func:`resolve_canonical` 用的是同一套命中口径，区别只在于**把几种命中摊开**：
+
+    - 空列表 —— 词表里压根没有这项技能（非 AI 岗位的缺口名都是这种情况）；
+    - 一个 —— 唯一命中，可以放心归一；
+    - 两个以上 —— 歧义，不能猜。
+
+    ``resolve_canonical`` 把后两种情况都压成 ``None``，需要区分"没收录"与"认不准"
+    的调用方（如成长记账）用这个函数。``vocabulary`` 为 None 时返回空列表。
+    """
+    text = str(name or "").strip()
+    if not text or vocabulary is None:
+        return []
+    return list(dict.fromkeys(canonical for canonical, _ in vocabulary.match_detailed(text)))
 
 
 def build_skill_mapping(names, vocabulary) -> tuple[dict, list]:

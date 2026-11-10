@@ -1,0 +1,15 @@
+# Project 知识库 —— 数据分析：Excel 与 SQL 数据清洗（入门）
+name: Excel 与 SQL 数据清洗
+domain: data-analysis
+difficulty: beginner
+covers_skills: [Excel, SQL, 数据清洗]
+prerequisites: []
+tech_stack: [Excel, SQLite, SQL]
+stage_hint: 学习路线起点，用一份脏数据练会可复现的清洗流程
+deliverable: 一份清洗前后的数据对照与清洗步骤说明
+acceptance_criteria:
+  - 能处理缺失值、重复行、格式不一致与异常值
+  - 每一步清洗写明规则与影响行数
+  - 清洗结果能用 SQL 复核关键口径
+  - 保留原始数据，不直接覆盖源文件
+estimated_weeks: 2

@@ -22,7 +22,8 @@
     - 混淆 "=" 赋值的可变对象引用，导致无意中共享同一份数据。
     - 异常处理过于笼统，用裸 except 吞掉真实错误，难以排查。
     - 把依赖全挂在全局，脚本一长就难以测试和维护。
-  learning_resources: []
+  learning_resources:
+    - {title: 'Python 官方教程（中文）', url: 'https://docs.python.org/zh-cn/3/tutorial/'}
   estimated_weeks: 3
 
 - skill: RAG
@@ -38,7 +39,8 @@
     - 不看切分粒度，整段塞进向量库导致语义被稀释、检索不准。
     - 只做向量召回，不做 Rerank 和评测，效果好不好说不清。
     - 把检索出的原文直接当"事实"，忽略来源校验和幻觉风险。
-  learning_resources: []
+  learning_resources:
+    - {title: 'RAG 原始论文（Lewis et al., 2020）', url: 'https://arxiv.org/abs/2005.11401'}
   estimated_weeks: 4
 
 - skill: Agent
@@ -54,7 +56,8 @@
     - 上下文无限累积，导致调用过长、成本上升甚至超出长度限制。
     - 工具调用结果的解析不健壮，格式一变化就崩。
     - 只搭流程不做评测，Agent 出错时无法归因。
-  learning_resources: []
+  learning_resources:
+    - {title: 'LLM Powered Autonomous Agents（Lilian Weng）', url: 'https://lilianweng.github.io/posts/2023-06-23-agent/'}
   estimated_weeks: 4
 
 - skill: Prompt Engineering
@@ -70,7 +73,8 @@
     - 不给示例，只靠"请规范输出"，小模型容易跑偏。
     - 一次给太多指令，模型顾此失彼，忽略关键约束。
     - 输出解析靠字符串硬拆，一旦换说法就失败。
-  learning_resources: []
+  learning_resources:
+    - {title: 'Prompt Engineering Guide（中文）', url: 'https://www.promptingguide.ai/zh'}
   estimated_weeks: 2
 
 - skill: LLM API
@@ -86,7 +90,8 @@
     - 不处理超时和重试，网络抖动时整个调用直接失败。
     - 把 API Key 硬编码进代码或提交到仓库。
     - 只盯着一个模型，不关注 token 成本与效果差异。
-  learning_resources: []
+  learning_resources:
+    - {title: '智谱开放平台 API 文档', url: 'https://open.bigmodel.cn/dev/api'}
   estimated_weeks: 2
 
 - skill: Function Calling
@@ -102,5 +107,6 @@
     - 工具描述不准确，模型频繁选中错误的工具。
     - 不校验传入参数，非法参数直接执行导致错误。
     - 调用失败后没有重试或降级，整个流程中断。
-  learning_resources: []
+  learning_resources:
+    - {title: 'OpenAI Function Calling 指南', url: 'https://platform.openai.com/docs/guides/function-calling'}
   estimated_weeks: 2

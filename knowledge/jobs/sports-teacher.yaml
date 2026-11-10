@@ -1,0 +1,135 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 体育教师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_sport_std_001  教育部义务教育体育与健康课程标准、国家学生体质健康
+#                         标准等公开文件要点整理
+#                         http://www.moe.gov.cn/ （访问日期 2026-11-10）
+#   source_sport_jd_001   公开招聘信息中中小学体育教师岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: sports_teacher
+job_name: 体育教师
+
+aliases:
+  - 体育教师
+  - 体育老师
+  - 中小学体育教师
+  - 体育教育
+  - 体育教练
+
+category: sports
+domain: sports
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 体育教师依据课程标准完成体育课教学与运动技能指导，组织体质健康测试与校园竞赛，落实课堂安全与运动损伤预防，促进学生体质与运动习惯养成。
+  core_tasks:
+    - {name: 备课与上课, detail: 按学段目标编写教案并组织课堂}
+    - {name: 技能教学, detail: 讲解示范并纠正动作，安排递进练习}
+    - {name: 组织体测, detail: 规范完成测试、录入与分析}
+    - {name: 安全管理, detail: 检查场地器材，落实保护与应急处理}
+    - {name: 组织竞赛与活动, detail: 编排赛程，担任裁判与带队}
+    - {name: 教研与家校沟通, detail: 参与教研，反馈学生体质情况}
+  tools: [教案模板, 体质测试器材, 秒表与哨子, 体育场地器材, 学生体质数据平台]
+  deliverables: [单元与课时教案, 体质测试数据报告, 竞赛规程, 安全预案, 教学反思]
+  entry_requirements: [体育教育/运动训练等相关专业, 掌握至少两项运动技能, 了解课程标准与体测要求, 具备急救常识, 有教师资格证]
+  career_path:
+    - {name: 体育教师, detail: 能独立承担学段体育教学与体测}
+    - {name: 骨干教师, detail: 能负责教研与校本课程开发}
+    - {name: 教研组长, detail: 能统筹学科教学与竞赛训练}
+    - {name: 体育主管, detail: 能负责学校体育工作整体规划}
+
+skills:
+
+  - skill: 体育教学法
+    importance: 5
+    level: 高级
+    reason: 课堂组织与教学方法是体育教师的基本功，直接决定课堂质量。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: qualification,
+         note: '课程标准整理：体育与健康课程的实施与教学建议'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：承担体育课教学与教案编写'}
+
+  - skill: 运动技能示范
+    importance: 5
+    level: 高级
+    reason: 示范不标准学生就学歪，技能水平是体育教师的硬门槛。
+    evidence:
+      - {source_id: source_sport_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：具备扎实的运动技能与示范能力'}
+
+  - skill: 体育课堂组织与安全
+    importance: 5
+    level: 中级
+    reason: 体育课是校园伤害事故高发场景，组织不当要担责。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: responsibility,
+         note: '课程标准整理：体育活动安全与健康管理要求'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责课堂组织与学生安全'}
+
+  - skill: 体质测试与评价
+    importance: 4
+    level: 中级
+    reason: 体测是国家硬性要求，数据要能用于分析与改进。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：国家学生体质健康标准的测试项目与评定方法'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：组织并完成学生体质健康测试'}
+
+  - skill: 体育课程标准解读
+    importance: 4
+    level: 中级
+    reason: 教学与评价都要对齐课标，否则做了也不算达标。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: qualification,
+         note: '课程标准整理：核心素养、课程目标与内容要求'}
+      - {source_id: source_sport_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉体育与健康课程标准'}
+
+  - skill: 运动损伤预防
+    importance: 4
+    level: 中级
+    reason: 预防不到位就会变成事故，处理不当还会造成二次伤害。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: responsibility,
+         note: '课程标准整理：运动损伤预防与安全防护要求'}
+      - {source_id: source_sport_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：掌握运动损伤预防与基本处理'}
+
+  - skill: 急救与心肺复苏
+    importance: 4
+    level: 初级
+    reason: 运动现场突发情况必须能第一时间处置。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: qualification,
+         note: '课程标准整理：体育教师应具备急救知识与技能'}
+      - {source_id: source_sport_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：持急救证书者优先'}
+
+  - skill: 体育竞赛组织
+    importance: 3
+    level: 初级
+    reason: 校运会与单项比赛是常态工作，规程与裁判必须拿得下来。
+    evidence:
+      - {source_id: source_sport_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：组织校内外体育竞赛与训练'}
+
+  - skill: 运动生理学基础
+    importance: 3
+    level: 初级
+    reason: 不懂负荷与恢复，训练安排容易过量或不足。
+    evidence:
+      - {source_id: source_sport_std_001, requirement_type: required, context: qualification,
+         note: '课程标准整理：体育运动中的生理负荷与健康知识'}

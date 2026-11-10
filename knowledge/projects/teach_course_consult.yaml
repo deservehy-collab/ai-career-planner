@@ -1,0 +1,15 @@
+# Project 知识库 —— 教学：课程咨询与学员规划（入门）
+name: 课程咨询与学员规划
+domain: teaching
+difficulty: beginner
+covers_skills: [课程体系理解, 学员需求分析, 学习规划, 咨询沟通, 销售转化]
+prerequisites: [教育心理学]
+tech_stack: [课程大纲, 咨询记录表]
+stage_hint: 学习路线前期，用模拟咨询完整走一遍需求到方案
+deliverable: 一份咨询记录与学员学习规划：需求、基础、目标、课程匹配与阶段安排
+acceptance_criteria:
+  - 能通过提问区分学员的真实目标与表面诉求
+  - 课程推荐与学员基础匹配，不夸大效果
+  - 学习规划有阶段目标与可检验的里程碑
+  - 咨询记录如实写下学员顾虑与未解决事项
+estimated_weeks: 2

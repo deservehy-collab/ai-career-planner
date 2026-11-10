@@ -1,0 +1,139 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 化学分析员 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_chem_std_001   国家药品监督管理局与国家药典委员会发布的药品标准与
+#                         检验相关公开规范要点整理
+#                         https://www.nmpa.gov.cn/ （访问日期 2026-11-10）
+#   source_lab_jd_001     公开招聘信息中化学分析员/QC 岗位的通用职责与要求
+#                         汇总整理（多家合并，检索日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: qc_chemist
+job_name: 化学分析员
+
+aliases:
+  - 化学分析员
+  - 化学检验员
+  - 化验员
+  - QC 检验员
+  - 分析检测员
+
+category: bio-chemical
+domain: bio-chemical
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: 化学分析员按药典与企业标准完成原料、中间体与成品的取样与检验，操作色谱与滴定等分析方法，出具检验报告并处理异常结果，维护仪器与实验室安全。
+  core_tasks:
+    - {name: 取样与前处理, detail: 按取样规程取样，完成溶解、提取与定容}
+    - {name: 执行检验, detail: 按标准方法做滴定、色谱与常规理化检测}
+    - {name: 判断与复检, detail: 处理 OOS 结果，按流程复检并调查}
+    - {name: 出具报告, detail: 汇总数据，对照标准判定并归档}
+    - {name: 维护仪器, detail: 做日常保养、校准与系统适用性检查}
+    - {name: 管理试剂与安全, detail: 管理标准品、危化品与废液}
+  tools: [高效液相色谱仪, 气相色谱仪, 电位滴定仪, 电子天平, 马弗炉, 实验室信息管理系统]
+  deliverables: [检验记录, 检验报告, OOS 调查记录, 仪器使用与保养记录, 试剂台账]
+  entry_requirements: [化学/药学/分析检测等相关专业, 掌握分析化学基础, 能按标准方法操作, 数据敏感、记录规范, 有制药或检测机构实习经验优先]
+  career_path:
+    - {name: 分析员, detail: 能独立完成常规检验与记录}
+    - {name: 高级分析员, detail: 能处理方法转移与异常调查}
+    - {name: QC 主管, detail: 能负责实验室质量与团队管理}
+    - {name: 质量负责人, detail: 能对产品质量体系负责}
+
+skills:
+
+  - skill: 分析化学基础
+    importance: 5
+    level: 高级
+    reason: 浓度、反应与方法选择都靠它，算错一步结果全错。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：药品检验涉及的分析化学基础要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：分析化学相关专业，基础扎实'}
+
+  - skill: 色谱分析
+    importance: 5
+    level: 中级
+    reason: 含量与有关物质测定主要靠色谱，方法不稳结论就不可用。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：色谱法测定含量与有关物质的方法要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：熟练操作 HPLC/GC 并处理数据'}
+
+  - skill: 滴定与容量分析
+    importance: 5
+    level: 中级
+    reason: 含量测定与试剂标定的经典方法，操作细节决定准确度。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：容量分析法的操作与计算要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：完成滴定与常规理化检验'}
+
+  - skill: 样品前处理
+    importance: 4
+    level: 中级
+    reason: 前处理决定回收率与干扰水平，是误差的主要来源。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：供试品制备与溶液配制要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责取样与前处理操作'}
+
+  - skill: 分析仪器操作
+    importance: 4
+    level: 中级
+    reason: 检验数据几乎都出自仪器，系统适用性不合格就不能测。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：仪器分析方法的系统适用性要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责仪器操作与数据采集'}
+
+  - skill: 分析仪器维护
+    importance: 4
+    level: 初级
+    reason: 仪器状态直接影响柱效与重现性，带病工作会污染整批数据。
+    evidence:
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责仪器日常维护与保养'}
+
+  - skill: 检验记录与报告
+    importance: 4
+    level: 中级
+    reason: 报告是产品放行的依据，任何不一致都是质量事故。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: responsibility,
+         note: '标准整理：检验记录与报告的填写与审核要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：出具检验报告并归档'}
+
+  - skill: 药品与产品标准法规
+    importance: 4
+    level: 中级
+    reason: 判定必须依据现行标准，标准版本错了结论就无效。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：药典与产品标准的检验项目与限度'}
+      - {source_id: source_lab_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：熟悉药典与 GMP 相关要求者优先'}
+
+  - skill: 化学品安全与危化品管理
+    importance: 4
+    level: 初级
+    reason: 日常接触有机溶剂与强酸强碱，管理松懈会出安全事故。
+    evidence:
+      - {source_id: source_chem_std_001, requirement_type: required, context: qualification,
+         note: '标准整理：实验室化学品与危险废物管理要求'}
+      - {source_id: source_lab_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：遵守化学品安全管理制度'}

@@ -35,6 +35,11 @@ const menu = [
   { to: '/status', label: '系统状态', icon: 'M12 3a9 9 0 1 0 9 9 9 9 0 0 0-9-9zm0 4.5V12l3 2' },
 ]
 
+/** 父级菜单在子页也要亮着：/tasks/learning 仍属于「学习与项目」。 */
+function isSectionActive(to) {
+  return route.path === to || route.path.startsWith(`${to}/`)
+}
+
 const dotClass = computed(() => {
   if (health.unreachable) return 'dot dot-danger'
   if (health.status === 'ok') return 'dot dot-ok'
@@ -43,8 +48,8 @@ const dotClass = computed(() => {
 
 const statusText = computed(() => {
   if (health.loading && !health.data) return '检查中…'
-  if (health.unreachable) return '后端未连接'
-  return health.status === 'ok' ? '系统就绪' : '降级运行'
+  if (health.unreachable) return '服务未连接'
+  return health.status === 'ok' ? '系统就绪' : '部分功能受限'
 })
 
 function onLogout() {
@@ -61,8 +66,15 @@ function onLogout() {
       :class="{ 'is-collapsed': collapsed, 'is-open': drawerOpen }"
     >
       <div class="sidebar-brand">
-        <span class="sidebar-logo">CA</span>
-        <div class="brand">AI Career <span>Agent</span></div>
+        <span class="sidebar-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="5" cy="12" r="2.2" />
+            <circle cx="19" cy="6" r="2.2" />
+            <circle cx="19" cy="18" r="2.2" />
+            <path d="M7.2 11l9.6-4M7.2 13l9.6 4" />
+          </svg>
+        </span>
+        <div class="brand">AI 职业<span>规划平台</span></div>
       </div>
 
       <nav class="sidebar-nav" aria-label="主导航">
@@ -71,9 +83,10 @@ function onLogout() {
           :key="item.to"
           :to="item.to"
           class="sidebar-link"
+          :class="{ 'is-section-active': isSectionActive(item.to) }"
           :title="item.label"
           :aria-label="item.label"
-          :aria-current="route.path === item.to ? 'page' : undefined"
+          :aria-current="isSectionActive(item.to) ? 'page' : undefined"
         >
           <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -89,7 +102,7 @@ function onLogout() {
           <span class="sidebar-status-text">{{ statusText }}</span>
         </div>
         <div v-if="auth.isLoggedIn" class="sidebar-user auth-user">
-          <span class="auth-username" :title="'用户 ID ' + (auth.user?.id ?? '')">
+          <span class="auth-username">
             {{ auth.user?.username || '已登录' }}
           </span>
           <button
@@ -144,7 +157,7 @@ function onLogout() {
             <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <div class="brand">AI Career <span>Agent</span></div>
+        <div class="brand">AI 职业<span>规划平台</span></div>
         <span class="topbar-status" :title="statusText">
           <span :class="dotClass" />
           <span class="faint">{{ statusText }}</span>

@@ -1,0 +1,136 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# UI 设计师 —— 岗位画像（公开资料整理）
+# 版本：v1
+# 最后更新：2026-11-10
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 【来源说明】
+#   source_design_ui_001     公开平台设计规范要点整理（Material Design 3 与
+#                            Apple 人机界面指南的布局、组件与状态规则）
+#                            https://m3.material.io/ ，https://developer.apple.com/design/
+#                            （访问日期 2026-11-10）
+#   source_design_jd_001     公开招聘信息中 UI/交互设计岗位的通用职责与要求
+#                            汇总整理（多家合并，非单份 JD 逐字引用；检索日期 2026-11-10）
+#   source_design_guide_001  Figma 官方文档中组件、自动布局与交付检查的要点整理
+#                            https://help.figma.com/ （访问日期 2026-11-10）
+# ═══════════════════════════════════════════════════════════════════════════
+
+job_id: ui_designer
+job_name: UI 设计师
+
+aliases:
+  - UI设计师
+  - UI设计
+  - 交互设计师
+  - 界面设计师
+  - 产品设计师
+
+category: design
+domain: design
+origin: human-curated
+version: 1
+updated_at: 2026-11-10
+
+ground_requirements: true
+
+profile:
+  summary: UI 设计师负责产品界面的信息结构、交互流程与视觉呈现，产出高保真稿、组件与标注交付，并通过可用性验证和与前端协作保证设计落地。
+  core_tasks:
+    - {name: 梳理任务流程, detail: 把用户目标拆成页面与步骤，标出关键决策点}
+    - {name: 设计界面与状态, detail: 覆盖正常、空、加载、错误与禁用状态}
+    - {name: 搭建组件与规范, detail: 用组件变体统一按钮、表单与列表样式}
+    - {name: 制作可点击原型, detail: 连接关键流程用于评审与测试}
+    - {name: 验证可用性, detail: 观察用户完成任务，记录卡点并迭代}
+    - {name: 标注与交付, detail: 提供尺寸、间距、交互说明与切图}
+  tools: [Figma, 设计组件库, 原型工具, 用户测试脚本, 设计标注]
+  deliverables: [高保真界面稿, 可点击原型, 组件库, 交互标注, 可用性问题清单]
+  entry_requirements: [设计/数字媒体/计算机等相关专业或作品集, 熟练使用 Figma, 理解交互与界面规范, 能与前端协作, 有完整产品设计案例优先]
+  career_path:
+    - {name: UI 设计师, detail: 能独立完成页面设计与标注交付}
+    - {name: 资深 UI 设计师, detail: 能负责完整产品线并维护设计系统}
+    - {name: 设计主管, detail: 能统筹项目与设计质量}
+    - {name: 设计负责人, detail: 能制定产品设计策略与团队标准}
+
+skills:
+
+  - skill: 交互设计基础
+    importance: 5
+    level: 中级
+    reason: 界面价值取决于任务能否被顺畅完成，而不只是看起来漂亮。
+    evidence:
+      - {source_id: source_design_ui_001, requirement_type: required, context: qualification,
+         note: '平台规范整理：任务流程、状态反馈与异常路径的设计要求'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：负责交互流程与界面方案设计'}
+
+  - skill: 用户界面规范
+    importance: 5
+    level: 中级
+    reason: 字号、间距与控件不统一，产品会显得拼装且难维护。
+    evidence:
+      - {source_id: source_design_ui_001, requirement_type: required, context: qualification,
+         note: '平台规范整理：控件尺寸、层级与多端适配的统一定义'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟悉主流平台界面规范'}
+
+  - skill: Figma
+    importance: 5
+    level: 中级
+    reason: 组件、自动布局与协作交付都依赖工具熟练度。
+    evidence:
+      - {source_id: source_design_guide_001, requirement_type: required, context: qualification,
+         note: '工具文档整理：组件、变体、自动布局与协作流程'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: qualification,
+         note: '招聘要求整理：熟练使用 Figma 完成设计与交付'}
+
+  - skill: 原型设计
+    importance: 4
+    level: 中级
+    reason: 写代码前用原型验证流程，是最低成本的纠错方式。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：制作可交互原型用于需求评审'}
+
+  - skill: 设计组件库
+    importance: 4
+    level: 中级
+    reason: 组件库决定多页面一致性与改版效率。
+    evidence:
+      - {source_id: source_design_ui_001, requirement_type: required, context: responsibility,
+         note: '平台规范整理：组件复用与设计系统维护要求'}
+      - {source_id: source_design_guide_001, requirement_type: required, context: responsibility,
+         note: '工具文档整理：组件变体与设计令牌的维护方式'}
+
+  - skill: 可用性测试
+    importance: 3
+    level: 初级
+    reason: 设计假设需要真实用户行为来验证，不能只靠内部评审。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: preferred, context: responsibility,
+         note: '招聘要求整理：参与用户测试并据此优化设计'}
+
+  - skill: 前端协作与交付
+    importance: 4
+    level: 中级
+    reason: 标注与状态说明不完整，还原度就只能靠反复对图。
+    evidence:
+      - {source_id: source_design_guide_001, requirement_type: required, context: responsibility,
+         note: '工具文档整理：交付检查、标注与切图规范'}
+      - {source_id: source_design_jd_001, requirement_type: required, context: responsibility,
+         note: '招聘要求整理：与前端协作保证设计还原'}
+
+  - skill: 用户研究基础
+    importance: 3
+    level: 初级
+    reason: 不了解目标用户与场景，界面方案容易建立在假设上。
+    evidence:
+      - {source_id: source_design_jd_001, requirement_type: preferred, context: qualification,
+         note: '招聘要求整理：具备用户研究或需求分析意识'}
+
+  - skill: 版式与构图
+    importance: 4
+    level: 中级
+    reason: 界面同样是版面，信息层级与留白决定可读性。
+    evidence:
+      - {source_id: source_design_ui_001, requirement_type: required, context: qualification,
+         note: '平台规范整理：布局网格、间距与信息层级要求'}

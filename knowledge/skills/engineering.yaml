@@ -19,7 +19,8 @@
     - 接口缺少参数校验和统一错误返回，前端与 Agent 难以对接。
     - 不写日志和异常处理，出问题无法排查。
     - 把敏感配置硬编码，或接口未做任何鉴权。
-  learning_resources: []
+  learning_resources:
+    - {title: 'FastAPI 官方教程（中文）', url: 'https://fastapi.tiangolo.com/zh/'}
   estimated_weeks: 3
 
 - skill: 测试与效果评测
@@ -35,7 +36,8 @@
     - 只测 happy path，不覆盖异常和边界。
     - 评测只看一两个样例，没有量化指标。
     - 把"能跑通"当成"效果达标"，不做回归对比。
-  learning_resources: []
+  learning_resources:
+    - {title: 'pytest 官方文档', url: 'https://docs.pytest.org/en/stable/'}
   estimated_weeks: 2
 
 - skill: Git
@@ -51,7 +53,8 @@
     - 把 .env、密钥或中间产物提交进仓库。
     - 在错误的分支上改代码，或提交信息混乱。
     - 不拉取最新代码直接改，冲突后处理不当。
-  learning_resources: []
+  learning_resources:
+    - {title: 'Pro Git（中文版）', url: 'https://git-scm.com/book/zh/v2'}
   estimated_weeks: 1
 
 - skill: Docker
@@ -67,5 +70,108 @@
     - 把构建产物和源码一起打进镜像，镜像又大又乱。
     - 容器里跑依赖本地绝对路径的代码。
     - 忽略依赖缓存，每次构建都全量下载。
-  learning_resources: []
+  learning_resources:
+    - {title: 'Docker 官方入门指南', url: 'https://docs.docker.com/get-started/'}
   estimated_weeks: 2
+
+- skill: Linux
+  category: engineering
+  level_guides:
+    入门: 知道 Linux 是服务器常用操作系统，能看懂基本目录结构与命令示例。
+    初级: 能用 ls、cd、cp、grep、tail 等命令完成文件查看与简单操作。
+    中级: 能完成软件安装、权限管理、进程查看与日志排查，会写简单 shell 脚本。
+    高级: 能进行服务部署、性能排查与权限加固，编写可维护的运维脚本。
+  prerequisites: [操作系统]
+  typical_usage: 后端服务、数据处理与模型部署的主要运行环境。
+  common_pitfalls:
+    - 用 root 执行所有操作，权限过大且容易误删。
+    - 不区分前台与后台进程，退出终端服务就停。
+    - 出问题不看日志，直接重启碰运气。
+  learning_resources:
+    - {title: 'Linux Journey 入门教程', url: 'https://linuxjourney.com/'}
+  estimated_weeks: 2
+
+- skill: SQL
+  category: engineering
+  level_guides:
+    入门: 知道表和字段的概念，能写简单的 SELECT 查询。
+    初级: 会用 WHERE、ORDER BY、GROUP BY 与 JOIN 完成常见查询。
+    中级: 能写多表关联与聚合查询，理解索引与执行计划的基本作用。
+    高级: 能优化慢查询、设计表结构与数据约束，处理复杂分析型查询。
+  prerequisites: []
+  typical_usage: 后端开发、测试造数与数据分析取数的通用能力。
+  common_pitfalls:
+    - 用 SELECT * 取全表，数据量大时拖垮服务。
+    - 在 WHERE 里对字段做函数运算，导致索引失效。
+    - 不理解 NULL 语义，统计结果与预期不一致。
+  learning_resources:
+    - {title: 'MySQL 官方教程', url: 'https://dev.mysql.com/doc/refman/8.0/en/tutorial.html'}
+  estimated_weeks: 2
+
+- skill: 操作系统
+  category: engineering
+  level_guides:
+    入门: 知道进程、内存、文件与设备是操作系统管理的基本对象。
+    初级: 能解释进程与线程的区别，会查看 CPU、内存与磁盘占用。
+    中级: 能理解调度、内存管理、文件系统与死锁的基本机制。
+    高级: 能结合系统原理定位性能瓶颈与资源竞争问题。
+  prerequisites: []
+  typical_usage: 理解程序运行环境、排查性能问题与学习后端/部署的基础。
+  common_pitfalls:
+    - 把线程当进程用，资源与状态管理混乱。
+    - 只看应用日志，不看系统层面的资源瓶颈。
+    - 死锁问题靠重启解决，不分析锁顺序。
+  learning_resources:
+    - {title: 'Operating Systems: Three Easy Pieces', url: 'https://pages.cs.wisc.edu/~remzi/OSTEP/'}
+  estimated_weeks: 4
+
+- skill: 计算机网络
+  category: engineering
+  level_guides:
+    入门: 知道 IP、端口、DNS 与 HTTP 的基本作用。
+    初级: 能解释一次网页请求从 DNS 到响应的主要过程。
+    中级: 能理解 TCP/UDP、HTTP/HTTPS、状态码与常见网络故障的排查思路。
+    高级: 能分析复杂网络问题，理解代理、负载均衡与安全传输的影响。
+  prerequisites: []
+  typical_usage: 接口联调、服务部署与线上故障排查的基础知识。
+  common_pitfalls:
+    - 分不清 4xx 与 5xx，排查方向一开始就错。
+    - 忽略代理与 DNS 配置，本地能通线上不通。
+    - 把超时一律归因于网络慢，不看服务端耗时。
+  learning_resources:
+    - {title: 'Computer Networking: A Top-Down Approach 配套站点', url: 'https://gaia.cs.umass.edu/kurose_ross/index.php'}
+  estimated_weeks: 4
+
+- skill: 数据结构与算法
+  category: engineering
+  level_guides:
+    入门: 知道数组、链表、栈、队列等基本结构及其用途。
+    初级: 能分析简单代码的时间复杂度，用哈希表与排序解决常见问题。
+    中级: 能根据问题选择合适的数据结构与算法，写出清晰的解题代码。
+    高级: 能分析复杂算法的时空权衡，在工程中做性能与可读性的取舍。
+  prerequisites: [Python]
+  typical_usage: 编码面试、性能优化与理解框架内部实现的基础。
+  common_pitfalls:
+    - 只背题不理解复杂度，换个场景就不会。
+    - 过度追求最优解，代码难读且容易出错。
+    - 忽略边界条件，空输入或大数据量时崩溃。
+  learning_resources:
+    - {title: 'MIT 6.006 Introduction to Algorithms', url: 'https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/'}
+  estimated_weeks: 4
+
+- skill: Agent Skill / MCP 工具封装
+  category: engineering
+  level_guides:
+    入门: 知道 MCP 是让模型安全调用外部工具与数据的协议，能看懂一个工具定义。
+    初级: 能按规范定义工具名称、参数与返回，接入一个简单工具。
+    中级: 能封装可复用的 Agent Skill，处理参数校验、错误返回与权限边界。
+    高级: 能设计工具生态与调用策略，保证可观测、可测试与安全可控。
+  prerequisites: [Python, 后端 API 开发, Function Calling]
+  typical_usage: 把业务能力封装成 Agent 可调用的工具，是 AI 应用落地的关键环节。
+  common_pitfalls:
+    - 工具参数过于宽泛，模型经常传错。
+    - 工具没有错误说明，模型无法自行纠正。
+    - 不设权限边界，工具能读写超出职责的数据。
+  learning_resources:
+    - {title: 'Model Context Protocol 官方文档', url: 'https://modelcontextprotocol.io/docs'}
+  estimated_weeks: 3

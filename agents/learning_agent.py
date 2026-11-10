@@ -5,11 +5,14 @@
 原则不变：**模型负责写文字，可判定的结论一律由代码算**。
 
 1. **技能名归一（S1）**：模型很容易把岗位"能力分类标签"（如"Agent 与工作流编排"）
-   当成技能名。直接拿这种名字查 Skill 知识库会全部落空，学习标准就只好靠模型编。
-   查询前先经 ``SkillVocabulary`` 归一，**只有唯一命中才采用**；没命中或有歧义
-   一律记入 ``unmapped_covers`` 并告警，绝不猜测。
-2. **covers 规范化与降级剔除（S2）**：``covers`` 只保留规范技能名；已满足 /
+   当成技能名，也很容易在 covers 里直接写缺口编号。查询前先经 ``SkillVocabulary``
+   归一，**只有唯一命中才采用**；词表没收录的岗位（电气、护理…）改按**本用户自己的
+   skill_gaps 原名**记账；编号按其指向的那条缺口还原，两者都在 ``skill_mapping``
+   留痕。有歧义的一律记入 ``unmapped_covers`` 并告警，绝不猜测。
+2. **covers 规范化与降级剔除（S2）**：``covers`` 只留能确定的技能名；已满足 /
    低优先级的缺口不得占据学习阶段，会被移出并记入 ``dropped_low_priority``。
+   整条路线一个技能都没关联上时**直接中止分析**（``require_any_covered_skill``），
+   不再交付一份提交后永远进不了成长记录的任务清单。
 3. **覆盖率与等级一致性（S2 / S8）**：高、中优先级缺口若没有任何阶段覆盖，
    或阶段的 goal 与 completion_criteria 目标等级自相矛盾，都会产出明确告警，
    而不是静默通过。
@@ -28,11 +31,13 @@ import re
 from pydantic import BaseModel, Field
 
 from agents.llm import structured_invoke
-from agents.retriever import SkillVocabulary
+from agents.skill_dict import SkillVocabulary
 from agents.skill_knowledge import SkillKnowledgeBase
+from agents.source_attribution import gap_source_hint
 from agents.utils import (
     SKILL_LEVELS,
     build_skill_mapping,
+    canonical_matches,
     check_non_empty,
     dedupe_by,
     log,
@@ -83,7 +88,9 @@ PROMPT = """你是一名学习路径规划师，熟悉「{target_job}」所在�
 
 【要求】
 1. 只针对上面**优先级为"高"或"中"**的缺口安排学习，不要给"低"或"已满足"的
-   缺口排期——它们已经达标，再排一次是浪费时间。
+   缺口排期——它们已经达标且有直接证据，再排一次是浪费时间。
+   「疑似具备」「未验证」的缺口要安排**验证性任务**（做出可验收的项目/成果），
+   而不是重复学基础。
 2. 一共安排 3~5 个阶段。**不要贪多**，不要把所有技能都塞进来，
    宁可少而深。同一个阶段内可以合并相关性强的技能。
 3. 严格按学习的前置关系排序：必须先学的基础排在前面
@@ -98,6 +105,7 @@ PROMPT = """你是一名学习路径规划师，熟悉「{target_job}」所在�
    - covers：这一阶段覆盖了上面哪几项差距。
      **只写技能名本身**，必须和上面给出的技能名一字不差，
      不要加括号、等级或任何修饰（写"LLM API"，不要写"LLM API（高级）"）；
+     **绝对不要写缺口编号**（"1"、"2" 这种数字不是技能名，编号只是给你清点条数用的）；
    - prerequisite：学之前需要具备什么（参考他已有的技能）；
    - completion_criteria：达到什么程度算学会，要可验证、可验收
      （技术岗如"能独立开发一个提供 3 个接口的 AI 服务并写清 README"，
@@ -138,10 +146,14 @@ def _format_gaps(gaps: list) -> str:
     lines = [
         f"共 {len(gaps)} 项缺口，其中优先级「高」{high} 项 —— "
         f"这 {high} 项必须**一项不漏**地出现在下面的路线里。"
+        f"（每行开头的数字只是第几项的编号；covers 里写技能名，不要写编号）"
     ]
     lines.extend(
-        f"{index}. [{g.get('priority')}] {g.get('skill')}｜岗位重要度 {g.get('importance')}｜"
+        f"{index}. [{g.get('priority')}] {g.get('skill')}｜"
+        f"状态 {g.get('display_status') or g.get('status')}｜"
+        f"岗位重要度 {g.get('importance')}｜"
         f"当前 {g.get('current_level')}，要求 {g.get('required_level')}｜{g.get('gap')}"
+        f"{gap_source_hint(g)}"
         for index, g in enumerate(gaps, start=1)
     )
     return "\n".join(lines)
@@ -187,26 +199,114 @@ def _skill_knowledge_block(names: list[str], base: SkillKnowledgeBase | None) ->
 
 
 # ── 纯函数：技能名归一与阶段修正（S1 / S2）────────────────────────────────
-def normalize_covers(covers, vocabulary) -> tuple[list[str], dict, list[str]]:
-    """把一批 covers 归一成规范技能名。
+_INDEX_ONLY = re.compile(r"^\d+$")
+
+
+def _gap_key(name) -> str:
+    """缺口原名比对用的键：只去首尾空格、英文转小写，不做任何"像不像"的判断。"""
+    return str(name or "").strip().lower()
+
+
+def _gap_name_index(gaps: list) -> dict[str, str]:
+    """``{小写去空格的缺口原名: 缺口原名}``，把 covers 里的写法认回本次缺口清单。"""
+    index: dict[str, str] = {}
+    for gap in gaps or []:
+        name = str(gap.get("skill") or "").strip()
+        if name:
+            index.setdefault(_gap_key(name), name)
+    return index
+
+
+def _gap_by_number(name: str, gaps: list) -> str | None:
+    """模型写成缺口**编号**时按编号还原成技能名；还原不了返回 None。
+
+    编号是 :func:`_format_gaps` 自己打上去的（``1. [高] 电气控制与自动化｜…``），
+    ``gaps[i-1]`` 与提示词里的第 i 行严格对应，所以这是一次查表而不是猜测。
+    小模型看到带编号的清单很容易直接回「1」「2」，光靠提示词劝不住。
+    """
+    if not _INDEX_ONLY.match(name):
+        return None
+    position = int(name)
+    if not 1 <= position <= len(gaps or []):
+        return None
+    gap_name = str((gaps[position - 1] or {}).get("skill") or "").strip()
+    return gap_name or None
+
+
+def _gap_by_substring(name: str, gaps: list) -> str | None:
+    """模型把一个复合缺口拆成几个词回报时，按"**缺口原名包含它**"还原。
+
+    实测：缺口写的是「变频器、伺服驱动、传感器等工控元件」，模型回报
+    ``covers=["变频器", "伺服驱动", "传感器"]`` —— 逐字相等一个都对不上，
+    整条学习任务的 ``skills`` 就空了，打卡只留个完成记录、不涨等级。
+
+    仍然不做语义联想：只有**唯一一个**缺口原名包含这段文字才认。沾上两个以上
+    说明认不准（如缺口里同时有「变频器」和「变频器与伺服调试」），返回 None
+    交给 ``unmapped``，与词表歧义同一条红线。纯数字不走这里，编号有专门口径。
+    """
+    if _INDEX_ONLY.match(name):
+        return None
+    key = _gap_key(name)
+    if len(key) < 2:
+        return None
+    hits: list[str] = []
+    for gap in gaps or []:
+        gap_name = str((gap or {}).get("skill") or "").strip()
+        if gap_name and gap_name not in hits and key in _gap_key(gap_name):
+            hits.append(gap_name)
+    return hits[0] if len(hits) == 1 else None
+
+
+def normalize_covers(covers, vocabulary, gaps=None) -> tuple[list[str], dict, list[str]]:
+    """把一批 covers 折算成成长记账用的技能名。
 
     返回 `(canonical, mapping, unmapped)`：
 
-    - ``canonical``：去重后的规范技能名，**只保留能唯一归一的**；
-    - ``mapping``：``{模型写的原名: 规范技能名}``，供下游追踪；
-    - ``unmapped``：没命中或有歧义的原名，直接列出，不猜测、不替换。
+    - ``canonical``：去重后可用的技能名，**只保留能确定的**；
+    - ``mapping``：``{模型写的原名: 采用的技能名}``，供下游追踪（含编号还原的留痕）；
+    - ``unmapped``：定不下来的原名，直接列出，不猜测、不替换。
+
+    判定从严到宽四层，**任何一层都不做语义联想**：
+
+    1. 词表**唯一命中** → 用规范技能名（既有口径，一字未动）；
+    2. 词表**一个都没沾上** → 认本次 ``skill_gaps`` 的缺口原名，命中就按原名记账。
+       词表只收录「AI 应用工程师」那十几项技能，电气、护理这些岗位的缺口名天生
+       对不上；以前一律丢弃，导致这些用户的学习任务 ``skills`` 恒为空、
+       成长记录一条也写不进去；
+    3. 还认不出、且它只是个数字 → 按缺口编号还原（见 :func:`_gap_by_number`）；
+    4. 仍认不出 → 看**有没有唯一一个缺口原名包含它**：小模型常把一个复合缺口拆成
+       几个词分别回报（见 :func:`_gap_by_substring`）。
+
+    词表**沾上两个以上**（歧义，如"大模型调用与提示词工程"那种含混说法）时始终进
+    ``unmapped`` 并丢弃 —— 这条红线不放宽，跟成长层 ``normalize_skills`` 同口径。
     """
     canonical: list[str] = []
     mapping: dict[str, str] = {}
     unmapped: list[str] = []
+    by_name = _gap_name_index(gaps or [])
     for raw in covers or []:
         name = str(raw or "").strip()
         if not name or name in mapping or name in unmapped:
             continue
-        resolved = resolve_canonical(name, vocabulary)
-        if resolved is None:
-            unmapped.append(name)
+        matches = canonical_matches(name, vocabulary)
+        if len(matches) == 1:
+            resolved = matches[0]
+        elif matches:
+            unmapped.append(name)          # 歧义：认不准就不记账
             continue
+        else:
+            resolved = (
+                by_name.get(_gap_key(name))
+                or _gap_by_number(name, gaps or [])
+                or _gap_by_substring(name, gaps or [])
+            )
+            if not resolved:
+                unmapped.append(name)
+                continue
+            # 缺口名是**绕过**第 1 层拿到的（模型写编号、写词表没收录的原名，或把复合
+            # 缺口拆开写），所以要再折一次词表：AI 岗位上"1"还原成"后端服务"之后仍该归一
+            # 成「后端 API 开发」，否则规范名从这条路上漏掉了。折不动的（歧义）留原名。
+            resolved = resolve_canonical(resolved, vocabulary) or resolved
         mapping[name] = resolved
         if resolved not in canonical:
             canonical.append(resolved)
@@ -214,10 +314,17 @@ def normalize_covers(covers, vocabulary) -> tuple[list[str], dict, list[str]]:
 
 
 def _gap_lookup(gaps: list, vocabulary) -> dict:
-    """``{规范技能名: gap}`` —— 同一规范名只取第一条，避免一个缺口覆盖另一个。"""
+    """``{技能名: gap}`` —— 规范技能名与缺口**原名**都作为键，同一键只取第一条。
+
+    covers 里现在可能出现词表没收录的缺口原名（非 AI 岗位），只按规范名建键的话
+    优先级过滤与等级对齐就找不到参照物了。
+    """
     lookup: dict[str, dict] = {}
     for gap in gaps or []:
-        canonical = resolve_canonical(gap.get("skill"), vocabulary)
+        name = str(gap.get("skill") or "").strip()
+        if name and name not in lookup:
+            lookup[name] = gap
+        canonical = resolve_canonical(name, vocabulary)
         if canonical and canonical not in lookup:
             lookup[canonical] = gap
     return lookup
@@ -226,10 +333,11 @@ def _gap_lookup(gaps: list, vocabulary) -> dict:
 def repair_stages(stages: list, gaps: list, vocabulary) -> list[str]:
     """**原地**修正每个阶段的 covers，返回问题清单。
 
-    - ``covers`` 只保留 Skill 知识库的规范技能名，无法唯一归一的移入
-      ``unmapped_covers``；
+    - ``covers`` 只留能确定的技能名（规范技能名，或词表没收录时的本用户缺口原名），
+      定不下来的移入 ``unmapped_covers``，判定口径见 :func:`normalize_covers`；
     - 已满足 / 低优先级缺口不得占据 covers，移入 ``dropped_low_priority``；
-    - 每阶段的 ``skill_mapping`` 保留"原始名 → 规范名"，便于下游追踪。
+    - 每阶段的 ``skill_mapping`` 保留"原始名 → 采用的技能名"，便于下游追踪
+      （模型把 covers 写成缺口编号时，还原痕迹也记在这里）。
 
     修正只动 covers 与这几个追踪字段，不重写模型写的 goal / 完成标准。
     """
@@ -237,7 +345,7 @@ def repair_stages(stages: list, gaps: list, vocabulary) -> list[str]:
     lookup = _gap_lookup(gaps, vocabulary)
 
     for index, stage in enumerate(stages, start=1):
-        canonical, mapping, unmapped = normalize_covers(stage.get("covers"), vocabulary)
+        canonical, mapping, unmapped = normalize_covers(stage.get("covers"), vocabulary, gaps)
         kept: list[str] = []
         dropped: list[str] = []
         unknown: list[str] = []
@@ -288,34 +396,51 @@ def repair_stages(stages: list, gaps: list, vocabulary) -> list[str]:
 
 
 def covered_skills(stages: list) -> set[str]:
-    """所有阶段 covers 的并集（都是规范技能名）。"""
+    """所有阶段 covers 的并集 —— 都是折算后可用的技能名。"""
     covered: set[str] = set()
     for stage in stages:
         covered.update(stage.get("covers") or [])
     return covered
 
 
+def require_any_covered_skill(stages: list) -> None:
+    """硬门禁：整条路线**一个技能都没关联上**时中止本次分析，而不是放行。
+
+    covers 为空的任务提交后只会留下一条完成记录，构不成成长成果
+    （成长闭环把"没关联技能"判成"不是技能成长"，见 ``growth_loop.build_growth_event``）。
+    过去非 AI 岗位每次都撞上这个结果：任务清单看着正常，提交多少条都进不了成长记录。
+    与其交付一份永远交不了差、还让人以为是自己没记上账的清单，不如如实失败。
+    """
+    if covered_skills(stages):
+        return
+    raise ValueError(
+        f"学习路线的 {len(stages)} 个阶段都没有关联到任何能力缺口，"
+        f"这样的学习任务提交后不会计入成长记录；本次分析已中止，"
+        f"请重试，或把招聘要求写得更具体一些"
+    )
+
+
 def check_coverage(stages: list, gaps: list, vocabulary) -> list[str]:
-    """高、中优先级缺口是否被覆盖。未被覆盖的**必须显式报告**，不能静默放行。"""
+    """高、中优先级缺口是否被覆盖。未被覆盖的**必须显式报告**，不能静默放行。
+
+    比对两把键：缺口**原名**（词表没收录的岗位，covers 里存的就是它）与规范技能名。
+    以前只比规范名，所以非 AI 岗位的缺口一律只能报"无法核对是否被覆盖"；
+    现在缺口原名就是合法的技能名，能给出确定结论了。
+    """
     covered = covered_skills(stages)
 
     issues: list[str] = []
     for gap in gaps or []:
         if gap.get("priority") == LOW_PRIORITY:
             continue
-        name = gap.get("skill")
+        name = str(gap.get("skill") or "").strip()
         canonical = resolve_canonical(name, vocabulary)
-        if canonical is None:
-            issues.append(
-                f"缺口「{name}」（优先级 {gap.get('priority')}）无法归一为规范技能名，"
-                f"无法核对是否被覆盖"
-            )
+        if name in covered or (canonical and canonical in covered):
             continue
-        if canonical not in covered:
-            issues.append(
-                f"缺口「{name}」（优先级 {gap.get('priority')}、岗位重要度 "
-                f"{gap.get('importance')}）没有被任何学习阶段覆盖"
-            )
+        issues.append(
+            f"缺口「{name}」（优先级 {gap.get('priority')}、岗位重要度 "
+            f"{gap.get('importance')}）没有被任何学习阶段覆盖"
+        )
     return issues
 
 
@@ -708,7 +833,7 @@ def validate_learning_plan(stages: list, gaps: list, vocabulary, base) -> list[s
     # covers 被清空后等级校验就没有参照物了，所以这里用**归一后的原始 covers** 先算一遍。
     level_issues: list[str] = []
     for index, stage in enumerate(stages, start=1):
-        raw_covers, _, _ = normalize_covers(stage.get("covers"), vocabulary)
+        raw_covers, _, _ = normalize_covers(stage.get("covers"), vocabulary, gaps)
         probe = {**stage, "covers": raw_covers}
         for issue in check_level_consistency(probe, gaps, base, vocabulary):
             level_issues.append(f"阶段 {index}：{issue}")
@@ -776,7 +901,9 @@ def learning_node(state: CareerState) -> dict:
     # 3) 防漏回路：高优先级缺口一个没被覆盖就由代码补一个阶段出来
     for note in backfill_uncovered_gaps(stages, gaps, vocabulary, base):
         print(f"[Learning Agent] {note}", flush=True)
-    # 4) 等级措辞向缺口要求等级对齐（放在补漏之后，补出来的阶段一并处理）
+    # 4) 硬门禁：整条路线一个技能都没关联上就中止，不生成交不了差的任务清单
+    require_any_covered_skill(stages)
+    # 5) 等级措辞向缺口要求等级对齐（放在补漏之后，补出来的阶段一并处理）
     for note in align_stage_levels(stages, gaps, vocabulary, base):
         print(f"[Learning Agent] {note}", flush=True)
 

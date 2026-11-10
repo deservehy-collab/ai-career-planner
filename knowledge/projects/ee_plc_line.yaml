@@ -1,0 +1,15 @@
+# Project 知识库 —— 电子电气：PLC 自动化单元设计与调试（进阶）
+name: PLC 自动化单元设计与调试
+domain: electronics
+difficulty: intermediate
+covers_skills: [PLC 编程, 电气制图, 电机与拖动, 变频器与传动, 电气安全规范, 现场调试]
+prerequisites: [电路基础, 电气安全规范]
+tech_stack: [西门子 S7-1200 / 三菱 FX 系列, 变频器, 三相异步电机, AutoCAD Electrical, 万用表]
+stage_hint: 从一个工位的动作需求出发，完成电气方案、程序与现场验证
+deliverable: 一套电气图纸、PLC 程序与调试验收记录
+acceptance_criteria:
+  - 图纸含主电路、控制电路与端子编号，图物一致
+  - 程序实现手动、自动与急停三种状态，联锁逻辑说明清楚
+  - 电机与变频器选型有计算依据，保护参数与负载匹配
+  - 调试记录包含通电前检查项、报警处理与最终验收结论
+estimated_weeks: 4

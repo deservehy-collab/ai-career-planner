@@ -1,7 +1,6 @@
 """后端集中配置：Ollama、模型、CORS、端口与项目路径。
 
-模型名**不在这里另立一套**，而是直接从 Agent 侧导入
-（``agents.llm.MODEL_NAME`` / ``agents.retriever.EMBEDDING_MODEL``），
+模型名**不在这里另立一套**，而是直接从 Agent 侧导入（``agents.llm.MODEL_NAME``），
 这样前端展示的模型名与真正调用的模型永远不会漂移 —— 本项目不擅自更改
 六阶段业务使用的模型。
 
@@ -16,16 +15,17 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from agents.llm import MODEL_NAME as CHAT_MODEL
-from agents.retriever import EMBEDDING_MODEL
 
 __all__ = [
-    "REPO_ROOT", "RUNS_DIR", "KNOWLEDGE_DIR", "CHROMA_INDEX_DIR",
+    "REPO_ROOT", "RUNS_DIR", "KNOWLEDGE_DIR",
     "SKILLS_DIR", "PROJECTS_DIR",
-    "CHAT_MODEL", "EMBEDDING_MODEL", "OLLAMA_BASE_URL", "OLLAMA_TAGS_PATH",
+    "CHAT_MODEL", "OLLAMA_BASE_URL", "OLLAMA_TAGS_PATH",
     "HOST", "PORT", "CORS_ORIGINS", "EVIDENCE_MAX_LENGTH", "TASK_WORKERS",
+    "NOTE_MAX_CHARS",
     "TASK_RECORD_CAP", "TASK_QUEUE_CAP",
     "AUTH_DB_PATH", "JWT_SECRET_PATH", "JWT_ALGORITHM", "JWT_TTL_HOURS",
     "USERNAME_MIN_LENGTH", "USERNAME_MAX_LENGTH", "PASSWORD_MIN_LENGTH",
@@ -39,12 +39,49 @@ __all__ = [
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS_DIR = REPO_ROOT / "runs"
 KNOWLEDGE_DIR = REPO_ROOT / "knowledge"
-CHROMA_INDEX_DIR = KNOWLEDGE_DIR / "index"
 SKILLS_DIR = KNOWLEDGE_DIR / "skills"
 PROJECTS_DIR = KNOWLEDGE_DIR / "projects"
 
+# ── .env ────────────────────────────────────────────────────────────────
+# 不引入 python-dotenv：这里只做最小解析，够本项目这几个 KEY=VALUE 用。
+# **已有环境变量优先**，所以 shell 里的临时覆盖不会被 .env 反盖掉。
+ENV_FILE = REPO_ROOT / ".env"
+
+
+def _load_env_file(path: Path) -> None:
+    """把 .env 里的键值补进 ``os.environ``；文件不存在时静默跳过。
+
+    支持空行、``#`` 注释、可选 ``export`` 前缀和成对引号；不支持变量展开、
+    多行值与行尾注释 —— 本项目的 .env 只有地址、key、模型名，不需要这些。
+    """
+    try:
+        lines = path.read_text(encoding="utf-8-sig").splitlines()
+    except OSError:
+        return
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[len("export "):].lstrip()
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key.isidentifier() or key in os.environ:
+            continue
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+            value = value[1:-1]
+        os.environ[key] = value
+
+
+# 在 backend 启动（以及测试导入 config）时加载。agents.llm 的 cloud_settings()
+# 是运行时读 os.environ 的，所以这里先导入 llm 再加载也不影响结果。
+_load_env_file(ENV_FILE)
+
 # ── 模型（从 Agent 侧导入，见模块 docstring）─────────────────────────────
-# CHAT_MODEL / EMBEDDING_MODEL 由上方 import 提供。
+# CHAT_MODEL 由上方 import 提供。
 
 # ── Ollama ─────────────────────────────────────────────────────────────
 OLLAMA_BASE_URL = "http://localhost:11434"
@@ -64,6 +101,11 @@ CORS_ORIGINS = [
 # 任务证据的字符上限：空白拒绝、超长拒绝，由 schemas.CompleteTaskRequest 执行。
 EVIDENCE_MAX_LENGTH = 5000
 
+# 任务完成时的可选心得笔记。同样跟着证据进 loop.json（全量读-改-写），
+# 所以设上限；证据+心得的**合计**仍受 EVIDENCE_MAX_LENGTH 约束
+# （由 schemas.CompleteTaskRequest 的 model_validator 执行）。
+NOTE_MAX_CHARS = 1000
+
 # 手动补录成果（/api/growth/manual-event）的输入上限。与任务证据同一套动机：
 # loop.json 是全量读-改-写的，任何无界写入都会让所有后续查询变慢。
 MANUAL_TITLE_MAX_CHARS = 200
@@ -73,6 +115,11 @@ MANUAL_SKILL_MAX_CHARS = 100
 GROWTH_EVENTS_MAX_ITEMS = 200
 # 目标岗位的字符上限。
 TARGET_JOB_MAX_CHARS = 200
+# 用户粘贴的招聘要求原文上限。原文要整段进提示词，而模型的上下文是
+# CONTEXT_TOKENS（8192）—— 6000 字中文约占 4000~5000 token，留得下系统提示与
+# 输出。超长由前端提示用户截短，不在后端静默裁剪（悄悄裁掉会让用户以为
+# "后半段它也读过了"）。原文切成几条证据句子由 agents/user_jd.py 自己决定。
+JD_TEXT_MAX_CHARS = 6000
 
 # 后台任务的并发上限。**必须是 1**：runs/growth.json 与 runs/loop.json 的
 # 读-改-写只在进程内串行安全（见 tests/test_readonly_boundary.py），
