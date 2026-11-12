@@ -77,8 +77,9 @@ async function readBody(response) {
   }
 }
 
-async function request(path, { method = 'GET', body, signal } = {}) {
+async function request(path, { method = 'GET', body, signal, responseType } = {}) {
   const init = { method, headers: {}, signal }
+  const wantsBlob = responseType === 'blob'
 
   const token = getAuthToken()
   if (token) init.headers.Authorization = `Bearer ${token}`
@@ -99,10 +100,11 @@ async function request(path, { method = 'GET', body, signal } = {}) {
     )
   }
 
-  const payload = await readBody(response)
+  // 二进制接口（Word 下载）成功时不能把正文当 JSON 读掉；失败时仍要读回
+  // 后端的 detail，才能给出和普通接口同一套人话错误。
+  const payload = (!response.ok || !wantsBlob) ? await readBody(response) : null
 
-  if (!response.ok) {
-    // 业务接口的 401 = token 缺失/过期/无效：清掉本地登录态并回登录页。
+  if (!response.ok) {    // 业务接口的 401 = token 缺失/过期/无效：清掉本地登录态并回登录页。
     // /auth/ 自身的 401（比如密码错误）属于正常业务反馈，不能清登录态。
     if (response.status === 401 && !path.startsWith('/auth/')) {
       // 只让**发出这个请求时**的 token 失效登录态。切换账号后旧请求迟到返回
@@ -125,7 +127,7 @@ async function request(path, { method = 'GET', body, signal } = {}) {
     )
   }
 
-  return payload
+  return wantsBlob ? response.blob() : payload
 }
 
 export const api = {
@@ -133,4 +135,6 @@ export const api = {
   post: (path, body, options) => request(path, { ...options, method: 'POST', body }),
   put: (path, body, options) => request(path, { ...options, method: 'PUT', body }),
   delete: (path, options) => request(path, { ...options, method: 'DELETE' }),
+  postBlob: (path, body, options) =>
+    request(path, { ...options, method: 'POST', body, responseType: 'blob' }),
 }

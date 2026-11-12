@@ -25,6 +25,7 @@ GET  /api/tasks                轮次 / 任务清单（limit/offset 分页）   
 GET  /api/health               系统状态（全量探测 Ollama/知识库/store）    ✅           ❌ 只读
 GET  /api/status/llm-channel   查询模型通道（local / cloud）               ✅           ❌ 只读
 PUT  /api/status/llm-channel   切换模型通道                                ✅           ✅ settings.json
+POST /api/resume/docx          导出简历 Word（不写业务数据）                ✅           ❌ 只生成文件
 =============================  ==========================================  ============  ================================
 
 除 ``/api/ping`` 与注册/登录两个入口外，**所有接口都要求 Bearer token**，
@@ -73,6 +74,7 @@ from backend.db import init_db
 from backend.deps import create_stores, create_task_manager
 from backend.jobs import STATUS_QUEUED, QueueFull, TaskManager
 from backend.plans_api import router as plans_router
+from backend.resume_api import router as resume_router
 from backend.schemas import (
     AnalyzeRequest, AttachEvidenceRequest, ClearTasksRequest, CompleteTaskRequest,
     LlmChannelRequest,
@@ -153,6 +155,9 @@ app.include_router(auth_router)
 
 # 档案与基础资料：/api/profile、/api/plans（六表档案边界）
 app.include_router(plans_router, prefix="/api")
+
+# 简历导出：/api/resume/docx（无状态，只生成文件；登录仍为硬要求）
+app.include_router(resume_router, prefix="/api")
 
 # AI 助手聊天路由：/api/chat/stream（SSE 流式）。
 # 鉴权与业务接口同口径（可被 tests/conftest.py 覆盖），但**不接入 TaskManager**：

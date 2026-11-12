@@ -32,6 +32,7 @@ const menu = [
   { to: '/analyze', label: '岗位分析', icon: 'M10 3a7 7 0 1 0 7 7 7 7 0 0 0-7-7zm0 3.5a3.5 3.5 0 1 0 3.5 3.5M17 17l4 4' },
   { to: '/tasks', label: '学习与项目', icon: 'M4 6h3l1.5 1.5L12 4M4 12h3l1.5 1.5L12 10M4 18h3l1.5 1.5L12 16M15 6h5M15 12h5M15 18h5' },
   { to: '/growth', label: '成长记录', icon: 'M4 19h16M6 15l4-4 3 3 5-6M18 8h3v3' },
+  { to: '/resume', label: '简历制作', icon: 'M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6' },
   { to: '/status', label: '系统状态', icon: 'M12 3a9 9 0 1 0 9 9 9 9 0 0 0-9-9zm0 4.5V12l3 2' },
 ]
 
@@ -163,7 +164,7 @@ function onLogout() {
           <span class="faint">{{ statusText }}</span>
         </span>
       </div>
-      <div class="app-main-inner">
+      <div class="app-main-inner" :class="{ 'is-wide': route.meta.wide }">
         <slot />
       </div>
     </main>

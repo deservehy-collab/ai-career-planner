@@ -252,6 +252,7 @@ class TestRunApiExposesProgress:
 
     def test_get_run_returns_progress_and_current_node(self):
         manager = TaskManager(max_workers=1)
+        saved_auth = app.dependency_overrides.get(get_current_user)
         app.dependency_overrides[create_task_manager] = lambda: manager
         app.dependency_overrides[get_current_user] = lambda: {"id": 7, "username": "u"}
         started = threading.Event()
@@ -283,7 +284,10 @@ class TestRunApiExposesProgress:
             release.set()
             manager.shutdown()
             app.dependency_overrides.pop(create_task_manager, None)
-            app.dependency_overrides.pop(get_current_user, None)
+            if saved_auth is None:
+                app.dependency_overrides.pop(get_current_user, None)
+            else:
+                app.dependency_overrides[get_current_user] = saved_auth
 
 
 class TestInvokeFallback:

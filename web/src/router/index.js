@@ -79,6 +79,13 @@ const routes = [
     meta: { title: '成长记录' },
   },
   {
+    path: '/resume',
+    name: 'resume',
+    component: () => import('../views/ResumeView.vue'),
+    // 简历工作台要同时放下 A4 预览与编辑栏，比普通阅读页更宽。
+    meta: { title: '简历制作', wide: true },
+  },
+  {
     path: '/status',
     name: 'status',
     component: () => import('../views/StatusView.vue'),

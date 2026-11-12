@@ -313,3 +313,21 @@ export const startNextRound = (body, planId) =>
   planId
     ? startPlanNextRound(planId, { request_key: body?.request_key || crypto.randomUUID() })
     : api.post('/growth/next-round', body)
+
+// ── 简历导出 ──────────────────────────────────────────────────────────
+
+/**
+ * `POST /api/resume/docx` → DOCX 二进制（登录必需，不写业务数据）。
+ *
+ * 请求体 `{resume}` 与 `web/src/utils/resume.js` 的 normalizeResume 同形。
+ * 空简历 / 超长条目由后端 422 拒绝，错误文案照常从 `detail` 读取。
+ */
+export const exportResumeDocx = (resume) =>
+  api.postBlob('/resume/docx', { resume })
+
+/**
+ * `POST /api/resume/pdf` → PDF 二进制。后端调用本机 Chrome/Edge 落盘；
+ * 找不到浏览器时返回 503，提示改用 Word。
+ */
+export const exportResumePdf = (resume) =>
+  api.postBlob('/resume/pdf', { resume })
