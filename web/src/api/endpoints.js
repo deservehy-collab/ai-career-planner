@@ -331,3 +331,14 @@ export const exportResumeDocx = (resume) =>
  */
 export const exportResumePdf = (resume) =>
   api.postBlob('/resume/pdf', { resume })
+
+// ── 面试陪练 ──────────────────────────────────────────────────────────
+
+/**
+ * `POST /api/interview/questions` → 6 道面试题（登录必需，不写业务数据）。
+ *
+ * 请求体 `{plan_id, resume}`：简历草稿可为 null，后端退回档案里的画像与能力表。
+ * 模型未就绪返回 503、输出格式不对返回 502，错误文案照常从 `detail` 读取。
+ */
+export const generateInterviewQuestions = (payload) =>
+  api.post('/interview/questions', payload)

@@ -86,6 +86,13 @@ const routes = [
     meta: { title: '简历制作', wide: true },
   },
   {
+    path: '/interview',
+    name: 'interview',
+    component: () => import('../views/InterviewView.vue'),
+    // 题目分栏展示，宽屏两列读起来更省滚动。
+    meta: { title: '面试陪练', wide: true },
+  },
+  {
     path: '/status',
     name: 'status',
     component: () => import('../views/StatusView.vue'),

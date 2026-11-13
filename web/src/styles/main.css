@@ -10294,3 +10294,578 @@ table.data tbody tr:hover {
     transition: none;
   }
 }
+
+/* ── 面试陪练：题册封面 + 编号题卡 ──────────────────────────────────── */
+
+.iv-page {
+  display: grid;
+  gap: var(--sp-5);
+  max-width: 1180px;
+}
+
+.iv-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line-tint);
+}
+
+.iv-head h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  background: var(--grad-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.iv-stamp {
+  padding: 3px 9px;
+  border: 1px solid rgba(var(--primary-rgb), 0.26);
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.iv-layout {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+/* 左侧封面：档案、题量、分类目录、主按钮，滚长列表时跟随 */
+.iv-cover {
+  position: sticky;
+  top: 20px;
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.iv-cover-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+}
+
+.iv-cover-plan {
+  display: block;
+  margin-top: 5px;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.iv-cover-plan.is-empty {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.iv-cover-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.iv-cover-count b {
+  font-family: var(--serif);
+  font-size: 54px;
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.iv-cover-count span {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.iv-cover-count.is-zero b {
+  color: var(--text-faint);
+}
+
+.iv-toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.iv-toc a,
+.iv-toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.iv-toc a:hover {
+  color: var(--primary-dark);
+}
+
+.iv-toc-leader {
+  flex: 1 1 auto;
+  min-width: 14px;
+  border-bottom: 1px dotted var(--border-strong);
+  transform: translateY(-3px);
+}
+
+.iv-toc b {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.iv-toc a:hover b {
+  color: var(--primary);
+}
+
+.iv-toc-row.is-idle {
+  color: var(--text-faint);
+}
+
+.iv-toc-row.is-idle b {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.iv-generate {
+  width: 100%;
+  justify-content: center;
+}
+
+.iv-main {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  min-width: 0;
+}
+
+.iv-gate {
+  display: grid;
+  gap: var(--sp-4);
+  justify-items: start;
+  align-content: center;
+  min-height: 260px;
+  padding: 32px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.iv-gate-title,
+.iv-empty-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.iv-empty {
+  display: grid;
+  gap: 22px;
+}
+
+.iv-empty-head {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.iv-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.iv-chips li {
+  padding: 4px 11px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+/* 空题卡：六张虚位卡，版面不空，也预告一次出六题 */
+.iv-ghosts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.iv-ghost {
+  display: block;
+  min-height: 96px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--border-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.iv-loading {
+  display: grid;
+  gap: 16px;
+}
+
+.iv-loading-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.iv-loading-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: iv-pulse 1.1s ease-in-out infinite;
+}
+
+.iv-skeleton-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.iv-skeleton {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  min-height: 92px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.iv-skeleton-no {
+  display: block;
+  padding-top: 16px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 17px;
+  color: var(--border-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.iv-skeleton-body {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 20px 16px;
+}
+
+.iv-skeleton-bar {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--surface-warm) 0%, #eef2f7 50%, var(--surface-warm) 100%);
+  background-size: 200% 100%;
+  animation: iv-shimmer 1.6s linear infinite;
+}
+
+.iv-skeleton-bar.is-short {
+  width: 56%;
+}
+
+.iv-error {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 20px 22px;
+  border: 1px solid var(--danger);
+  border-left-width: 3px;
+  border-radius: var(--radius-lg);
+  background: var(--danger-soft);
+  color: var(--text);
+}
+
+.iv-error p {
+  margin: 0;
+  line-height: var(--lh-body);
+}
+
+@keyframes iv-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes iv-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+.iv-groups {
+  display: grid;
+  gap: 28px;
+}
+
+.iv-group {
+  display: grid;
+  gap: 12px;
+  scroll-margin-top: 20px;
+}
+
+.iv-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.iv-group-title {
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.iv-group-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-warm);
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.iv-group-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.iv-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+/* 题卡：左侧编号栏 + 右侧题干，像一张张带序号的面试手卡 */
+.iv-card {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s ease;
+}
+
+.iv-card:hover {
+  border-color: rgba(var(--primary-rgb), 0.3);
+}
+
+.iv-no {
+  display: block;
+  padding-top: 15px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.iv-card-body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 14px 16px 14px 14px;
+}
+
+.iv-question {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.iv-toggle {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 0;
+  border: 0;
+  background: none;
+  color: var(--primary-dark);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.iv-toggle:hover {
+  color: var(--primary);
+}
+
+.iv-toggle svg {
+  transition: transform 0.18s ease;
+}
+
+.iv-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.iv-points {
+  display: grid;
+  gap: var(--sp-2);
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+.iv-points ul {
+  margin: 0;
+  padding-left: 1.15em;
+  display: grid;
+  gap: 6px;
+}
+
+.iv-points li {
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.iv-follow {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+@media (max-width: 1080px) {
+  .iv-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .iv-cover {
+    position: static;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 18px;
+  }
+
+  .iv-cover-head {
+    grid-column: 1;
+  }
+
+  .iv-cover-count {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .iv-cover-count b {
+    font-size: 40px;
+  }
+
+  .iv-toc {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 28px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+  }
+
+  .iv-generate {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .iv-head h1 {
+    font-size: 26px;
+  }
+
+  .iv-cover {
+    padding: 16px;
+  }
+
+  .iv-toc {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .iv-ghosts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .iv-ghost {
+    min-height: 68px;
+  }
+
+  .iv-gate {
+    min-height: 200px;
+    padding: 24px 20px;
+  }
+
+  .iv-empty-title,
+  .iv-gate-title {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iv-skeleton-bar,
+  .iv-loading-dot {
+    animation: none;
+  }
+
+  .iv-card,
+  .iv-toggle svg,
+  .iv-toc a {
+    transition: none;
+  }
+}
